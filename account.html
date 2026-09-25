@@ -14,7 +14,7 @@
 
   <!-- TOP ANNOUNCEMENT -->
   <div class="bg-neutral-950 text-white text-[11px] py-2 px-4 text-center font-mono-tech tracking-wider border-b border-neutral-800">
-    ⚡ KODO VIP REBEL CLUB • YOU HAVE <span class="text-amber-400 font-bold">850 REBEL COINS</span> (₹850 CASH VALUE)
+    ⚡ KODO ACCOUNT • REAL ORDERS, TRACKING, RETURNS & STORE CREDIT
   </div>
 
   <!-- HEADER -->
@@ -38,7 +38,7 @@
         <a href="index.html" class="text-xs font-bold text-neutral-600 hover:text-neutral-900">
           ← Back to Shop
         </a>
-        <button type="button" onclick="alert('Signed out of demo session'); window.location.href='index.html';" class="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase">
+        <button type="button" onclick="window.KODO_AUTH?.signOut('index.html')" class="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase">
           Sign Out
         </button>
       </div>
@@ -61,14 +61,14 @@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="font-syne text-xl sm:text-2xl font-black uppercase tracking-tight">Kabir Sharma</h1>
-              <span class="bg-amber-400 text-neutral-950 font-mono-tech text-[10px] font-black px-2 py-0.5 rounded-full uppercase">STREET OG VIP</span>
+              <h1 id="account-display-name" class="font-syne text-xl sm:text-2xl font-black uppercase tracking-tight">KODO Customer</h1>
+              <span class="bg-amber-400 text-neutral-950 font-mono-tech text-[10px] font-black px-2 py-0.5 rounded-full uppercase">VERIFIED ACCOUNT</span>
             </div>
-            <p class="text-xs text-neutral-400 mt-0.5 font-mono-tech">+91 98765 43210 • kabir.sharma@streetkodo.in</p>
+            <p id="account-display-email" class="text-xs text-neutral-400 mt-0.5 font-mono-tech">Sign in to sync your real order history</p>
             <div class="mt-2 flex items-center gap-3 text-xs text-neutral-300">
-              <span>Member Since: <b>Oct 2024</b></span>
+              <span>Member Since: <b id="account-member-since">After sign in</b></span>
               <span>•</span>
-              <span class="text-emerald-400 font-bold">✓ 5 Verified Orders</span>
+              <span class="text-emerald-400 font-bold">✓ Real checkout orders only</span>
             </div>
           </div>
         </div>
@@ -174,13 +174,13 @@
         <div class="bg-white rounded-3xl p-6 border border-neutral-200 shadow-sm relative">
           <span class="absolute top-6 right-6 text-[10px] font-black bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full uppercase">DEFAULT</span>
           <div class="text-xs font-black uppercase text-neutral-400 mb-1">HOME</div>
-          <h4 class="text-sm font-black text-neutral-900">Kabir Sharma</h4>
+          <h4 class="text-sm font-black text-neutral-900">Primary Shipping Address</h4>
           <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
             Flat 402, Skyline Residency, Sector 45<br>
             Near City Centre Mall<br>
             Gurugram, Haryana — 122003
           </p>
-          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: +91 98765 43210</p>
+          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: saved after first checkout</p>
           <div class="mt-4 pt-4 border-t border-neutral-100 flex gap-3 text-xs font-bold">
             <button type="button" class="text-blue-600 hover:underline">Edit</button>
             <span class="text-neutral-300">|</span>
@@ -190,12 +190,12 @@
 
         <div class="bg-white rounded-3xl p-6 border border-neutral-200 shadow-sm">
           <div class="text-xs font-black uppercase text-neutral-400 mb-1">WORK / STUDIO</div>
-          <h4 class="text-sm font-black text-neutral-900">Kabir Sharma (Design Studio)</h4>
+          <h4 class="text-sm font-black text-neutral-900">Design Studio Address</h4>
           <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
             Plot 18, Streetwear Creative Hub, Okhla Phase III<br>
             New Delhi — 110020
           </p>
-          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: +91 98765 43210</p>
+          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: saved after first checkout</p>
           <div class="mt-4 pt-4 border-t border-neutral-100 flex gap-3 text-xs font-bold">
             <button type="button" class="text-blue-600 hover:underline">Set as Default</button>
             <span class="text-neutral-300">|</span>
@@ -384,6 +384,15 @@
         });
       });
     });
+  </script>
+  <script src="js/auth.js"></script>
+  <script>
+    const accountSession = window.KODO_AUTH?.getSession?.();
+    if (accountSession) {
+      document.getElementById("account-display-name").textContent = accountSession.name || accountSession.email;
+      document.getElementById("account-display-email").textContent = accountSession.email;
+      document.getElementById("account-member-since").textContent = new Date(accountSession.signedInAt || Date.now()).toLocaleDateString("en-IN", { month: "short", year: "numeric" });
+    }
   </script>
   <script src="js/extras.js"></script>
 </body>

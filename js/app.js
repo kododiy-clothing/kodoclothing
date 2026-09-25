@@ -1303,6 +1303,8 @@
     let discount = appliedCoupon && appliedCoupon.discountPercent ? Math.round(subtotal * (appliedCoupon.discountPercent / 100)) : 0;
     let shipping = (subtotal >= FREE_SHIPPING_THRESHOLD || (appliedCoupon && appliedCoupon.freeShipping)) ? 0 : 99;
     let total = subtotal - discount + shipping;
+    const codAdvance = Math.max(1, Math.round(total * 0.25));
+    const codBalance = Math.max(0, total - codAdvance);
 
     modal.innerHTML = `
       <div class="modal-box bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-neutral-200">
@@ -1346,9 +1348,12 @@
               <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 cursor-pointer payment-option">
                 <input type="radio" name="payment-method" value="Cash On Delivery" class="hidden">
                 <span class="text-lg mb-1">💵</span>
-                <span class="text-[11px] font-extrabold text-neutral-800">Cash on Del.</span>
-                <span class="text-[9px] text-neutral-400">Standard</span>
+                <span class="text-[11px] font-extrabold text-neutral-800">COD + 25% Advance</span>
+                <span class="text-[9px] text-neutral-400">Pay ₹${codAdvance} now</span>
               </label>
+            </div>
+            <div id="cod-advance-note" class="hidden mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] leading-relaxed text-amber-800">
+              COD orders require a 25% non-refundable confirmation advance through secure checkout. Balance <b>₹${codBalance}</b> is payable in cash on delivery.
             </div>
           </div>
 
@@ -1391,6 +1396,14 @@
         lbl.classList.remove("border", "border-neutral-200", "bg-white");
         const radio = lbl.querySelector("input[type='radio']");
         if (radio) selectedPayment = radio.value;
+        const codNote = modal.querySelector("#cod-advance-note");
+        const actionText = modal.querySelector("#confirm-place-order-btn span");
+        if (codNote) codNote.classList.toggle("hidden", selectedPayment !== "Cash On Delivery");
+        if (actionText) {
+          actionText.textContent = selectedPayment === "Cash On Delivery"
+            ? `PAY 25% COD ADVANCE ₹${codAdvance}`
+            : `PAY SECURELY ₹${total}`;
+        }
       });
     });
 
@@ -1424,6 +1437,8 @@
         `Discount: ₹${discount}`,
         `Shipping: ₹${shipping}`,
         `Total: ₹${total}`,
+        selectedPayment === "Cash On Delivery" ? `COD Advance Due Now: ₹${codAdvance}` : "",
+        selectedPayment === "Cash On Delivery" ? `COD Balance on Delivery: ₹${codBalance}` : "",
         `Payment: ${selectedPayment}`,
         "",
         `Customer: ${name}`,
@@ -1432,38 +1447,48 @@
       ].join("\n");
       const whatsappUrl = `https://wa.me/917046702094?text=${encodeURIComponent(whatsappText)}`;
 
-      if (selectedPayment !== "Cash On Delivery") {
-        const newOrder = buildOrder("Dodo Secure Checkout", "Redirected to Dodo Checkout", "Awaiting Payment");
-        if (payBtn) {
-          payBtn.disabled = true;
-          payBtn.classList.add("opacity-70", "cursor-wait");
-          payBtn.innerHTML = "<span>CREATING SECURE PAYMENT...</span>";
-        }
-        try {
-          const checkout = await createDodoCheckout(newOrder);
-          newOrder.dodoPaymentId = checkout.paymentId;
-          newOrder.paymentLink = checkout.checkoutUrl || checkout.paymentLink;
-          await saveOrder(newOrder);
-          window.location.href = newOrder.paymentLink;
-        } catch (err) {
-          console.error("Dodo checkout error:", err);
-          if (payBtn) {
-            payBtn.disabled = false;
-            payBtn.classList.remove("opacity-70", "cursor-wait");
-            payBtn.innerHTML = `<span>PAY SECURELY ₹${total}</span>`;
-          }
-          content.querySelector("#checkout-payment-error")?.remove();
-          content.insertAdjacentHTML("beforeend", `
-            <div id="checkout-payment-error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-700 leading-relaxed">
-              <b>Payment gateway is not configured on this host yet.</b><br>
-              Backend needs <code>DODO_PAYMENTS_API_KEY</code> and a Dodo product id/map. No fake payment was created.
-            </div>
-          `);
-        }
-        return;
+      const isCod = selectedPayment === "Cash On Delivery";
+      const newOrder = buildOrder(
+        isCod ? "COD with 25% Advance" : "Dodo Secure Checkout",
+        isCod ? `25% advance pending: ₹${codAdvance}; COD balance: ₹${codBalance}` : "Redirected to Dodo Checkout",
+        "Awaiting Payment"
+      );
+      if (isCod) {
+        newOrder.paymentMode = "cod_advance";
+        newOrder.gatewayAmount = codAdvance;
+        newOrder.codBalance = codBalance;
+      } else {
+        newOrder.paymentMode = "prepaid";
+        newOrder.gatewayAmount = total;
       }
 
-      finalizeOrder();
+      if (payBtn) {
+        payBtn.disabled = true;
+        payBtn.classList.add("opacity-70", "cursor-wait");
+        payBtn.innerHTML = isCod ? "<span>CREATING COD ADVANCE PAYMENT...</span>" : "<span>CREATING SECURE PAYMENT...</span>";
+      }
+      try {
+        const checkout = await createDodoCheckout(newOrder);
+        newOrder.dodoPaymentId = checkout.paymentId;
+        newOrder.paymentLink = checkout.checkoutUrl || checkout.paymentLink;
+        await saveOrder(newOrder);
+        window.location.href = newOrder.paymentLink;
+      } catch (err) {
+        console.error("Dodo checkout error:", err);
+        if (payBtn) {
+          payBtn.disabled = false;
+          payBtn.classList.remove("opacity-70", "cursor-wait");
+          payBtn.innerHTML = isCod ? `<span>PAY 25% COD ADVANCE ₹${codAdvance}</span>` : `<span>PAY SECURELY ₹${total}</span>`;
+        }
+        content.querySelector("#checkout-payment-error")?.remove();
+        content.insertAdjacentHTML("beforeend", `
+          <div id="checkout-payment-error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-700 leading-relaxed">
+            <b>Payment gateway is not configured on this host yet.</b><br>
+            Add <code>DODO_PAYMENTS_API_KEY</code>, <code>DODO_PRODUCT_ID_DEFAULT</code>, and <code>PUBLIC_SITE_URL</code> in Vercel Environment Variables. No fake order confirmation was created.
+          </div>
+        `);
+      }
+      return;
 
       function buildOrder(paymentMethod, paymentStatus, status) {
         return {

@@ -410,7 +410,7 @@
   }
 
   /* -------------------------------------------------------------
-     5. PHONE NUMBER OTP LOGIN / REGISTER MODAL SIMULATION
+     5. REAL SIGN-IN NOTICE
      ------------------------------------------------------------- */
   function initPhoneOtpModal() {
     const modal = document.createElement("div");
@@ -429,34 +429,34 @@
           KODO REBEL CLUB SIGN IN
         </h3>
         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 mb-5">
-          Enter your 10-digit mobile number for instant 1-click OTP login.
+          Real customer sign-in needs an OTP provider or Google OAuth. Demo OTP is disabled on this production storefront.
         </p>
 
         <div id="otp-step-1" class="space-y-4">
           <div class="flex items-center bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-xl px-3 py-2.5">
             <span class="text-xs font-bold text-neutral-500 mr-2 font-mono-tech">+91</span>
-            <input type="tel" id="otp-phone-input" placeholder="98765 43210" maxlength="10" value="9876543210" class="w-full text-xs font-bold bg-transparent focus:outline-none text-neutral-900 dark:text-white">
+            <input type="tel" id="otp-phone-input" placeholder="Enter mobile number" maxlength="10" class="w-full text-xs font-bold bg-transparent focus:outline-none text-neutral-900 dark:text-white">
           </div>
           <button type="button" id="otp-send-btn" class="w-full py-3.5 bg-neutral-900 dark:bg-blue-600 hover:bg-[#2D8CE3] text-white font-black text-xs uppercase tracking-wider rounded-xl transition-colors shadow-md">
-            SEND 4-DIGIT OTP →
+            CHECK SIGN-IN SETUP →
           </button>
         </div>
 
         <div id="otp-step-2" class="hidden space-y-4">
           <div class="text-xs text-neutral-600 dark:text-neutral-400">
-            SMS sent to <b id="otp-display-phone" class="text-neutral-900 dark:text-white">+91 9876543210</b>
+            Sign-in setup required for <b id="otp-display-phone" class="text-neutral-900 dark:text-white">this number</b>
           </div>
           <div class="flex justify-center gap-2 my-3">
-            <input type="text" maxlength="1" value="4" class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:border-blue-600 focus:outline-none">
-            <input type="text" maxlength="1" value="8" class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:border-blue-600 focus:outline-none">
-            <input type="text" maxlength="1" value="2" class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:border-blue-600 focus:outline-none">
-            <input type="text" maxlength="1" value="9" class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-50 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:border-blue-600 focus:outline-none">
+            <input type="text" maxlength="1" disabled class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-100 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none">
+            <input type="text" maxlength="1" disabled class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-100 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none">
+            <input type="text" maxlength="1" disabled class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-100 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none">
+            <input type="text" maxlength="1" disabled class="otp-digit w-12 h-12 text-center text-lg font-black bg-neutral-100 dark:bg-neutral-800 border-2 border-neutral-300 dark:border-neutral-700 rounded-xl focus:outline-none">
           </div>
           <div class="text-[11px] text-emerald-600 font-bold">
-            Demo SMS: Use OTP <span class="bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">4829</span>
+            Connect Google OAuth, Firebase Auth, or an SMS OTP provider before enabling login.
           </div>
           <button type="button" id="otp-verify-btn" class="w-full py-3.5 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-colors shadow-md">
-            VERIFY & ACCESS VIP HUB 🚀
+            GO TO ACCOUNT
           </button>
         </div>
 
@@ -489,13 +489,6 @@
     });
 
     verifyBtn.addEventListener("click", () => {
-      localStorage.setItem("KODO_AUTH", JSON.stringify({
-        phone: phoneInput.value.trim(),
-        name: "Kabir Sharma",
-        coins: 850,
-        loggedIn: true
-      }));
-      alert("✓ Verified successfully! Welcome to KODO Streetwear Club.");
       modal.classList.remove("active");
       document.body.style.overflow = "";
       window.location.href = "account.html";

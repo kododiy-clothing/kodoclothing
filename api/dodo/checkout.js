@@ -47,22 +47,38 @@ module.exports = async function handler(req, res) {
   }
 
   const productCart = [];
-  for (const item of items) {
-    const productId = getDodoProductId(item);
+  const gatewayAmount = Number(order.gatewayAmount || 0);
+  if (gatewayAmount > 0) {
+    const productId = process.env.DODO_PRODUCT_ID_DEFAULT || getDodoProductId(items[0]);
     if (!productId) {
       return res.status(500).json({
         success: false,
-        error: "DODO_PRODUCT_ID_DEFAULT or DODO_PRODUCT_MAP_JSON is required"
+        error: "DODO_PRODUCT_ID_DEFAULT is required for partial/COD advance payments"
       });
     }
-    const cartItem = {
+    productCart.push({
       product_id: productId,
-      quantity: Math.max(1, Number.parseInt(item.quantity || 1, 10))
-    };
-    if (SEND_DYNAMIC_AMOUNTS) {
-      cartItem.amount = Math.max(1, Math.round(Number(item.price || 0) * 100));
+      quantity: 1,
+      amount: Math.max(1, Math.round(gatewayAmount * 100))
+    });
+  } else {
+    for (const item of items) {
+      const productId = getDodoProductId(item);
+      if (!productId) {
+        return res.status(500).json({
+          success: false,
+          error: "DODO_PRODUCT_ID_DEFAULT or DODO_PRODUCT_MAP_JSON is required"
+        });
+      }
+      const cartItem = {
+        product_id: productId,
+        quantity: Math.max(1, Number.parseInt(item.quantity || 1, 10))
+      };
+      if (SEND_DYNAMIC_AMOUNTS) {
+        cartItem.amount = Math.max(1, Math.round(Number(item.price || 0) * 100));
+      }
+      productCart.push(cartItem);
     }
-    productCart.push(cartItem);
   }
 
   const customer = order.customer || {};
@@ -90,7 +106,9 @@ module.exports = async function handler(req, res) {
       subtotal: String(order.subtotal || ""),
       discount: String(order.discount || ""),
       shipping: String(order.shipping || ""),
-      total: String(order.total || "")
+      total: String(order.total || ""),
+      gateway_amount: String(order.gatewayAmount || order.total || ""),
+      payment_mode: order.paymentMode || "prepaid"
     }
   };
 

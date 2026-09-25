@@ -6,6 +6,7 @@
   <title>KODO.DIY Merchant Central — Shopify-Style Control Panel</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/png" href="assets/favicon.png?v=1">
   <link rel="apple-touch-icon" href="assets/favicon.png?v=1">
@@ -640,7 +641,7 @@
           </p>
           
           <!-- Sample Preset 1-Click Loaders -->
-            <span class="text-neutral-400 font-bold uppercase font-mono-tech">Quick Demo Presets:</span>
+            <span class="text-neutral-400 font-bold uppercase font-mono-tech">Sample Catalog Presets:</span>
             <button type="button" class="ai-preset-btn px-2.5 py-1 rounded-lg bg-neutral-900 border border-indigo-500/40 hover:border-indigo-400 text-indigo-300 font-bold transition-colors" data-preset="altitude">
               🏔️ Alpine Summit Altitude Tee (4 Photos)
             </button>
@@ -854,7 +855,13 @@
     </div>
   </div>
 
-  <script src="js/backend-config.js?v=8"></script>
+  <script src="js/backend-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    if (!window.KODO_AUTH?.requireAdminAccess()) {
+      throw new Error("Admin auth required");
+    }
+  </script>
   <script src="js/data.js"></script>
   <script src="js/admin.js"></script>
 </body>
