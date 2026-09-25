@@ -1,6 +1,31 @@
 // KODO.DIY Main Application Logic
 
 (function () {
+  window.KODO_DATA = window.KODO_DATA || {};
+  window.KODO_DATA.PRODUCTS = Array.isArray(window.KODO_DATA.PRODUCTS) ? window.KODO_DATA.PRODUCTS : [];
+  window.KODO_DATA.PROMOS = Array.isArray(window.KODO_DATA.PROMOS) ? window.KODO_DATA.PROMOS : [
+    "Free shipping above ₹799",
+    "Buy any 2 oversized tees @ ₹1,199",
+    "WhatsApp order verification before dispatch",
+    "Heavyweight 240-380 GSM streetwear drops"
+  ];
+  window.KODO_DATA.CATEGORIES = Array.isArray(window.KODO_DATA.CATEGORIES) ? window.KODO_DATA.CATEGORIES : [
+    { id: "all", name: "All Drops", icon: "✦" },
+    { id: "bestsellers", name: "Bestsellers", icon: "★" },
+    { id: "oversized-tees", name: "Oversized Tees", icon: "□" },
+    { id: "celestial-series", name: "Celestial", icon: "☾" },
+    { id: "alpine-series", name: "Alpine", icon: "△" },
+    { id: "racing-tokyo", name: "Tokyo Racing", icon: "⚑" }
+  ];
+  window.KODO_DATA.SIZE_CHART = Array.isArray(window.KODO_DATA.SIZE_CHART) ? window.KODO_DATA.SIZE_CHART : [
+    { size: "XS", chest: "38", length: "25", shoulder: "18" },
+    { size: "S", chest: "40", length: "26", shoulder: "19" },
+    { size: "M", chest: "42", length: "27", shoulder: "20" },
+    { size: "L", chest: "44", length: "28", shoulder: "21" },
+    { size: "XL", chest: "46", length: "29", shoulder: "22" },
+    { size: "XXL", chest: "48", length: "30", shoulder: "23" }
+  ];
+
   let currentCategory = 'all';
   let cart = [];
   let wishlist = [];
