@@ -1295,7 +1295,7 @@
     if (!modal) {
       modal = document.createElement("div");
       modal.id = "checkout-modal";
-      modal.className = "modal-overlay fixed inset-0 z-[10000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4";
+      modal.className = "modal-overlay fixed inset-0 z-[10000] bg-white flex items-start justify-center p-0 overflow-y-auto";
       document.body.appendChild(modal);
     }
 
@@ -1308,16 +1308,16 @@
     const codBalance = Math.max(0, total - codAdvance);
 
     modal.innerHTML = `
-      <div class="modal-box bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-neutral-200">
-        <div class="bg-gradient-to-r from-[#2D8CE3] via-blue-600 to-[#8F54F0] p-4 text-white flex items-center justify-between">
+      <div class="modal-box bg-white w-full min-h-screen overflow-hidden">
+        <div class="sticky top-0 z-10 bg-gradient-to-r from-[#2D8CE3] via-blue-600 to-[#8F54F0] px-4 sm:px-8 py-4 text-white flex items-center justify-between shadow-lg">
           <div class="flex items-center gap-3">
             <img src="assets/kodo-logo.png?v=4" alt="KODO Logo" class="h-6 w-auto object-contain bg-white/10 px-2 py-0.5 rounded-lg">
-            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Secure Order Request</span>
+            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Secure Checkout</span>
           </div>
           <button type="button" id="checkout-close" class="text-white hover:text-white/80 text-xl font-bold">✕</button>
         </div>
 
-        <div id="checkout-content-area" class="p-6 max-h-[80vh] overflow-y-auto">
+        <div id="checkout-content-area" class="max-w-4xl mx-auto p-4 sm:p-8">
           <div class="mb-6">
             <h4 class="text-xs font-black uppercase tracking-wider text-neutral-800 mb-3 flex items-center gap-2">
               <span class="w-5 h-5 rounded-full bg-[#2D8CE3] text-white flex items-center justify-center text-[10px]">1</span>
@@ -1325,7 +1325,15 @@
             </h4>
             <div class="space-y-2.5">
               <input type="text" id="chk-name" placeholder="Full Name" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
-              <input type="tel" id="chk-phone" placeholder="Mobile Number" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+              <div class="flex rounded-xl border border-neutral-200 overflow-hidden focus-within:border-blue-500">
+                <select id="chk-country-code" class="px-3.5 py-2 bg-neutral-50 text-xs font-black border-r border-neutral-200 focus:outline-none">
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                </select>
+                <input type="tel" id="chk-phone" placeholder="Mobile Number" inputmode="numeric" class="w-full px-3.5 py-2 text-xs focus:outline-none">
+              </div>
               <input type="text" id="chk-addr" placeholder="Complete Street Address" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
               <div class="grid grid-cols-2 gap-2">
                 <input type="text" id="chk-city" placeholder="City" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
@@ -1396,7 +1404,10 @@
         lbl.classList.add("border-2", "border-blue-500", "bg-blue-50/50");
         lbl.classList.remove("border", "border-neutral-200", "bg-white");
         const radio = lbl.querySelector("input[type='radio']");
-        if (radio) selectedPayment = radio.value;
+        if (radio) {
+          radio.checked = true;
+          selectedPayment = radio.value;
+        }
         const codNote = modal.querySelector("#cod-advance-note");
         const actionText = modal.querySelector("#confirm-place-order-btn span");
         if (codNote) codNote.classList.toggle("hidden", selectedPayment !== "Cash On Delivery");
@@ -1418,13 +1429,15 @@
       const payBtn = modal.querySelector("#confirm-place-order-btn");
       const orderId = "KD-" + Math.floor(100000 + Math.random() * 900000);
       const name = modal.querySelector("#chk-name").value.trim();
-      const phone = modal.querySelector("#chk-phone").value.trim();
+      const countryCode = modal.querySelector("#chk-country-code")?.value || "+91";
+      const phoneDigits = modal.querySelector("#chk-phone").value.replace(/\D/g, "");
+      const phone = `${countryCode}${phoneDigits}`;
       const addr = modal.querySelector("#chk-addr").value.trim();
       const city = modal.querySelector("#chk-city").value.trim();
       const pin = modal.querySelector("#chk-pin").value.trim();
 
-      if (!name || !phone || !addr || !city || !/^\d{6}$/.test(pin)) {
-        showToast("Please enter a real name, phone, address, city, and 6-digit PIN.");
+      if (!name || phoneDigits.length < 8 || !addr || !city || !/^\d{6}$/.test(pin)) {
+        showToast("Please enter a real name, country-code phone, address, city, and 6-digit PIN.");
         return;
       }
 
