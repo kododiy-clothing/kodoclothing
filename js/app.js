@@ -1482,10 +1482,12 @@
           payBtn.innerHTML = isCod ? `<span>PAY 25% COD ADVANCE ₹${codAdvance}</span>` : `<span>PAY SECURELY ₹${total}</span>`;
         }
         content.querySelector("#checkout-payment-error")?.remove();
+        const paymentErrorMessage = err?.message || "Unable to create payment link. Please try again.";
         content.insertAdjacentHTML("beforeend", `
           <div id="checkout-payment-error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-700 leading-relaxed">
-            <b>Payment gateway is not configured on this host yet.</b><br>
-            Add <code>DODO_PAYMENTS_API_KEY</code>, <code>DODO_PRODUCT_ID_DEFAULT</code>, and <code>PUBLIC_SITE_URL</code> in Vercel Environment Variables. No fake order confirmation was created.
+            <b>Payment could not start.</b><br>
+            ${paymentErrorMessage}<br>
+            No order was confirmed or charged. Please try again or switch to Secure Pay.
           </div>
         `);
       }

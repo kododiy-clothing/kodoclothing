@@ -47,7 +47,10 @@ module.exports = async function handler(req, res) {
   }
 
   const productCart = [];
-  const gatewayAmount = Number(order.gatewayAmount || 0);
+  let gatewayAmount = Number(order.gatewayAmount || 0);
+  if (!gatewayAmount && order.paymentMode === "cod_advance") {
+    gatewayAmount = Math.max(50, Math.round(Number(order.total || 0) * 0.25));
+  }
   if (gatewayAmount > 0) {
     if (gatewayAmount < 50) {
       return res.status(400).json({
