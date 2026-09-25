@@ -455,11 +455,17 @@
     filterState.selectedGender = gender;
     document.querySelectorAll(".gender-tab-btn").forEach(btn => {
       if (btn.dataset.gender === gender) {
-        btn.classList.add("bg-neutral-900", "dark:bg-white", "text-white", "dark:text-neutral-900", "border-neutral-900", "shadow-sm");
-        btn.classList.remove("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-300", "border-neutral-200", "dark:border-neutral-700");
+        btn.classList.add("bg-white", "text-neutral-950", "border-white", "shadow-sm");
+        btn.classList.remove("bg-white/5", "bg-pink-500/10", "text-neutral-200", "text-pink-100", "border-white/10", "border-pink-400/35");
       } else {
-        btn.classList.remove("bg-neutral-900", "dark:bg-white", "text-white", "dark:text-neutral-900", "border-neutral-900", "shadow-sm");
-        btn.classList.add("bg-neutral-100", "dark:bg-neutral-800", "text-neutral-600", "dark:text-neutral-300", "border-neutral-200", "dark:border-neutral-700");
+        btn.classList.remove("bg-white", "text-neutral-950", "border-white", "shadow-sm");
+        if (btn.dataset.gender === "women") {
+          btn.classList.add("bg-pink-500/10", "text-pink-100", "border-pink-400/35");
+          btn.classList.remove("bg-white/5", "text-neutral-200", "border-white/10");
+        } else {
+          btn.classList.add("bg-white/5", "text-neutral-200", "border-white/10");
+          btn.classList.remove("bg-pink-500/10", "text-pink-100", "border-pink-400/35");
+        }
       }
     });
 
