@@ -140,7 +140,7 @@
         <span>Estimated Total</span>
         <span id="cart-total" class="text-[#2D8CE3]">₹0</span>
       </div>
-      <button type="button" onclick="window.location.href='index.html';" class="w-full py-3.5 bg-[#2D8CE3] text-white font-black text-xs uppercase rounded-xl">
+      <button type="button" onclick="window.location.href='index.html?checkout=1';" class="w-full py-3.5 bg-[#2D8CE3] text-white font-black text-xs uppercase rounded-xl">
         CHECKOUT ON STOREFRONT →
       </button>
     </div>
@@ -327,7 +327,7 @@
             <button type="button" id="pdp-add-bag-btn" class="flex-1 py-4 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-2xl uppercase tracking-wider transition-colors shadow-md">
               ADD TO BAG
             </button>
-            <button type="button" onclick="window.location.href='index.html';" class="flex-1 py-4 bg-[#2D8CE3] hover:bg-blue-600 text-white text-xs font-black rounded-2xl uppercase tracking-wider transition-colors shadow-md">
+            <button type="button" id="pdp-buy-now-btn" class="flex-1 py-4 bg-[#2D8CE3] hover:bg-blue-600 text-white text-xs font-black rounded-2xl uppercase tracking-wider transition-colors shadow-md">
               BUY NOW (1-CLICK)
             </button>
           </div>
@@ -532,8 +532,7 @@
       // Initial count sync
       renderCartDrawer();
 
-      // Add to bag
-      document.getElementById("pdp-add-bag-btn").addEventListener("click", () => {
+      function addCurrentProductToCart() {
         let cart = JSON.parse(localStorage.getItem("KODO_CART") || "[]");
         const item = {
           id: `${product.id}-${activeSize}`,
@@ -550,7 +549,18 @@
         if (existing) existing.quantity++;
         else cart.push(item);
         localStorage.setItem("KODO_CART", JSON.stringify(cart));
+        return item;
+      }
+
+      // Add to bag
+      document.getElementById("pdp-add-bag-btn").addEventListener("click", () => {
+        addCurrentProductToCart();
         openCart();
+      });
+
+      document.getElementById("pdp-buy-now-btn")?.addEventListener("click", () => {
+        addCurrentProductToCart();
+        window.location.href = "index.html?checkout=1";
       });
     });
   </script>

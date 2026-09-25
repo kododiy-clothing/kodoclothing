@@ -70,6 +70,16 @@
     initCartDrawer();
     initQuickView();
     initCheckoutModal();
+    if (urlParams.get("checkout") === "1") {
+      setTimeout(() => {
+        if (cart.length > 0) {
+          closeCartDrawer();
+          openCheckoutModal();
+        } else {
+          openCartDrawer();
+        }
+      }, 150);
+    }
     initSpinWheel();
     initSizePredictor();
     if (window.initDiyStudio) {
