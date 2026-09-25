@@ -238,9 +238,9 @@
             </div>
           </div>
 
-          <div class="flex gap-3">
+          <div id="pdp-thumb-strip" class="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-1 px-1 snap-x snap-mandatory overscroll-x-contain">
             ${product.images.map((img, idx) => `
-              <img src="${img}" class="pdp-thumb w-20 h-24 object-cover rounded-xl border-2 cursor-pointer transition-all ${idx === 0 ? 'border-blue-600' : 'border-neutral-200 opacity-70'}" data-src="${img}">
+              <img src="${img}" class="pdp-thumb flex-none w-20 h-24 sm:w-24 sm:h-28 object-cover rounded-xl border-2 cursor-pointer transition-all snap-start ${idx === 0 ? 'border-blue-600' : 'border-neutral-200 opacity-70'}" data-src="${img}" data-index="${idx}" alt="${product.title} view ${idx + 1}">
             `).join("")}
           </div>
         </div>
@@ -340,19 +340,43 @@
       // Zoom listener
       const mainImg = document.getElementById("pdp-main-image");
       const zoomContainer = mainImg.parentElement;
+      let activeImageIndex = 0;
+      function selectPdpImage(nextIndex) {
+        const thumbs = Array.from(document.querySelectorAll(".pdp-thumb"));
+        if (!thumbs.length) return;
+        activeImageIndex = (nextIndex + thumbs.length) % thumbs.length;
+        const selected = thumbs[activeImageIndex];
+        thumbs.forEach(b => {
+          b.classList.remove("border-blue-600");
+          b.classList.add("border-neutral-200", "opacity-70");
+        });
+        selected.classList.add("border-blue-600");
+        selected.classList.remove("border-neutral-200", "opacity-70");
+        mainImg.src = selected.dataset.src;
+        selected.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
       zoomContainer.addEventListener("mousemove", (e) => {
         const rect = zoomContainer.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
         mainImg.style.transformOrigin = `${x}% ${y}%`;
       });
+      let touchStartX = 0;
+      zoomContainer.addEventListener("touchstart", (e) => {
+        touchStartX = e.touches[0]?.clientX || 0;
+      }, { passive: true });
+      zoomContainer.addEventListener("touchend", (e) => {
+        const endX = e.changedTouches[0]?.clientX || 0;
+        const delta = endX - touchStartX;
+        if (Math.abs(delta) > 45) {
+          selectPdpImage(activeImageIndex + (delta < 0 ? 1 : -1));
+        }
+      }, { passive: true });
 
       // Thumbs
       document.querySelectorAll(".pdp-thumb").forEach(t => {
         t.addEventListener("click", () => {
-          document.querySelectorAll(".pdp-thumb").forEach(b => b.classList.remove("border-blue-600"));
-          t.classList.add("border-blue-600");
-          mainImg.src = t.dataset.src;
+          selectPdpImage(Number(t.dataset.index || 0));
         });
       });
 
