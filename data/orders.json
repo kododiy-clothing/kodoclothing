@@ -1,0 +1,258 @@
+[
+  {
+    "orderId": "KD-863290",
+    "date": "2026-09-25T17:20:50.560Z",
+    "customer": {
+      "name": "Aryan Sharma",
+      "phone": "+91 98765 43210",
+      "address": "Flat 402, Skyline Towers, Indiranagar",
+      "city": "Bengaluru",
+      "pincode": "560038"
+    },
+    "items": [
+      {
+        "id": "kd-auto-astral-zenith-250-367-S",
+        "productId": "kd-auto-astral-zenith-250-367",
+        "title": "Galactic Core: 'Stardust Nebula' 280 GSM Oversized T-Shirt",
+        "price": 649,
+        "comparePrice": 1499,
+        "image": "assets/products/auto-generated/kd-auto-astral-zenith-250-367/model-front.jpg",
+        "size": "S",
+        "sizes": [
+          "S",
+          "M",
+          "L",
+          "XL",
+          "XXL"
+        ],
+        "quantity": 1
+      },
+      {
+        "id": "kd-altitude-L-1790280129042",
+        "title": "📸 [LOOKBOOK FIT] Alpine Summit 'Higher Than Yesterday' Tee",
+        "price": 699,
+        "comparePrice": 1258,
+        "size": "L",
+        "image": "assets/products/altitude-tee/front.jpg",
+        "quantity": 1
+      },
+      {
+        "id": "mystery-rebel-unisex-L-1790280185542",
+        "title": "📦 Rebel Vault Mystery Box (Acid Wash Vintage)",
+        "price": 1799,
+        "comparePrice": 4299,
+        "size": "L",
+        "image": "assets/products/same-sky-tee/front.jpg",
+        "quantity": 1
+      },
+      {
+        "id": "kd-woman-botanical-iris-02",
+        "title": "Botanical Sun: \"SOLAR IRIS LINE-ART\" 280 GSM Boxy Tee",
+        "price": 849,
+        "comparePrice": 1499,
+        "size": "L",
+        "image": "assets/products/woman-drops/kd-woman-botanical-iris-02/model-front.jpg",
+        "quantity": 1,
+        "category": "solaris-equinox"
+      },
+      {
+        "id": "combo-1790356845243",
+        "productId": "kd-street-combo-999",
+        "title": "Buy 2 Combo: Daydream: + Botanical",
+        "price": 999,
+        "comparePrice": 2598,
+        "size": "XXL & L",
+        "sizes": [
+          "Mixed Combo"
+        ],
+        "image": "assets/products/woman-drops/kd-woman-daydream-waves-06/model-front.jpg",
+        "quantity": 1,
+        "isCombo": true
+      }
+    ],
+    "subtotal": 4995,
+    "discount": 0,
+    "shipping": 0,
+    "total": 4995,
+    "paymentMethod": "UPI / QR",
+    "paymentStatus": "Paid",
+    "status": "Confirmed",
+    "courier": "BlueDart Express",
+    "awb": "BD-90356850"
+  },
+  {
+    "orderId": "KD-904128",
+    "date": "2026-09-24T18:12:00.313183+00:00",
+    "customer": {
+      "name": "Aarav Sengupta",
+      "phone": "+91 98201 44812",
+      "email": "aarav.sengupta@gmail.com",
+      "address": "14th Main Rd, HAL 2nd Stage, Indiranagar",
+      "city": "Bengaluru",
+      "pincode": "560038"
+    },
+    "items": [
+      {
+        "id": "kd-man-drop-03",
+        "title": "Midnight Rebels: \"TIGER DIVISION\" 280 GSM Oversized Tee",
+        "price": 799,
+        "comparePrice": 1499,
+        "size": "L",
+        "image": "assets/products/man-drops/kd-man-drop-03/model-front.jpg",
+        "quantity": 1,
+        "category": "tokyo-drift"
+      }
+    ],
+    "subtotal": 799,
+    "discount": 0,
+    "shipping": 0,
+    "total": 799,
+    "paymentMethod": "UPI (Google Pay)",
+    "paymentStatus": "Paid",
+    "status": "In Production",
+    "courier": "BlueDart Express",
+    "awb": "BD-884920194"
+  },
+  {
+    "orderId": "KD-892401",
+    "date": "2026-09-24T14:12:00.313183+00:00",
+    "customer": {
+      "name": "Ananya Sharma",
+      "phone": "+91 97110 33819",
+      "email": "ananya.sharma99@yahoo.com",
+      "address": "B-42, Vasant Vihar",
+      "city": "New Delhi",
+      "pincode": "110057"
+    },
+    "items": [
+      {
+        "id": "kd-woman-together-01",
+        "title": "Together: \"SISTERHOOD PORTRAITS\" 280 GSM Oversized Tee",
+        "price": 799,
+        "comparePrice": 1499,
+        "size": "M",
+        "image": "assets/products/woman-drops/kd-woman-together-01/model-front.jpg",
+        "quantity": 1,
+        "category": "oversized-tees"
+      }
+    ],
+    "subtotal": 799,
+    "discount": 0,
+    "shipping": 0,
+    "total": 799,
+    "paymentMethod": "UPI (PhonePe)",
+    "paymentStatus": "Paid",
+    "status": "Dispatched",
+    "courier": "Delhivery Air",
+    "awb": "DEL-74910283"
+  },
+  {
+    "orderId": "KD-881920",
+    "date": "2026-09-24T06:12:00.313183+00:00",
+    "customer": {
+      "name": "Rohan Mehta",
+      "phone": "+91 99203 11849",
+      "email": "rohan.mehta@outlook.com",
+      "address": "102 Regency Heights, Bandra West",
+      "city": "Mumbai",
+      "pincode": "400050"
+    },
+    "items": [
+      {
+        "id": "kd-man-drop-01",
+        "title": "Urban State: \"ORIGINAL SUPPLY\" 280 GSM Oversized Tee",
+        "price": 799,
+        "comparePrice": 1499,
+        "size": "XL",
+        "image": "assets/products/man-drops/kd-man-drop-01/model-front.jpg",
+        "quantity": 1,
+        "category": "oversized-tees"
+      },
+      {
+        "id": "kd-woman-original-orbit-08",
+        "title": "Original: \"CELESTIAL ORBITAL RING\" 280 GSM Boxy Tee",
+        "price": 799,
+        "comparePrice": 1499,
+        "size": "S",
+        "image": "assets/products/woman-drops/kd-woman-original-orbit-08/model-front.jpg",
+        "quantity": 1,
+        "category": "celestial-series"
+      }
+    ],
+    "subtotal": 1598,
+    "discount": 200,
+    "shipping": 0,
+    "total": 1398,
+    "paymentMethod": "UPI (PayTM)",
+    "paymentStatus": "Paid",
+    "status": "Confirmed",
+    "courier": "BlueDart Express",
+    "awb": "BD-991048201"
+  },
+  {
+    "orderId": "KD-870319",
+    "date": "2026-09-23T16:12:00.313183+00:00",
+    "customer": {
+      "name": "Priya Deshmukh",
+      "phone": "+91 98920 77123",
+      "email": "priya.deshmukh@gmail.com",
+      "address": "Flat 4B, Silver Oak, Koregaon Park",
+      "city": "Pune",
+      "pincode": "411001"
+    },
+    "items": [
+      {
+        "id": "kd-woman-botanical-iris-02",
+        "title": "Botanical Sun: \"SOLAR IRIS LINE-ART\" 280 GSM Boxy Tee",
+        "price": 799,
+        "comparePrice": 1499,
+        "size": "M",
+        "image": "assets/products/woman-drops/kd-woman-botanical-iris-02/model-front.jpg",
+        "quantity": 1,
+        "category": "solaris-equinox"
+      }
+    ],
+    "subtotal": 799,
+    "discount": 0,
+    "shipping": 0,
+    "total": 799,
+    "paymentMethod": "Credit Card (Visa)",
+    "paymentStatus": "Paid",
+    "status": "Delivered",
+    "courier": "Delhivery Air",
+    "awb": "DEL-65201948"
+  },
+  {
+    "orderId": "KD-861042",
+    "date": "2026-09-22T20:12:00.313183+00:00",
+    "customer": {
+      "name": "Kabir Malhotra",
+      "phone": "+91 98104 22910",
+      "email": "kabir.m@rediffmail.com",
+      "address": "22 Road No 10, Banjara Hills",
+      "city": "Hyderabad",
+      "pincode": "500034"
+    },
+    "items": [
+      {
+        "id": "kd-man-drop-07",
+        "title": "Subterranean Metro: \"AREA 04 / SYSTEM TERMINAL\" 280 GSM Oversized Tee",
+        "price": 799,
+        "comparePrice": 1499,
+        "size": "L",
+        "image": "assets/products/man-drops/kd-man-drop-07/model-front.jpg",
+        "quantity": 1,
+        "category": "tokyo-drift"
+      }
+    ],
+    "subtotal": 799,
+    "discount": 0,
+    "shipping": 0,
+    "total": 799,
+    "paymentMethod": "UPI (Google Pay)",
+    "paymentStatus": "Paid",
+    "status": "Delivered",
+    "courier": "BlueDart Express",
+    "awb": "BD-331049281"
+  }
+]

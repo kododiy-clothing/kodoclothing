@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#F8FAFC]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order — KODO.DIY Express</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/kodo-logo.png?v=3">
+</head>
+<body class="min-h-full flex flex-col text-neutral-900 selection:bg-[#2D8CE3] selection:text-white">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white border-b border-neutral-200 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="assets/kodo-logo.png?v=3" alt="KODO" class="h-9 w-auto object-contain">
+        <span class="text-[10px] font-black tracking-widest text-[#2D8CE3] uppercase bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+          EXPRESS DISPATCH
+        </span>
+      </a>
+
+      <div class="flex items-center gap-3">
+        <a href="account.html" class="flex items-center gap-1 text-xs font-bold text-neutral-700 hover:text-neutral-950">
+          <span>👑</span> <span>VIP Hub</span>
+        </a>
+        <a href="admin.html" class="hidden sm:inline-block text-xs font-bold text-neutral-500 hover:text-neutral-900">
+          Admin
+        </a>
+        <a href="index.html" class="text-xs font-bold text-neutral-600 hover:text-neutral-900 transition-colors">
+          ← Store
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN TRACKING CONTENT -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 py-10 w-full space-y-8">
+    
+    <!-- Search Order Box -->
+    <div class="bg-white rounded-3xl p-6 md:p-8 border border-neutral-200 shadow-sm text-center">
+      <span class="text-xs font-black tracking-widest text-[#2D8CE3] uppercase">REAL-TIME DISPATCH RADAR</span>
+      <h1 class="font-syne text-2xl sm:text-3xl font-black uppercase text-neutral-900 mt-1">TRACK YOUR STREETWEAR SHIPMENT</h1>
+      <p class="text-xs text-neutral-500 max-w-md mx-auto mt-1">
+        Enter your 6-digit Order ID (e.g. <b>KD-892140</b>) or Phone Number to view live courier status.
+      </p>
+
+      <form id="track-order-form" class="mt-6 flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+        <input type="text" id="track-input" placeholder="e.g. KD-892140 or Phone" required class="flex-1 px-4 py-3 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-blue-500 uppercase">
+        <button type="submit" class="px-6 py-3 bg-[#2D8CE3] hover:bg-blue-600 text-white text-xs font-black rounded-xl uppercase tracking-wider transition-colors shadow-md">
+          TRACK ORDER
+        </button>
+      </form>
+
+      <div class="mt-3 text-[11px] text-neutral-400">
+        Demo Orders: <button type="button" class="demo-track-btn text-blue-600 font-bold underline" data-id="KD-892140">KD-892140</button>, <button type="button" class="demo-track-btn text-blue-600 font-bold underline" data-id="KD-774192">KD-774192</button>
+      </div>
+    </div>
+
+    <!-- Live Tracking Result Container -->
+    <div id="tracking-result-card" class="bg-white rounded-3xl border border-neutral-200 shadow-sm overflow-hidden hidden">
+      
+      <!-- Status Header Strip -->
+      <div class="bg-gradient-to-r from-neutral-900 via-neutral-950 to-blue-950 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <span id="track-order-id-display" class="font-syne text-xl sm:text-2xl font-black text-white">KD-892140</span>
+            <span id="track-status-pill" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+              IN TRANSIT
+            </span>
+          </div>
+          <div class="text-xs text-neutral-400 mt-1">
+            Courier: <b class="text-white">Delhivery Surface Express</b> • AWB: <b id="track-awb-num" class="text-blue-400">DEL-984021980</b>
+          </div>
+        </div>
+
+        <div class="text-left sm:text-right">
+          <div class="text-[11px] text-neutral-400 uppercase tracking-wider">Estimated Delivery</div>
+          <div id="track-eta-date" class="text-base sm:text-lg font-black text-[#00E599]">Tomorrow, by 8:00 PM</div>
+        </div>
+      </div>
+
+      <!-- Animated Progress Stepper -->
+      <div class="p-6 sm:p-8 border-b border-neutral-100">
+        <div class="relative flex flex-col md:flex-row justify-between gap-6 md:gap-2">
+          
+          <!-- Step 1 -->
+          <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
+            <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-md">
+              ✓
+            </div>
+            <div>
+              <div class="text-xs font-black text-neutral-900">Order Confirmed</div>
+              <div class="text-[10px] text-neutral-400">Payment Verified</div>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="hidden md:block w-full h-1 bg-emerald-500 rounded my-auto -mx-4"></div>
+
+          <!-- Step 2 -->
+          <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
+            <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-md">
+              ✓
+            </div>
+            <div>
+              <div class="text-xs font-black text-neutral-900">Quality Check & Printing</div>
+              <div class="text-[10px] text-neutral-400">Mumbai Atelier</div>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="hidden md:block w-full h-1 bg-blue-500 rounded my-auto -mx-4"></div>
+
+          <!-- Step 3 -->
+          <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
+            <div class="w-10 h-10 rounded-full bg-[#2D8CE3] text-white flex items-center justify-center font-bold text-sm shadow-lg animate-pulse">
+              🚚
+            </div>
+            <div>
+              <div class="text-xs font-black text-blue-600">Dispatched in Transit</div>
+              <div class="text-[10px] text-neutral-400">Hub Sort Facility</div>
+            </div>
+          </div>
+
+          <!-- Connector -->
+          <div class="hidden md:block w-full h-1 bg-neutral-200 rounded my-auto -mx-4"></div>
+
+          <!-- Step 4 -->
+          <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
+            <div class="w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 border border-neutral-300 flex items-center justify-center font-bold text-sm">
+              🛵
+            </div>
+            <div>
+              <div class="text-xs font-bold text-neutral-400">Out for Delivery</div>
+              <div class="text-[10px] text-neutral-400">Local Hub</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Items & Shipping Summary -->
+      <div class="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-neutral-50/50">
+        
+        <!-- Items in Shipment -->
+        <div>
+          <h4 class="text-xs font-black uppercase text-neutral-800 tracking-wider mb-3">Items in Shipment</h4>
+          <div id="track-items-list" class="space-y-2.5">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- Destination & Support -->
+        <div class="space-y-4">
+          <div class="p-4 bg-white rounded-2xl border border-neutral-200 text-xs space-y-1">
+            <span class="text-[10px] font-black uppercase text-neutral-400 block tracking-wider">Delivery Address</span>
+            <div id="track-customer-name" class="font-bold text-neutral-900">Devendra Patel</div>
+            <div id="track-customer-addr" class="text-neutral-600">B-204, Royal Palms, Koregaon Park, Pune - 411001</div>
+            <div id="track-customer-phone" class="text-neutral-500">Phone: +91 98234 11092</div>
+          </div>
+
+          <div class="p-4 bg-blue-50 rounded-2xl border border-blue-200 text-xs flex items-center justify-between gap-3">
+            <div>
+              <div class="font-bold text-blue-900">Need shipment assistance?</div>
+              <div class="text-[11px] text-blue-700">Reach our dispatch team on WhatsApp.</div>
+            </div>
+            <a href="https://wa.me/917046702094" target="_blank" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold whitespace-nowrap shadow-sm">
+              WhatsApp Us 💬
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-neutral-200 py-6 text-center text-xs text-neutral-400">
+    KODO.DIY Express Tracking • Real-time Delhivery API Integrated • 100% Genuine Veirdo Style
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("track-order-form");
+      const input = document.getElementById("track-input");
+      const resultCard = document.getElementById("tracking-result-card");
+
+      // Auto load if order parameter passed
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlOrderId = urlParams.get("id");
+      if (urlOrderId) {
+        input.value = urlOrderId;
+        lookupOrder(urlOrderId);
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        lookupOrder(input.value.trim());
+      });
+
+      document.querySelectorAll(".demo-track-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          input.value = id;
+          lookupOrder(id);
+        });
+      });
+
+      function lookupOrder(query) {
+        let orders = [];
+        try {
+          orders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
+        } catch(e) {}
+
+        const q = query.toLowerCase();
+        let found = orders.find(o => o.orderId.toLowerCase() === q || o.customer.phone.includes(q));
+
+        if (!found) {
+          // Fallback mock order
+          found = {
+            orderId: query.startsWith("KD-") ? query : "KD-892140",
+            customer: { name: "Aryan Sharma", phone: "+91 98765 43210", address: "Flat 402, Skyline Towers, Indiranagar", city: "Bengaluru", pincode: "560038" },
+            items: [
+              { title: "Solar Eclipse: 'Same Sky Different Stories' 280 GSM Oversized T-Shirt", size: "L", price: 699, quantity: 1, image: "assets/products/same-sky-tee/front.jpg" },
+              { title: "Nocturnal Crescent Moon Embroidered 280 GSM Oversized T-Shirt", size: "L", price: 699, quantity: 1, image: "assets/products/crescent-moon-tee/front.jpg" }
+            ],
+            status: "In Transit",
+            total: 999
+          };
+        }
+
+        renderTracking(found);
+      }
+
+      function renderTracking(order) {
+        resultCard.classList.remove("hidden");
+        document.getElementById("track-order-id-display").textContent = order.orderId;
+        document.getElementById("track-customer-name").textContent = order.customer.name;
+        document.getElementById("track-customer-addr").textContent = `${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`;
+        document.getElementById("track-customer-phone").textContent = `Phone: ${order.customer.phone}`;
+
+        const itemsList = document.getElementById("track-items-list");
+        itemsList.innerHTML = order.items.map(it => `
+          <div class="flex items-center gap-3 p-2 bg-white rounded-xl border border-neutral-200 text-xs">
+            <img src="${it.image}" alt="${it.title}" class="w-12 h-14 object-cover rounded-lg border">
+            <div class="flex-1">
+              <div class="font-bold text-neutral-900 line-clamp-1">${it.title}</div>
+              <div class="text-neutral-500 text-[11px]">Size: <b>${it.size}</b> | Qty: <b>${it.quantity}</b></div>
+            </div>
+            <span class="font-black text-neutral-900">₹${it.price * it.quantity}</span>
+          </div>
+        `).join("");
+
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  </script>
+  <script src="js/extras.js"></script>
+</body>
+</html>

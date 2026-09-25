@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist — KODO.DIY Streetwear</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/kodo-logo.png?v=3">
+</head>
+<body class="min-h-full flex flex-col text-neutral-900 selection:bg-[#2D8CE3] selection:text-white">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center">
+          <img src="assets/kodo-logo.png?v=3" alt="KODO.DIY" class="h-9 sm:h-11 md:h-12 w-auto object-contain">
+        </a>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-6 text-xs font-black uppercase tracking-wider">
+        <a href="index.html#catalog-section" class="hover:text-[#2D8CE3]">All Drops</a>
+        <a href="index.html#combo-builder-section" class="text-blue-600 hover:underline">Buy 2 @ ₹999</a>
+        <a href="index.html#combo-builder-section" class="text-pink-600 hover:underline">2 @ ₹999 Combo</a>
+        <a href="account.html" class="hover:text-[#2D8CE3]">VIP Hub</a>
+        <a href="returns.html" class="hover:text-[#2D8CE3]">Exchanges</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="text-xs font-bold text-neutral-600 hover:text-neutral-900">
+          ← Back to Shop
+        </a>
+        <a href="index.html" class="p-2.5 rounded-xl bg-neutral-100 text-neutral-900 font-black text-xs uppercase flex items-center gap-1.5">
+          <span>🛍️ Bag</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WISHLIST VIEW -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-200 mb-8">
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-syne text-2xl sm:text-3xl font-black uppercase text-neutral-900">SAVED STREETWEAR DROPS</h1>
+          <span id="wishlist-count-badge" class="px-2.5 py-0.5 bg-[#2D8CE3] text-white text-xs font-black rounded-full">3</span>
+        </div>
+        <p class="text-xs text-neutral-500 mt-1">Keep track of upcoming restocks and limited capsule pieces.</p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button type="button" id="share-wishlist-btn" class="px-4 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5">
+          <span>🔗</span> Share Wishlist
+        </button>
+        <button type="button" id="move-all-bag-btn" class="px-5 py-2 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black uppercase rounded-xl transition-colors shadow-sm">
+          Move All to Bag 🛍️
+        </button>
+      </div>
+    </div>
+
+    <!-- Wishlist Grid -->
+    <div id="wishlist-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="wishlist-empty" class="hidden text-center py-20 space-y-4">
+      <span class="text-5xl">🖤</span>
+      <h2 class="font-syne text-xl font-black uppercase">Your Wishlist is Empty</h2>
+      <p class="text-xs text-neutral-500 max-w-sm mx-auto">Explore our high-GSM graphic tees, cargos, and winter wear to save your favorite street fits.</p>
+      <a href="index.html#catalog-section" class="inline-block px-6 py-3 bg-[#2D8CE3] text-white text-xs font-black uppercase rounded-xl">
+        Explore Street Catalog
+      </a>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-neutral-200 py-6 text-center text-xs text-neutral-400 mt-12">
+    KODO.DIY • Powered by Veirdo Inspired Architecture
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById("wishlist-grid");
+      const empty = document.getElementById("wishlist-empty");
+      const countBadge = document.getElementById("wishlist-count-badge");
+
+      let wishlistIds = JSON.parse(localStorage.getItem("KODO_WISHLIST") || "[]");
+
+      // Seed with high hype pieces if empty for great UX
+      if (wishlistIds.length === 0) {
+        wishlistIds = ["kd-auto-tokyo-cyber-136-113", "kd-auto-celestial-equinox-507-724", "kd-auto-midnight-wangan-721-736"];
+        localStorage.setItem("KODO_WISHLIST", JSON.stringify(wishlistIds));
+      }
+
+      function renderWishlist() {
+        countBadge.textContent = wishlistIds.length;
+        if (wishlistIds.length === 0) {
+          grid.innerHTML = "";
+          empty.classList.remove("hidden");
+          return;
+        }
+
+        empty.classList.add("hidden");
+        const items = wishlistIds.map(id => window.KODO_DATA.PRODUCTS.find(p => p.id === id)).filter(Boolean);
+
+        grid.innerHTML = items.map(product => `
+          <div class="group bg-white rounded-3xl p-3 border border-neutral-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden bg-neutral-100 mb-3">
+              <a href="product.html?id=${product.id}">
+                <img src="${product.images[0]}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </a>
+              <button type="button" class="remove-wish-btn absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 text-neutral-600 hover:text-red-500 shadow flex items-center justify-center font-bold" data-id="${product.id}" title="Remove from wishlist">
+                ✕
+              </button>
+              <div class="absolute bottom-2 left-2 bg-black/60 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
+                ${product.fit} • ${product.gsm} GSM
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <a href="product.html?id=${product.id}" class="text-xs font-bold text-neutral-900 hover:text-[#2D8CE3] line-clamp-1">
+                ${product.title}
+              </a>
+              <div class="flex items-baseline gap-2">
+                <span class="text-sm font-black text-neutral-900">₹${product.price}</span>
+                <span class="text-[11px] text-neutral-400 line-through">₹${product.comparePrice}</span>
+              </div>
+
+              <!-- Quick Size Selector & Move to Bag -->
+              <div class="flex items-center gap-1.5 pt-1">
+                <select class="wish-size-sel flex-1 px-2 py-2 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-bold text-neutral-800">
+                  ${product.sizes.map(s => `<option value="${s}">Size ${s}</option>`).join("")}
+                </select>
+                <button type="button" class="wish-add-bag-btn px-3.5 py-2 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl transition-colors" data-id="${product.id}">
+                  + Bag
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join("");
+
+        // Attach listeners
+        document.querySelectorAll(".remove-wish-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            wishlistIds = wishlistIds.filter(x => x !== id);
+            localStorage.setItem("KODO_WISHLIST", JSON.stringify(wishlistIds));
+            renderWishlist();
+          });
+        });
+
+        document.querySelectorAll(".wish-add-bag-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            const p = window.KODO_DATA.PRODUCTS.find(x => x.id === id);
+            const sizeSelect = btn.parentElement.querySelector(".wish-size-sel");
+            const chosenSize = sizeSelect ? sizeSelect.value : "L";
+
+            let cart = JSON.parse(localStorage.getItem("KODO_CART") || "[]");
+            const item = {
+              id: `${p.id}-${chosenSize}`,
+              productId: p.id,
+              title: p.title,
+              price: p.price,
+              comparePrice: p.comparePrice,
+              image: p.images[0],
+              size: chosenSize,
+              sizes: p.sizes,
+              quantity: 1
+            };
+            const existing = cart.find(x => x.id === item.id);
+            if (existing) existing.quantity++;
+            else cart.push(item);
+            localStorage.setItem("KODO_CART", JSON.stringify(cart));
+
+            btn.textContent = "✓ Added";
+            btn.classList.add("bg-emerald-600");
+            setTimeout(() => {
+              btn.textContent = "+ Bag";
+              btn.classList.remove("bg-emerald-600");
+            }, 1400);
+          });
+        });
+      }
+
+      renderWishlist();
+
+      // Share button
+      document.getElementById("share-wishlist-btn")?.addEventListener("click", () => {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Wishlist share link copied to clipboard! Share with your street gang on WhatsApp or Instagram.");
+      });
+
+      // Move all to bag
+      document.getElementById("move-all-bag-btn")?.addEventListener("click", () => {
+        let cart = JSON.parse(localStorage.getItem("KODO_CART") || "[]");
+        wishlistIds.forEach(id => {
+          const p = window.KODO_DATA.PRODUCTS.find(x => x.id === id);
+          if (p) {
+            const item = {
+              id: `${p.id}-L`,
+              productId: p.id,
+              title: p.title,
+              price: p.price,
+              comparePrice: p.comparePrice,
+              image: p.images[0],
+              size: "L",
+              sizes: p.sizes,
+              quantity: 1
+            };
+            const existing = cart.find(x => x.id === item.id);
+            if (existing) existing.quantity++;
+            else cart.push(item);
+          }
+        });
+        localStorage.setItem("KODO_CART", JSON.stringify(cart));
+        alert("All wishlist drops added to your bag!");
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+  <script src="js/extras.js"></script>
+</body>
+</html>

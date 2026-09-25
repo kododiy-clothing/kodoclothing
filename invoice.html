@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-neutral-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GST Tax Invoice — KODO.DIY</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/kodo-logo.png?v=3">
+  <style>
+    @media print {
+      body { background: #fff !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      .invoice-box { box-shadow: none !important; border: 1px solid #ddd !important; }
+    }
+  </style>
+</head>
+<body class="min-h-full py-8 px-4 sm:px-6 font-sans text-neutral-900">
+
+  <!-- TOP ACTION BAR -->
+  <div class="max-w-3xl mx-auto mb-6 flex items-center justify-between no-print">
+    <a href="account.html" class="text-xs font-bold text-neutral-600 hover:text-neutral-900">
+      ← Back to Account
+    </a>
+    <div class="flex items-center gap-3">
+      <button type="button" onclick="window.print();" class="px-5 py-2.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black uppercase rounded-xl transition-colors shadow-md flex items-center gap-2">
+        <span>🖨️</span> Print / Save as PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- INVOICE SHEET -->
+  <div class="invoice-box max-w-3xl mx-auto bg-white rounded-3xl p-8 sm:p-10 shadow-xl border border-neutral-200 space-y-6">
+    
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-200">
+      <div class="space-y-1">
+        <img src="assets/kodo-logo.png?v=3" alt="KODO Logo" class="h-10 w-auto object-contain">
+        <div class="text-xs font-black uppercase text-neutral-400 font-mono-tech mt-1">KODO REBEL ATELIER PVT. LTD.</div>
+        <p class="text-[11px] text-neutral-500 leading-relaxed">
+          Plot 18, Streetwear Creative Hub, Okhla Phase III<br>
+          New Delhi — 110020, India<br>
+          <b>GSTIN:</b> 07AAACK9812M1Z5 | <b>State:</b> Delhi (07)
+        </p>
+      </div>
+
+      <div class="sm:text-right space-y-1">
+        <span class="inline-block px-3 py-1 bg-neutral-900 text-white font-mono-tech text-xs font-black uppercase rounded-full">
+          TAX INVOICE (B2C)
+        </span>
+        <div class="text-xs font-mono-tech font-bold text-neutral-600 mt-2">
+          Invoice No: <b id="inv-num" class="text-neutral-900">INV-2026-98214</b>
+        </div>
+        <div class="text-xs font-mono-tech text-neutral-500">
+          Invoice Date: <span id="inv-date">17 Sep 2026</span>
+        </div>
+        <div class="text-xs font-mono-tech text-neutral-500">
+          Order ID: <span id="inv-order-id" class="font-bold text-blue-600">KD-98214</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Billing & Shipping -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 bg-neutral-50 rounded-2xl border border-neutral-100 text-xs">
+      <div>
+        <span class="font-black uppercase tracking-wider text-neutral-400 block mb-1">BILL TO:</span>
+        <div class="font-bold text-neutral-900" id="inv-customer-name">Kabir Sharma</div>
+        <div class="text-neutral-600 leading-relaxed" id="inv-customer-address">
+          Flat 402, Skyline Residency, Sector 45<br>
+          Near City Centre Mall<br>
+          Gurugram, Haryana — 122003
+        </div>
+        <div class="text-neutral-500 mt-1 font-mono-tech">State: Haryana (06) | Phone: +91 98765 43210</div>
+      </div>
+
+      <div class="sm:text-right">
+        <span class="font-black uppercase tracking-wider text-neutral-400 block mb-1">DISPATCH & COURIER:</span>
+        <div class="font-bold text-neutral-900">BlueDart Priority Air Express</div>
+        <div class="text-neutral-600 font-mono-tech">AWB: <span id="inv-awb">AWB-KODO-849204</span></div>
+        <div class="text-neutral-600 mt-1">Payment Method: <b>Prepaid (UPI Google Pay)</b></div>
+        <div class="text-emerald-600 font-bold mt-1">Payment Status: Verified & Paid</div>
+      </div>
+    </div>
+
+    <!-- Itemized Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs border-collapse">
+        <thead>
+          <tr class="border-b-2 border-neutral-900 font-black uppercase text-neutral-600 text-[11px]">
+            <th class="py-3">Item Description</th>
+            <th class="py-3">HSN Code</th>
+            <th class="py-3 text-center">Qty</th>
+            <th class="py-3 text-right">Unit Price</th>
+            <th class="py-3 text-right">Taxable Val</th>
+            <th class="py-3 text-right">GST (5%)</th>
+            <th class="py-3 text-right">Total (₹)</th>
+          </tr>
+        </thead>
+        <tbody id="inv-items-body" class="divide-y divide-neutral-200">
+          <tr>
+            <td class="py-3 font-bold text-neutral-900">
+              KODO Acid Heavyweight Oversized Tee<br>
+              <span class="text-[10px] text-neutral-500 font-normal">Size: L | 240 GSM French Terry</span>
+            </td>
+            <td class="py-3 font-mono-tech text-neutral-600">61091000</td>
+            <td class="py-3 text-center font-bold">1</td>
+            <td class="py-3 text-right">₹951.43</td>
+            <td class="py-3 text-right">₹951.43</td>
+            <td class="py-3 text-right">₹47.57</td>
+            <td class="py-3 text-right font-black">₹999.00</td>
+          </tr>
+          <tr>
+            <td class="py-3 font-bold text-neutral-900">
+              Custom 3D Puff Print Tee (KODO 3D Retro)<br>
+              <span class="text-[10px] text-neutral-500 font-normal">Size: L | 3D Embossed Rubber Inks</span>
+            </td>
+            <td class="py-3 font-mono-tech text-neutral-600">61091000</td>
+            <td class="py-3 text-center font-bold">1</td>
+            <td class="py-3 text-right">₹760.95</td>
+            <td class="py-3 text-right">₹760.95</td>
+            <td class="py-3 text-right">₹38.05</td>
+            <td class="py-3 text-right font-black">₹799.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Subtotals & Tax Breakdown -->
+    <div class="flex flex-col sm:flex-row justify-between items-start pt-4 border-t-2 border-neutral-900 gap-6 text-xs">
+      <div class="space-y-1 text-neutral-500">
+        <div><b>Tax Note:</b> All rates inclusive of CGST 2.5% + SGST 2.5% (or IGST 5%).</div>
+        <div>Computer generated invoice, requires no physical signature.</div>
+      </div>
+
+      <div class="w-full sm:w-64 space-y-1.5 text-right font-medium">
+        <div class="flex justify-between">
+          <span class="text-neutral-500">Total Taxable Value:</span>
+          <span>₹1,712.38</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-500">CGST (2.5%):</span>
+          <span>₹42.81</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-500">SGST (2.5%):</span>
+          <span>₹42.81</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-500">Express Courier Freight:</span>
+          <span class="text-emerald-600 font-bold">FREE</span>
+        </div>
+        <div class="flex justify-between pt-2 border-t border-neutral-300 text-sm font-black text-neutral-900">
+          <span>Grand Total (INR):</span>
+          <span class="text-[#2D8CE3]" id="inv-grand-total">₹1,798.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signatory & Barcode Footer -->
+    <div class="pt-6 border-t border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-center sm:text-left">
+        <div class="text-[10px] font-mono-tech tracking-widest text-neutral-400 uppercase">AUTHENTIC STREET REBEL VERIFIED</div>
+        <div class="font-mono-tech text-xs tracking-widest text-neutral-800 font-bold mt-0.5">||||| | |||| ||| |||||| |||| | |||||</div>
+      </div>
+
+      <div class="text-center sm:text-right">
+        <div class="text-[10px] font-mono-tech text-neutral-400">FOR KODO REBEL ATELIER PVT. LTD.</div>
+        <div class="font-syne font-black text-xs text-neutral-900 mt-1 uppercase">AUTHORIZED SIGNATORY</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = urlParams.get("id") || "KD-98214";
+      document.getElementById("inv-order-id").textContent = orderId;
+      document.getElementById("inv-num").textContent = `INV-2026-${orderId.replace(/[^0-9]/g, '') || '98214'}`;
+    });
+  </script>
+</body>
+</html>

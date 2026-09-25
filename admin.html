@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#0d1117] text-neutral-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KODO.DIY Merchant Central — Shopify-Style Control Panel</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/kodo-logo.png?v=3">
+</head>
+<body class="min-h-full flex flex-col antialiased selection:bg-[#2D8CE3] selection:text-white bg-[#0f1218]">
+
+  <!-- SHOPIFY-STYLE ADMIN WRAPPER -->
+  <div class="flex-1 flex min-h-screen">
+
+    <!-- LEFT SIDEBAR (SHOPIFY DARK SLATE) -->
+    <aside class="w-64 bg-[#161b22] border-r border-neutral-800 flex flex-col justify-between flex-shrink-0 z-20">
+      
+      <!-- Brand & Store Switcher -->
+      <div>
+        <div class="p-4 border-b border-neutral-800 flex items-center justify-between">
+          <a href="index.html" class="flex items-center gap-2.5">
+            <img src="assets/kodo-logo.png?v=3" alt="KODO Logo" class="h-7 w-auto object-contain">
+            <span class="text-[10px] font-mono-tech tracking-widest text-[#2D8CE3] font-black uppercase px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/30">
+              MERCHANT
+            </span>
+          </a>
+        </div>
+
+        <div class="px-4 py-3 border-b border-neutral-800/60 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="font-bold text-neutral-300">kodo-streetwear.in</span>
+          </div>
+          <a href="index.html" target="_blank" class="text-neutral-400 hover:text-white text-xs" title="Open Storefront">
+            ↗
+          </a>
+        </div>
+
+        <!-- Sidebar Navigation Menu -->
+        <nav class="p-3 space-y-1 text-xs font-bold text-neutral-400">
+          <button type="button" class="admin-nav-link active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="dashboard">
+            <span class="text-base">📊</span>
+            <span>Dashboard & KPIs</span>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="orders">
+            <span class="text-base">📦</span>
+            <div class="flex-1 flex items-center justify-between">
+              <span>Orders & Fulfillment</span>
+              <span id="nav-orders-badge" class="bg-[#2D8CE3] text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+            </div>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="products">
+            <span class="text-base">👕</span>
+            <div class="flex-1 flex items-center justify-between">
+              <span>Products & Inventory</span>
+              <span id="nav-products-badge" class="bg-neutral-800 text-neutral-300 text-[10px] font-black px-1.5 py-0.2 rounded-full">42</span>
+            </div>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="discounts">
+            <span class="text-base">🏷️</span>
+            <span>Discounts & Coupons</span>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="customers">
+            <span class="text-base">👥</span>
+            <span>Customers CRM</span>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="analytics">
+            <span class="text-base">📈</span>
+            <span>Sales Analytics Radar</span>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="settings">
+            <span class="text-base">⚙️</span>
+            <span>Store Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Footer Quick Links -->
+      <div class="p-3 border-t border-neutral-800 space-y-2">
+        <a href="index.html" target="_blank" class="block text-center w-full py-2.5 bg-[#2D8CE3] hover:bg-blue-600 text-white text-xs font-black uppercase rounded-xl transition-colors">
+          View Live Storefront ↗
+        </a>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT WORKSPACE -->
+    <div class="flex-1 flex flex-col min-w-0 bg-[#0d1117] overflow-y-auto">
+      
+      <!-- TOP UTILITY BAR -->
+      <header class="h-16 bg-[#161b22] border-b border-neutral-800 px-6 flex items-center justify-between gap-4 sticky top-0 z-10">
+        <div class="flex items-center gap-3 flex-1 max-w-md">
+          <div class="relative w-full">
+            <input type="text" id="admin-global-search" placeholder="Search orders, customers, drops, AWB tracking..." class="w-full pl-8 pr-3 py-1.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500">
+            <span class="absolute left-2.5 top-2 text-xs text-neutral-400">🔍</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <button type="button" onclick="document.querySelector('[data-tab=\'products\']').click(); document.getElementById('open-add-product-modal').click();" class="px-3.5 py-1.5 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-xs uppercase rounded-xl transition-colors shadow-sm flex items-center gap-1.5">
+            <span>+</span> <span>Add Product Drop</span>
+          </button>
+
+          <button type="button" id="admin-export-csv-btn" class="px-3 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5">
+            <span>📊</span> <span>Export CSV</span>
+          </button>
+
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-[#2D8CE3] flex items-center justify-center text-xs font-black text-white">
+            KD
+          </div>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD & KPIS -->
+      <div id="tab-dashboard" class="admin-tab-pane p-6 sm:p-8 space-y-8">
+        
+        <!-- Welcome Hero Banner -->
+        <div class="bg-gradient-to-r from-neutral-900 via-neutral-900 to-[#121c2d] p-6 sm:p-8 rounded-3xl border border-neutral-800 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+          <div class="space-y-1 relative z-10">
+            <div class="inline-flex items-center gap-1.5 text-emerald-400 text-xs font-black font-mono-tech uppercase">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> KODO DTC LIVE ENGINE ACTIVE
+            </div>
+            <h1 class="font-syne text-2xl sm:text-3xl font-black uppercase tracking-tight text-white">
+              STREETWEAR MERCHANT OVERVIEW
+            </h1>
+            <p class="text-xs text-neutral-400">
+              Live orders, sales velocity, courier fulfillment tracking, and catalog controls.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 relative z-10">
+            <button type="button" onclick="document.querySelector('[data-tab=\'orders\']').click();" class="px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-black text-xs uppercase rounded-xl transition-colors">
+              View All Orders →
+            </button>
+          </div>
+        </div>
+
+        <!-- REAL STORE OPERATIONS BANNER -->
+        <div class="bg-gradient-to-r from-blue-950/60 via-neutral-900 to-emerald-950/40 p-5 rounded-3xl border border-blue-500/30 relative overflow-hidden shadow-xl">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+            <div class="flex items-start gap-3.5">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#2D8CE3] to-emerald-500 flex items-center justify-center text-xl flex-shrink-0 shadow-lg shadow-blue-900/50">
+                📦
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> REAL-TIME CATALOG & FULFILLMENT SYNC
+                  </span>
+                  <span id="store-sku-count-badge" class="text-xs font-mono-tech font-bold text-neutral-300">42 Live SKUs Active</span>
+                </div>
+                <h2 class="text-base font-syne font-black text-white uppercase mt-1">Live Streetwear Catalog & Courier Dispatch</h2>
+                <p class="text-xs text-neutral-400">
+                  Real order persistence, live stock quantity deductions, customer CRM tracking, and Delhivery / BlueDart shipping AWBs.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2.5">
+              <button type="button" onclick="document.querySelector('[data-tab=\'orders\']').click();" class="px-4 py-2.5 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-xs uppercase rounded-xl transition-all shadow-lg flex items-center gap-2 cursor-pointer">
+                <span>📦</span> <span>Fulfill Live Orders</span>
+              </button>
+              <button type="button" onclick="document.querySelector('[data-tab=\'products\']').click();" class="px-3.5 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 font-bold text-xs rounded-xl border border-neutral-700 transition-colors flex items-center gap-1.5 cursor-pointer">
+                <span>👕</span> <span>Manage Stock Levels</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-[#161b22] p-5 rounded-2xl border border-neutral-800 shadow-sm">
+            <div class="text-[11px] font-black uppercase text-neutral-500 tracking-wider">Gross Sales (INR)</div>
+            <div id="kpi-revenue" class="text-2xl sm:text-3xl font-black text-white mt-2 font-mono-tech">₹0</div>
+            <div class="text-[11px] text-emerald-400 font-bold mt-1 flex items-center gap-1">
+              <span>↑ 24.8%</span> <span class="text-neutral-500 font-normal">vs last drop</span>
+            </div>
+          </div>
+
+          <div class="bg-[#161b22] p-5 rounded-2xl border border-neutral-800 shadow-sm">
+            <div class="text-[11px] font-black uppercase text-neutral-500 tracking-wider">Total Orders</div>
+            <div id="kpi-orders-count" class="text-2xl sm:text-3xl font-black text-white mt-2 font-mono-tech">0</div>
+            <div class="text-[11px] text-blue-400 font-bold mt-1">100% Prepaid & UPI Speed</div>
+          </div>
+
+          <div class="bg-[#161b22] p-5 rounded-2xl border border-neutral-800 shadow-sm">
+            <div class="text-[11px] font-black uppercase text-neutral-500 tracking-wider">Average Order Value</div>
+            <div id="kpi-aov" class="text-2xl sm:text-3xl font-black text-white mt-2 font-mono-tech">₹0</div>
+            <div class="text-[11px] text-neutral-400 mt-1">Boosted by Buy 2 Combos</div>
+          </div>
+
+          <div class="bg-[#161b22] p-5 rounded-2xl border border-neutral-800 shadow-sm">
+            <div class="text-[11px] font-black uppercase text-neutral-500 tracking-wider">Total Warehouse Stock</div>
+            <div id="kpi-stock-count" class="text-2xl sm:text-3xl font-black text-emerald-400 mt-2 font-mono-tech">0</div>
+            <div class="text-[11px] text-emerald-500 font-bold mt-1">📦 42 Drop SKUs Available</div>
+          </div>
+        </div>
+
+        <!-- Recent Activity & Sales Split -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Recent Orders Quick Preview (8 Cols) -->
+          <div class="lg:col-span-8 bg-[#161b22] rounded-3xl border border-neutral-800 p-6 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-neutral-800">
+              <h3 class="font-syne font-black text-sm uppercase text-white">LATEST FULFILLMENT ACTIVITY</h3>
+              <button type="button" onclick="document.querySelector('[data-tab=\'orders\']').click();" class="text-xs font-bold text-blue-400 hover:underline">Manage All Orders →</button>
+            </div>
+            <div id="dashboard-recent-orders-list" class="space-y-3">
+              <!-- Injected via JavaScript -->
+            </div>
+          </div>
+
+          <!-- Channel & Payment Breakdown (4 Cols) -->
+          <div class="lg:col-span-4 bg-[#161b22] rounded-3xl border border-neutral-800 p-6 space-y-4">
+            <h3 class="font-syne font-black text-sm uppercase text-white pb-3 border-b border-neutral-800">PAYMENT & CONVERSION RADAR</h3>
+            
+            <div class="space-y-3 text-xs">
+              <div>
+                <div class="flex justify-between font-bold mb-1">
+                  <span>UPI Dynamic QR (GPay / PhonePe)</span>
+                  <span class="text-[#2D8CE3]">74%</span>
+                </div>
+                <div class="w-full h-2 bg-neutral-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#2D8CE3] rounded-full" style="width: 74%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between font-bold mb-1">
+                  <span>Prepaid Debit / Credit Cards</span>
+                  <span class="text-purple-400">18%</span>
+                </div>
+                <div class="w-full h-2 bg-neutral-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-purple-500 rounded-full" style="width: 18%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between font-bold mb-1">
+                  <span>Cash On Delivery (Verified COD)</span>
+                  <span class="text-amber-400">8%</span>
+                </div>
+                <div class="w-full h-2 bg-neutral-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-amber-400 rounded-full" style="width: 8%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-neutral-900 rounded-2xl border border-neutral-800 text-xs space-y-1.5 mt-4">
+              <div class="text-[10px] font-black uppercase text-neutral-500">Logistics Partner</div>
+              <div class="font-bold text-white flex items-center justify-between">
+                <span>BlueDart Air Express</span>
+                <span class="text-emerald-400">99.2% SLA</span>
+              </div>
+              <p class="text-[11px] text-neutral-400">Average transit time across Indian metro zones: 2.1 Days</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: ORDERS & FULFILLMENT -->
+      <div id="tab-orders" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">ORDERS & LIVE FULFILLMENT</h2>
+            <p class="text-xs text-neutral-400 mt-0.5">Track, dispatch, generate AWB numbers, and print courier packing slips.</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button type="button" id="admin-refresh-orders-btn" class="px-3.5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
+              <span>🔄</span> <span>Sync Live Orders</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="bg-[#161b22] p-4 rounded-2xl border border-neutral-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <button type="button" class="admin-status-filter active px-3 py-1.5 rounded-xl text-xs font-bold uppercase transition-all bg-neutral-800 text-white" data-status="all">All Orders</button>
+            <button type="button" class="admin-status-filter px-3 py-1.5 rounded-xl text-xs font-bold uppercase transition-all text-neutral-400 hover:bg-neutral-800" data-status="Confirmed">Confirmed</button>
+            <button type="button" class="admin-status-filter px-3 py-1.5 rounded-xl text-xs font-bold uppercase transition-all text-neutral-400 hover:bg-neutral-800" data-status="In Production">In Production</button>
+            <button type="button" class="admin-status-filter px-3 py-1.5 rounded-xl text-xs font-bold uppercase transition-all text-neutral-400 hover:bg-neutral-800" data-status="Dispatched">Dispatched</button>
+            <button type="button" class="admin-status-filter px-3 py-1.5 rounded-xl text-xs font-bold uppercase transition-all text-neutral-400 hover:bg-neutral-800" data-status="Delivered">Delivered</button>
+            <button type="button" class="admin-status-filter px-3 py-1.5 rounded-xl text-xs font-bold uppercase transition-all text-neutral-400 hover:bg-neutral-800" data-status="Cancelled">Cancelled</button>
+          </div>
+
+          <input type="text" id="admin-orders-search" placeholder="Search by Order ID, Phone, Customer..." class="px-3 py-1.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-blue-500 w-full md:w-64">
+        </div>
+
+        <!-- Orders Table -->
+        <div class="bg-[#161b22] rounded-3xl border border-neutral-800 overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="bg-neutral-900/80 text-[11px] font-black uppercase tracking-wider text-neutral-400 border-b border-neutral-800">
+                  <th class="p-4">Order ID & Date</th>
+                  <th class="p-4">Customer & City</th>
+                  <th class="p-4">Items Summary</th>
+                  <th class="p-4">Amount</th>
+                  <th class="p-4">Payment</th>
+                  <th class="p-4">Status & Courier AWB</th>
+                  <th class="p-4 text-right">Fulfillment Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-table-body" class="divide-y divide-neutral-800">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: PRODUCTS & INVENTORY (UPLOAD DROPS) -->
+      <div id="tab-products" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">PRODUCT CATALOG & INVENTORY</h2>
+            <p class="text-xs text-neutral-400 mt-0.5">Upload new streetwear pieces, modify pricing, and toggle in-stock status.</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button type="button" id="open-add-product-modal" class="px-4 py-2.5 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-colors shadow-lg flex items-center gap-1.5 cursor-pointer">
+              <span>+</span> <span>Add Product Drop</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="bg-[#161b22] rounded-3xl border border-neutral-800 overflow-hidden shadow-sm">
+          <div class="p-4 border-b border-neutral-800 flex items-center justify-between">
+            <span class="text-xs font-bold text-neutral-400">All Live Streetwear Pieces</span>
+            <input type="text" id="admin-products-search" placeholder="Search product title, GSM, category..." class="px-3 py-1.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white focus:outline-none w-64">
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="bg-neutral-900/80 text-[11px] font-black uppercase tracking-wider text-neutral-400 border-b border-neutral-800">
+                  <th class="p-4">Product & SKU</th>
+                  <th class="p-4">Category</th>
+                  <th class="p-4">GSM</th>
+                  <th class="p-4">Price (₹)</th>
+                  <th class="p-4">Live Stock Units</th>
+                  <th class="p-4 text-right">Inventory Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-table-body" class="divide-y divide-neutral-800">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: DISCOUNTS & COUPONS -->
+      <div id="tab-discounts" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">DISCOUNT CODES & FLASH CAMPAIGNS</h2>
+            <p class="text-xs text-neutral-400 mt-0.5">Create and manage marketing promo vouchers.</p>
+          </div>
+
+          <button type="button" id="open-add-discount-modal" class="px-4 py-2 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-xs uppercase rounded-xl">
+            + Create Discount Code
+          </button>
+        </div>
+
+        <div class="bg-[#161b22] rounded-3xl border border-neutral-800 overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-neutral-900/80 text-[11px] font-black uppercase tracking-wider text-neutral-400 border-b border-neutral-800">
+                <th class="p-4">Code</th>
+                <th class="p-4">Type & Value</th>
+                <th class="p-4">Min. Spend</th>
+                <th class="p-4">Usage Status</th>
+                <th class="p-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-discounts-table-body" class="divide-y divide-neutral-800">
+              <!-- Injected via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 6: CUSTOMERS CRM -->
+      <div id="tab-customers" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div>
+          <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">STREET REBELS CUSTOMER DIRECTORY</h2>
+          <p class="text-xs text-neutral-400 mt-0.5">Customer contact details, total lifetime spend, and VIP rewards tier.</p>
+        </div>
+
+        <div class="bg-[#161b22] rounded-3xl border border-neutral-800 overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-neutral-900/80 text-[11px] font-black uppercase tracking-wider text-neutral-400 border-b border-neutral-800">
+                <th class="p-4">Customer</th>
+                <th class="p-4">Contact Info</th>
+                <th class="p-4">City</th>
+                <th class="p-4">Orders Count</th>
+                <th class="p-4">Lifetime Spend</th>
+                <th class="p-4">VIP Tier</th>
+                <th class="p-4 text-right">WhatsApp</th>
+              </tr>
+            </thead>
+            <tbody id="admin-customers-table-body" class="divide-y divide-neutral-800">
+              <!-- Injected via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 7: SALES ANALYTICS RADAR -->
+      <div id="tab-analytics" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div>
+          <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">SALES & VELOCITY ANALYTICS</h2>
+          <p class="text-xs text-neutral-400 mt-0.5">Detailed breakdown of product demand, top categories, and financial metrics.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-3">
+            <div class="text-xs font-black uppercase text-neutral-500">TOP SELLING CATEGORY</div>
+            <div class="text-2xl font-black text-[#2D8CE3] font-syne">OVERSIZED TEES</div>
+            <p class="text-xs text-neutral-400">Contributes to <b>62% of total store revenue</b> with average cart count of 2.4 units.</p>
+          </div>
+
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-3">
+            <div class="text-xs font-black uppercase text-neutral-500">COMBO BUILDER CONVERSION</div>
+            <div class="text-2xl font-black text-amber-400 font-syne">₹999 BUNDLES</div>
+            <p class="text-xs text-neutral-400"><b>41% of shoppers</b> use the "Buy 2 @ ₹999" interactive studio over single items.</p>
+          </div>
+
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-3">
+            <div class="text-xs font-black uppercase text-neutral-500">FULFILLMENT DISPATCH VELOCITY</div>
+            <div class="text-2xl font-black text-emerald-400 font-syne">99.4% SLA</div>
+            <p class="text-xs text-neutral-400">Same-day courier manifest generation with <b>Delhivery Air & BlueDart Express</b>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 8: STORE SETTINGS -->
+      <div id="tab-settings" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div>
+          <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">STORE CONFIGURATION & LOGISTICS</h2>
+          <p class="text-xs text-neutral-400 mt-0.5">Manage store credentials, free shipping limits, and support contact.</p>
+        </div>
+
+        <div class="max-w-2xl bg-[#161b22] p-6 sm:p-8 rounded-3xl border border-neutral-800 space-y-5 text-xs">
+          <div>
+            <label class="font-black uppercase tracking-wider text-neutral-400 block mb-1">Store Name</label>
+            <input type="text" value="KODO.DIY Streetwear India" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white">
+          </div>
+
+          <div>
+            <label class="font-black uppercase tracking-wider text-neutral-400 block mb-1">Company GSTIN Number</label>
+            <input type="text" value="07AAACK9812M1Z5" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white font-mono-tech">
+          </div>
+
+          <div>
+            <label class="font-black uppercase tracking-wider text-neutral-400 block mb-1">Free Shipping Threshold (INR)</label>
+            <input type="number" value="799" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white font-mono-tech">
+          </div>
+
+          <div>
+            <label class="font-black uppercase tracking-wider text-neutral-400 block mb-1">WhatsApp Customer Support Number</label>
+            <input type="text" value="+91 70467 02094" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white font-mono-tech">
+          </div>
+
+          <button type="button" onclick="alert('Store settings saved successfully!');" class="px-6 py-3 bg-[#2D8CE3] text-white font-black uppercase rounded-xl">
+            SAVE SETTINGS
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADD PRODUCT MODAL (SHOPIFY STYLE) -->
+  <div id="add-product-modal" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="modal-box bg-[#161b22] text-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-neutral-800 max-h-[90vh] overflow-y-auto relative">
+      <button type="button" id="close-add-product-modal" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center font-bold">
+        ✕
+      </button>
+
+      <div class="text-xs font-black tracking-widest text-[#2D8CE3] uppercase font-mono-tech mb-1">
+        ⚡ NEW CAPSULE DROP CREATOR
+      </div>
+      <h3 class="font-syne text-2xl font-black uppercase tracking-tight">
+        UPLOAD PRODUCT TO STOREFRONT
+      </h3>
+      <p class="text-xs text-neutral-400 mt-1 mb-6">
+        Newly created products will immediately appear on the Homepage, Collections, and Search radar.
+      </p>
+
+      <form id="add-product-form" class="space-y-4 text-xs">
+        <div>
+          <label class="font-black uppercase text-neutral-300 block mb-1">Product Title</label>
+          <input type="text" id="p-title" required placeholder="e.g. Acid Wash Tokyo Drift 280 GSM Oversized Tee" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Category</label>
+            <select id="p-cat" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+              <option value="oversized-tees">Oversized Graphic Tees</option>
+              <option value="winter-wear">Winter Jackets & Bombers</option>
+              <option value="cargos-pants">Korean Cargos & Bottoms</option>
+              <option value="premium-polos">Premium Street Polos</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Badge Tag</label>
+            <input type="text" id="p-badge" value="NEW DROP" placeholder="BESTSELLER, NEW DROP, LIMITED" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Price (₹)</label>
+            <input type="number" id="p-price" required value="799" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech">
+          </div>
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">MRP / Compare (₹)</label>
+            <input type="number" id="p-compare" required value="1599" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech">
+          </div>
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Fabric GSM</label>
+            <input type="number" id="p-gsm" required value="240" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Silhouette Fit</label>
+            <select id="p-fit" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+              <option value="Oversized Fit">Oversized Drop-Shoulder</option>
+              <option value="Boxy Regular">Boxy Regular Fit</option>
+              <option value="Relaxed Fit">Relaxed Fit</option>
+              <option value="Straight Leg">Straight Leg (Cargos)</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Stock Count</label>
+            <input type="number" id="p-stock" value="50" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech">
+          </div>
+        </div>
+
+        <div>
+          <label class="font-black uppercase text-neutral-300 block mb-1">Image URL (Shopify / Cloud CDN or local)</label>
+          <input type="text" id="p-image" required value="assets/products/same-sky-tee/front.jpg" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech focus:outline-none">
+        </div>
+
+        <div>
+          <label class="font-black uppercase text-neutral-300 block mb-1">Description & Story</label>
+          <textarea id="p-desc" rows="2" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl text-neutral-200 focus:outline-none">Crafted from heavyweight French Terry cotton with signature 3D puff print embroidery.</textarea>
+        </div>
+
+        <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-[#2D8CE3] text-white font-black text-xs uppercase tracking-wider rounded-2xl transition-all hover:opacity-95 shadow-lg shadow-emerald-500/20">
+          PUBLISH TO LIVE STOREFRONT 🚀
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD DISCOUNT MODAL -->
+  <div id="add-discount-modal" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="modal-box bg-[#161b22] text-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-neutral-800 text-left">
+      <button type="button" id="close-add-discount-modal" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center font-bold">
+        ✕
+      </button>
+
+      <h3 class="font-syne text-lg font-black uppercase mb-4">Create Discount Coupon</h3>
+      
+      <form id="add-discount-form" class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-neutral-300 block mb-1">Coupon Code</label>
+          <input type="text" id="d-code" required placeholder="e.g. DROP25" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white uppercase focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="font-bold text-neutral-300 block mb-1">Discount %</label>
+            <input type="number" id="d-val" required value="20" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech focus:outline-none">
+          </div>
+          <div>
+            <label class="font-bold text-neutral-300 block mb-1">Min Spend (₹)</label>
+            <input type="number" id="d-min" required value="999" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech focus:outline-none">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-[#2D8CE3] text-white font-black uppercase rounded-xl mt-2">
+          ACTIVATE COUPON
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- AI 4-PHOTO SMART DROP GENERATOR MODAL -->
+  <div id="ai-product-modal" class="modal-overlay fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="modal-box bg-[#12161f] text-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-purple-500/30 max-h-[92vh] overflow-y-auto relative">
+      <button type="button" id="close-ai-product-modal" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center font-bold">
+        ✕
+      </button>
+
+      <!-- Top AI Header -->
+      <div class="flex items-center gap-2 text-xs font-black tracking-widest text-purple-400 uppercase font-mono-tech mb-1">
+        <span class="w-2 h-2 rounded-full bg-purple-400 animate-ping"></span>
+        🤖 KODO STREETWEAR VISION AI • 4-PHOTO MULTI-DROP ENGINE
+      </div>
+      <h3 class="font-syne text-2xl sm:text-3xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-[#2D8CE3]">
+        DRAG & DROP 4 PHOTOS -> AI AUTO-CATALOG
+      </h3>
+      <p class="text-xs text-neutral-400 mt-1 mb-6 max-w-2xl">
+        Upload 4 garment angles (Front, Back, On-Body Fit, Fabric/Puff Detail). Our Streetwear Vision Engine will automatically detect the silhouette, GSM weight, generate high-converting Gen-Z copy, set competitive DTC margins, and push live to your storefront.
+      </p>
+
+      <!-- 4-PHOTO DRAG & DROP ZONE -->
+      <div class="space-y-4">
+        
+        <!-- Interactive Drop Target Area -->
+        <div id="ai-dropzone" class="border-2 border-dashed border-purple-500/40 hover:border-purple-400 bg-purple-950/15 hover:bg-purple-950/25 rounded-2xl p-6 text-center cursor-pointer transition-all group">
+          <input type="file" id="ai-file-input" accept="image/*" multiple class="hidden">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mx-auto text-2xl mb-2 group-hover:scale-110 transition-transform">
+            📸
+          </div>
+          <div class="text-sm font-black uppercase text-white tracking-wide">
+            DRAG & DROP UP TO 4 PRODUCT PHOTOS HERE
+          </div>
+          <p class="text-xs text-neutral-400 mt-1">
+            PNG, JPG, WebP supported • Front, Back, On-Body, Detail shot • Or click to browse files
+          </p>
+          
+          <!-- Sample Preset 1-Click Loaders -->
+            <span class="text-neutral-400 font-bold uppercase font-mono-tech">Quick Demo Presets:</span>
+            <button type="button" class="ai-preset-btn px-2.5 py-1 rounded-lg bg-neutral-900 border border-indigo-500/40 hover:border-indigo-400 text-indigo-300 font-bold transition-colors" data-preset="altitude">
+              🏔️ Alpine Summit Altitude Tee (4 Photos)
+            </button>
+            <button type="button" class="ai-preset-btn px-2.5 py-1 rounded-lg bg-neutral-900 border border-amber-500/40 hover:border-amber-400 text-amber-300 font-bold transition-colors" data-preset="same-sky">
+              ☀️ Solar Eclipse Same Sky Tee (4 Photos)
+            </button>
+            <button type="button" class="ai-preset-btn px-2.5 py-1 rounded-lg bg-neutral-900 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 font-bold transition-colors" data-preset="no-signal">
+              📡 Tokyo Cyber NO SIGNAL Tee
+            </button>
+            <button type="button" class="ai-preset-btn px-2.5 py-1 rounded-lg bg-neutral-900 border border-red-500/40 hover:border-red-400 text-red-300 font-bold transition-colors" data-preset="racing-division">
+              🏎️ Tokyo Drift Racing Division Tee (4 Photos)
+            </button>
+            <button type="button" class="ai-preset-btn px-2.5 py-1 rounded-lg bg-neutral-900 border border-blue-500/40 hover:border-blue-400 text-blue-300 font-bold transition-colors" data-preset="after-hours">
+              🪐 KODO After Hours 11:47 PM Tee
+            </button>
+            <button type="button" class="ai-preset-btn px-2.5 py-1 rounded-lg bg-neutral-900 border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 font-bold transition-colors" data-preset="crescent-moon">
+              🌙 Crescent Moon Embroidered Tee (5 Photos)
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 PHOTO SLOTS GRID -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <!-- Slot 1: Cover -->
+          <div class="ai-photo-slot bg-neutral-900 border border-neutral-800 rounded-2xl p-2.5 text-center relative group min-h-[140px] flex flex-col items-center justify-center" data-slot="0">
+            <div class="slot-placeholder text-center">
+              <div class="text-xl mb-1">👕</div>
+              <div class="text-[10px] font-black uppercase text-purple-400">Photo 1 (Cover)</div>
+              <div class="text-[9px] text-neutral-500">Front Chest Shot</div>
+            </div>
+            <img class="slot-img w-full h-28 object-cover rounded-xl hidden" src="" alt="Slot 1">
+            <button type="button" class="slot-remove-btn absolute top-2 right-2 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center hidden">✕</button>
+            <span class="slot-badge absolute bottom-2 left-2 px-1.5 py-0.2 bg-[#2D8CE3] text-white text-[9px] font-black rounded-full hidden">COVER</span>
+          </div>
+
+          <!-- Slot 2: Back Mural -->
+          <div class="ai-photo-slot bg-neutral-900 border border-neutral-800 rounded-2xl p-2.5 text-center relative group min-h-[140px] flex flex-col items-center justify-center" data-slot="1">
+            <div class="slot-placeholder text-center">
+              <div class="text-xl mb-1">🎨</div>
+              <div class="text-[10px] font-black uppercase text-neutral-400">Photo 2</div>
+              <div class="text-[9px] text-neutral-500">Back Mural / Graphic</div>
+            </div>
+            <img class="slot-img w-full h-28 object-cover rounded-xl hidden" src="" alt="Slot 2">
+            <button type="button" class="slot-remove-btn absolute top-2 right-2 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center hidden">✕</button>
+          </div>
+
+          <!-- Slot 3: Model Fit -->
+          <div class="ai-photo-slot bg-neutral-900 border border-neutral-800 rounded-2xl p-2.5 text-center relative group min-h-[140px] flex flex-col items-center justify-center" data-slot="2">
+            <div class="slot-placeholder text-center">
+              <div class="text-xl mb-1">👤</div>
+              <div class="text-[10px] font-black uppercase text-neutral-400">Photo 3</div>
+              <div class="text-[9px] text-neutral-500">On-Body Street Fit</div>
+            </div>
+            <img class="slot-img w-full h-28 object-cover rounded-xl hidden" src="" alt="Slot 3">
+            <button type="button" class="slot-remove-btn absolute top-2 right-2 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center hidden">✕</button>
+          </div>
+
+          <!-- Slot 4: Fabric / Puff Print -->
+          <div class="ai-photo-slot bg-neutral-900 border border-neutral-800 rounded-2xl p-2.5 text-center relative group min-h-[140px] flex flex-col items-center justify-center" data-slot="3">
+            <div class="slot-placeholder text-center">
+              <div class="text-xl mb-1">🔍</div>
+              <div class="text-[10px] font-black uppercase text-neutral-400">Photo 4</div>
+              <div class="text-[9px] text-neutral-500">Fabric & Puff Close-up</div>
+            </div>
+            <img class="slot-img w-full h-28 object-cover rounded-xl hidden" src="" alt="Slot 4">
+            <button type="button" class="slot-remove-btn absolute top-2 right-2 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center hidden">✕</button>
+          </div>
+        </div>
+
+        <!-- TRIGGER AI ANALYSIS BUTTON -->
+        <button type="button" id="trigger-ai-generate-btn" class="w-full py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-[#2D8CE3] hover:opacity-95 text-white font-black text-xs uppercase tracking-wider rounded-2xl transition-all shadow-xl shadow-purple-500/25 flex items-center justify-center gap-2">
+          <span>✨</span> <span>ANALYZE PHOTOS & AUTO-GENERATE FULL STREET DROP</span>
+        </button>
+
+        <!-- AI Scanning Progress Animation Banner (Hidden by default) -->
+        <div id="ai-scanning-banner" class="p-4 bg-purple-950/40 border border-purple-500/30 rounded-2xl space-y-2 hidden">
+          <div class="flex items-center justify-between text-xs font-mono-tech">
+            <span class="text-purple-300 font-black uppercase flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-pink-400 animate-ping"></span>
+              <span id="ai-scan-step-text">Neural Vision: Scanning garment silhouette & drape...</span>
+            </span>
+            <span id="ai-scan-percent" class="text-white font-bold">25%</span>
+          </div>
+          <div class="w-full bg-neutral-800 rounded-full h-2 overflow-hidden">
+            <div id="ai-scan-progress-bar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-[#2D8CE3] h-full transition-all duration-300" style="width: 25%;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AUTO-GENERATED PRODUCT EDIT / REVIEW FORM -->
+      <form id="ai-generated-form" class="mt-6 pt-6 border-t border-neutral-800 space-y-4 text-xs">
+        
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black uppercase text-neutral-300 tracking-wider font-mono-tech">
+            AI AUTO-GENERATED CATALOG DETAILS (EDITABLE):
+          </span>
+          <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
+            ✓ Vision Model Confidence: 99.2%
+          </span>
+        </div>
+
+        <div>
+          <label class="font-black uppercase text-neutral-300 block mb-1">Product Title</label>
+          <input type="text" id="ai-title" required placeholder="Auto-generated title..." class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none focus:border-purple-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Category</label>
+            <select id="ai-cat" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+              <option value="oversized-tees">Oversized Graphic Tees</option>
+              <option value="women-streetwear">Women's Streetwear</option>
+              <option value="crop-baby-tees">Baby Tees & Crops</option>
+              <option value="winter-wear">Winter Jackets & Hoodies</option>
+              <option value="cargos-pants">Korean Cargos & Bottoms</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Gender / Audience</label>
+            <select id="ai-gender" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+              <option value="unisex">Unisex Streetwear</option>
+              <option value="women">Women's Capsule</option>
+              <option value="men">Men's Streetwear</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Badge Tag</label>
+            <input type="text" id="ai-badge" value="HOT DROP" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Sale Price (₹)</label>
+            <input type="number" id="ai-price" required value="699" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-emerald-400 font-mono-tech focus:outline-none">
+          </div>
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">MRP / Compare (₹)</label>
+            <input type="number" id="ai-compare" required value="1499" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-neutral-400 line-through font-mono-tech focus:outline-none">
+          </div>
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Fabric GSM</label>
+            <input type="number" id="ai-gsm" required value="280" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech focus:outline-none">
+          </div>
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Stock Units</label>
+            <input type="number" id="ai-stock" required value="65" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white font-mono-tech focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Silhouette & Fit</label>
+            <input type="text" id="ai-fit" value="Oversized Boxy Drop-Shoulder" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+          </div>
+          <div>
+            <label class="font-black uppercase text-neutral-300 block mb-1">Color Palette</label>
+            <input type="text" id="ai-color" value="Acid Mineral Charcoal" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-bold text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="font-black uppercase text-neutral-300 block mb-1">Gen-Z Editorial Story & Description</label>
+          <textarea id="ai-desc" rows="2" class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl text-neutral-200 focus:outline-none leading-relaxed">Cut from ultra-dense 280 GSM French Terry cotton with vintage acid wash. Features high-density 3D embossed puff prints on the chest and a full cyber-glitch mural on the back. Preshrunk with reinforced rib neckline.</textarea>
+        </div>
+
+        <div>
+          <label class="font-black uppercase text-neutral-300 block mb-1">Wash Care & Tech Notes</label>
+          <input type="text" id="ai-care" value="Machine wash cold inside out. Do not iron on 3D puff artwork." class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-xl font-medium text-neutral-300 focus:outline-none">
+        </div>
+
+        <!-- SUBMIT FINAL PUBLISH -->
+        <button type="submit" id="ai-publish-btn" class="w-full py-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-[#2D8CE3] text-white font-black text-xs uppercase tracking-wider rounded-2xl transition-all hover:opacity-95 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2">
+          <span>🚀</span> <span>PUBLISH TO LIVE STOREFRONT (HOME + CATALOG + PDP + AR MIRROR)</span>
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- CELEBRATORY SUCCESS MODAL -->
+  <div id="ai-success-modal" class="modal-overlay fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="modal-box bg-[#161b22] text-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center border border-emerald-500/40 shadow-2xl relative">
+      <div class="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-3xl mx-auto mb-3">
+        ✓
+      </div>
+      <div class="text-xs font-mono-tech text-emerald-400 font-black uppercase mb-1">
+        🎉 AI DROP PUBLISHED LIVE!
+      </div>
+      <h3 id="ai-success-title" class="font-syne text-xl font-black uppercase text-white mb-2">
+        Tokyo Shibuya Acid Wash Oversized Tee
+      </h3>
+      <p class="text-xs text-neutral-400 mb-6">
+        All 4 photos and AI-generated copy are now live across the customer storefront, PDP loupe zoom, and AR Drip Mirror.
+      </p>
+
+      <div class="space-y-2.5">
+        <a id="ai-success-view-pdp" href="product.html" target="_blank" class="block w-full py-3 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-xs uppercase rounded-xl transition-all shadow-md">
+          👀 View Live Product Page (PDP) ↗
+        </a>
+        <a id="ai-success-view-tryon" href="tryon.html" target="_blank" class="block w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-black text-xs uppercase rounded-xl transition-all shadow-md">
+          🪞 Test in AR Drip Mirror ↗
+        </a>
+        <button type="button" id="close-ai-success-modal" class="w-full py-2.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 font-bold text-xs uppercase rounded-xl transition-all">
+          Done & Return to Admin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

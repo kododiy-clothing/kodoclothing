@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-neutral-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KODO VIP Rebel Hub — Customer Account</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/kodo-logo.png?v=3">
+</head>
+<body class="min-h-full flex flex-col text-neutral-900 selection:bg-[#2D8CE3] selection:text-white">
+
+  <!-- TOP ANNOUNCEMENT -->
+  <div class="bg-neutral-950 text-white text-[11px] py-2 px-4 text-center font-mono-tech tracking-wider border-b border-neutral-800">
+    ⚡ KODO VIP REBEL CLUB • YOU HAVE <span class="text-amber-400 font-bold">850 REBEL COINS</span> (₹850 CASH VALUE)
+  </div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center">
+          <img src="assets/kodo-logo.png?v=3" alt="KODO.DIY" class="h-9 sm:h-11 md:h-12 w-auto object-contain">
+        </a>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-6 text-xs font-black uppercase tracking-wider">
+        <a href="index.html#catalog-section" class="hover:text-[#2D8CE3]">All Drops</a>
+        <a href="index.html#combo-builder-section" class="text-blue-600 hover:underline">Buy 2 @ ₹999</a>
+        <a href="index.html#combo-builder-section" class="text-pink-600 hover:underline">2 @ ₹999 Combo</a>
+        <a href="track.html" class="hover:text-[#2D8CE3]">Track Order</a>
+        <a href="admin.html" class="text-neutral-500 hover:text-neutral-900">Admin</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="text-xs font-bold text-neutral-600 hover:text-neutral-900">
+          ← Back to Shop
+        </a>
+        <button type="button" onclick="alert('Signed out of demo session'); window.location.href='index.html';" class="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN ACCOUNT HUB -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    
+    <!-- Profile Banner & Loyalty Tier Card -->
+    <div class="bg-gradient-to-r from-neutral-950 via-neutral-900 to-[#121b2d] rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 relative overflow-hidden">
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-[#2D8CE3]/20 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-pink-500 to-[#2D8CE3] p-1 flex-shrink-0 shadow-lg">
+            <div class="w-full h-full bg-neutral-900 rounded-[14px] flex items-center justify-center text-2xl font-black text-white">
+              KS
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-syne text-xl sm:text-2xl font-black uppercase tracking-tight">Kabir Sharma</h1>
+              <span class="bg-amber-400 text-neutral-950 font-mono-tech text-[10px] font-black px-2 py-0.5 rounded-full uppercase">STREET OG VIP</span>
+            </div>
+            <p class="text-xs text-neutral-400 mt-0.5 font-mono-tech">+91 98765 43210 • kabir.sharma@streetkodo.in</p>
+            <div class="mt-2 flex items-center gap-3 text-xs text-neutral-300">
+              <span>Member Since: <b>Oct 2024</b></span>
+              <span>•</span>
+              <span class="text-emerald-400 font-bold">✓ 5 Verified Orders</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rebel Coins Wallet Box -->
+        <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 flex items-center justify-between md:justify-end gap-6 shadow-lg">
+          <div>
+            <div class="text-[10px] font-black uppercase tracking-widest text-neutral-300">KODO REBEL COINS</div>
+            <div class="text-3xl font-black text-amber-400 font-syne flex items-center gap-1">
+              <span>🪙</span> <span id="account-coin-balance">850</span>
+            </div>
+            <div class="text-[11px] text-neutral-400">1 Coin = ₹1.00 at Checkout</div>
+          </div>
+          <button type="button" onclick="alert('Redeem 850 Coins at checkout using code REBEL850!');" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black text-xs uppercase rounded-xl transition-all shadow-md">
+            Redeem ₹850
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Navigation Tabs -->
+    <div class="flex items-center gap-2 border-b border-neutral-200 pb-3 mb-6 overflow-x-auto">
+      <button type="button" class="account-tab-btn px-4 py-2 rounded-xl text-xs font-black uppercase transition-colors bg-neutral-900 text-white" data-tab="orders">
+        📦 Orders & Tracking (<span id="orders-tab-count">0</span>)
+      </button>
+      <button type="button" class="account-tab-btn px-4 py-2 rounded-xl text-xs font-black uppercase transition-colors text-neutral-600 hover:bg-neutral-200" data-tab="diy-vault">
+        🎨 Saved DIY Creations
+      </button>
+      <button type="button" class="account-tab-btn px-4 py-2 rounded-xl text-xs font-black uppercase transition-colors text-neutral-600 hover:bg-neutral-200" data-tab="addresses">
+        📍 Saved Addresses (2)
+      </button>
+      <button type="button" class="account-tab-btn px-4 py-2 rounded-xl text-xs font-black uppercase transition-colors text-neutral-600 hover:bg-neutral-200" data-tab="vip-perks">
+        👑 VIP Perks & Referral
+      </button>
+    </div>
+
+    <!-- TAB 1: ORDERS & TRACKING -->
+    <section id="tab-orders" class="account-tab-content space-y-4">
+      <div id="orders-list-container" class="space-y-4">
+        <!-- Injected via account.js -->
+      </div>
+      <div id="orders-empty-state" class="hidden text-center py-16 bg-white rounded-3xl border border-neutral-200 p-8 space-y-4">
+        <span class="text-4xl">📦</span>
+        <h3 class="font-syne text-lg font-black uppercase">No Active Orders Yet</h3>
+        <p class="text-xs text-neutral-500 max-w-sm mx-auto">Explore our high-GSM streetwear drops or customize your own graphic tee in our 2 @ ₹999 Combo.</p>
+        <a href="index.html#catalog-section" class="inline-block px-6 py-3 bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase">Start Shopping</a>
+      </div>
+    </section>
+
+    <!-- TAB 2: SAVED DIY CREATIONS -->
+    <section id="tab-diy-vault" class="account-tab-content hidden">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Creation 1 -->
+        <div class="bg-white rounded-3xl p-5 border border-neutral-200 shadow-sm space-y-3">
+          <div class="aspect-square bg-neutral-900 rounded-2xl flex items-center justify-center p-6 relative group overflow-hidden">
+            <img src="assets/kodo-logo.png?v=3" class="w-32 h-auto object-contain">
+            <span class="absolute top-3 left-3 bg-pink-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">3D PUFF INK</span>
+          </div>
+          <div>
+            <div class="text-xs font-black uppercase text-neutral-900">KODO RETRO ACID // BACK MURAL</div>
+            <div class="text-[11px] text-neutral-500 font-mono-tech">Onyx Black • 240 GSM • Size L</div>
+            <div class="text-xs font-black text-[#2D8CE3] mt-1">₹799</div>
+          </div>
+          <button type="button" onclick="alert('Added saved custom tee to your bag!'); window.location.href='index.html';" class="w-full py-2.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase transition-colors">
+            Re-Order Now (₹799)
+          </button>
+        </div>
+
+        <!-- Creation 2 -->
+        <div class="bg-white rounded-3xl p-5 border border-neutral-200 shadow-sm space-y-3">
+          <div class="aspect-square bg-neutral-900 rounded-2xl flex items-center justify-center p-6 relative group overflow-hidden" style="background-color: #f8fafc;">
+            <div class="text-center text-neutral-900">
+              <span class="text-5xl">⚡</span>
+              <div class="font-syne font-black text-sm uppercase mt-2">CYBER PUNK DIVISION</div>
+            </div>
+            <span class="absolute top-3 left-3 bg-neutral-800 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">FLAT DTG</span>
+          </div>
+          <div>
+            <div class="text-xs font-black uppercase text-neutral-900">CYBER PUNK STREET CHEST</div>
+            <div class="text-[11px] text-neutral-500 font-mono-tech">Chalk White • 260 GSM • Size XL</div>
+            <div class="text-xs font-black text-[#2D8CE3] mt-1">₹699</div>
+          </div>
+          <button type="button" onclick="alert('Added saved custom tee to your bag!'); window.location.href='index.html';" class="w-full py-2.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase transition-colors">
+            Re-Order Now (₹699)
+          </button>
+        </div>
+
+        <!-- Create New Card -->
+        <div class="bg-white rounded-3xl p-5 border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center text-center p-8 space-y-3">
+          <span class="text-3xl">🎨</span>
+          <h4 class="font-syne text-sm font-black uppercase">Create New DIY Tee</h4>
+          <p class="text-xs text-neutral-400">Design your next oversized streetwear piece with 3D puff print finish.</p>
+          <a href="index.html#combo-builder-section" class="px-4 py-2 bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase">Open Studio</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 3: SAVED ADDRESSES -->
+    <section id="tab-addresses" class="account-tab-content hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-3xl p-6 border border-neutral-200 shadow-sm relative">
+          <span class="absolute top-6 right-6 text-[10px] font-black bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full uppercase">DEFAULT</span>
+          <div class="text-xs font-black uppercase text-neutral-400 mb-1">HOME</div>
+          <h4 class="text-sm font-black text-neutral-900">Kabir Sharma</h4>
+          <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
+            Flat 402, Skyline Residency, Sector 45<br>
+            Near City Centre Mall<br>
+            Gurugram, Haryana — 122003
+          </p>
+          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: +91 98765 43210</p>
+          <div class="mt-4 pt-4 border-t border-neutral-100 flex gap-3 text-xs font-bold">
+            <button type="button" class="text-blue-600 hover:underline">Edit</button>
+            <span class="text-neutral-300">|</span>
+            <button type="button" class="text-neutral-400 hover:text-neutral-700">Delete</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 border border-neutral-200 shadow-sm">
+          <div class="text-xs font-black uppercase text-neutral-400 mb-1">WORK / STUDIO</div>
+          <h4 class="text-sm font-black text-neutral-900">Kabir Sharma (Design Studio)</h4>
+          <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
+            Plot 18, Streetwear Creative Hub, Okhla Phase III<br>
+            New Delhi — 110020
+          </p>
+          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: +91 98765 43210</p>
+          <div class="mt-4 pt-4 border-t border-neutral-100 flex gap-3 text-xs font-bold">
+            <button type="button" class="text-blue-600 hover:underline">Set as Default</button>
+            <span class="text-neutral-300">|</span>
+            <button type="button" class="text-blue-600 hover:underline">Edit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: VIP PERKS & REFERRAL -->
+    <section id="tab-vip-perks" class="account-tab-content hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200 shadow-sm space-y-6">
+        <h3 class="font-syne text-xl font-black uppercase">YOUR STREET OG VIP PRIVILEGES</h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 space-y-1.5">
+            <div class="text-2xl">🚀</div>
+            <div class="text-xs font-black uppercase text-neutral-900">Free Express Air Courier</div>
+            <p class="text-[11px] text-neutral-500">Every single order dispatched via priority air freight without any minimum spend.</p>
+          </div>
+          <div class="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 space-y-1.5">
+            <div class="text-2xl">⏳</div>
+            <div class="text-xs font-black uppercase text-neutral-900">2-Hour Early Drop Access</div>
+            <p class="text-[11px] text-neutral-500">Unlock limited capsule streetwear drops 2 hours before the public drops go live.</p>
+          </div>
+          <div class="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 space-y-1.5">
+            <div class="text-2xl">✨</div>
+            <div class="text-xs font-black uppercase text-neutral-900">Free 3D Puff Upgrades</div>
+            <p class="text-[11px] text-neutral-500">Automatic free upgrade to 3D embossed puff printing on all DIY custom tees.</p>
+          </div>
+        </div>
+
+        <!-- Referral Link Box -->
+        <div class="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div>
+            <div class="text-xs font-black uppercase text-[#2D8CE3]">GIVE ₹200, GET 200 REBEL COINS</div>
+            <h4 class="text-sm font-black text-neutral-900 mt-0.5">Invite a Streetwear Rebel</h4>
+            <p class="text-xs text-neutral-600 mt-1">Friends get ₹200 off their first drop, and you earn 200 Rebel Coins on their purchase.</p>
+          </div>
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <input type="text" readonly value="https://kodo.diy/vip?ref=KABIR99" id="ref-link-input" class="px-3 py-2 bg-white text-xs font-mono font-bold rounded-xl border border-blue-300 w-full md:w-64">
+            <button type="button" onclick="navigator.clipboard.writeText('https://kodo.diy/vip?ref=KABIR99'); alert('Referral link copied!');" class="px-4 py-2 bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase flex-shrink-0">
+              Copy
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-neutral-200 py-6 text-center text-xs text-neutral-400 mt-12">
+    KODO.DIY • Powered by Veirdo Inspired Architecture
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Tab switching
+      const tabBtns = document.querySelectorAll(".account-tab-btn");
+      const tabContents = document.querySelectorAll(".account-tab-content");
+
+      tabBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          tabBtns.forEach(b => {
+            b.classList.remove("bg-neutral-900", "text-white");
+            b.classList.add("text-neutral-600", "hover:bg-neutral-200");
+          });
+          btn.classList.add("bg-neutral-900", "text-white");
+          btn.classList.remove("text-neutral-600", "hover:bg-neutral-200");
+
+          const target = btn.dataset.tab;
+          tabContents.forEach(c => {
+            if (c.id === `tab-${target}`) c.classList.remove("hidden");
+            else c.classList.add("hidden");
+          });
+        });
+      });
+
+      // Render Orders from localStorage or mock orders
+      const ordersContainer = document.getElementById("orders-list-container");
+      const emptyState = document.getElementById("orders-empty-state");
+      const countTab = document.getElementById("orders-tab-count");
+
+      let orders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
+
+      // If empty, provide high quality default demo orders
+      if (orders.length === 0) {
+        orders = [
+          {
+            orderId: "KD-98214",
+            date: "17 Sep 2026",
+            items: [
+              {
+                title: "Alpine Summit: 'Beyond Limits' 280 GSM Oversized T-Shirt",
+                size: "L",
+                price: 699,
+                quantity: 1,
+                image: "assets/products/altitude-tee/front.jpg"
+              },
+              {
+                title: "Custom 3D Puff Print Tee (KODO 3D Retro)",
+                size: "L",
+                price: 799,
+                quantity: 1,
+                image: "assets/kodo-logo.png?v=3"
+              }
+            ],
+            total: 1498,
+            paymentMethod: "UPI (Google Pay)",
+            status: "In Transit",
+            awb: "AWB-KODO-849204"
+          },
+          {
+            orderId: "KD-97103",
+            date: "04 Sep 2026",
+            items: [
+              {
+                title: "Tokyo Drift: Racing Division GT-R 280 GSM Oversized T-Shirt",
+                size: "XL",
+                price: 699,
+                quantity: 1,
+                image: "assets/products/racing-division-tee/front.jpg"
+              }
+            ],
+            total: 699,
+            paymentMethod: "Prepaid Card",
+            status: "Delivered",
+            awb: "AWB-KODO-739182"
+          }
+        ];
+      }
+
+      countTab.textContent = orders.length;
+
+      ordersContainer.innerHTML = orders.map(ord => {
+        const isDelivered = ord.status === "Delivered";
+        const badgeColor = isDelivered ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-blue-100 text-blue-700 border-blue-300";
+
+        return `
+          <div class="bg-white rounded-3xl p-6 border border-neutral-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-100">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono-tech font-black text-sm uppercase text-neutral-900">${ord.orderId}</span>
+                  <span class="text-xs font-black uppercase px-2.5 py-0.5 rounded-full border ${badgeColor}">
+                    ● ${ord.status || 'Processing'}
+                  </span>
+                </div>
+                <div class="text-[11px] text-neutral-500 mt-0.5">Placed on ${ord.date || 'Recent'} • Paid via ${ord.paymentMethod || 'Prepaid'}</div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <a href="track.html?awb=${ord.awb || ord.orderId}" class="px-3.5 py-2 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase transition-colors flex items-center gap-1.5 shadow-sm">
+                  <span>📍</span> Track
+                </a>
+                <a href="invoice.html?id=${ord.orderId}" target="_blank" class="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-bold rounded-xl transition-colors">
+                  Invoice 🖨️
+                </a>
+                ${ord.status !== 'Delivered' && ord.status !== 'Cancelled' ? `
+                  <button type="button" class="cancel-order-btn px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold rounded-xl transition-colors border border-red-200" data-id="${ord.orderId}">
+                    Cancel
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+
+            <!-- Items in order -->
+            <div class="space-y-3">
+              ${(ord.items || []).map(item => `
+                <div class="flex items-center gap-3">
+                  <img src="${item.image || 'assets/kodo-logo.png?v=3'}" class="w-14 h-16 object-cover rounded-xl border border-neutral-200">
+                  <div class="flex-1 min-w-0">
+                    <div class="text-xs font-bold text-neutral-900 truncate">${item.title}</div>
+                    <div class="text-[11px] text-neutral-500">Size: ${item.size || 'M'} • Qty: ${item.quantity || 1}</div>
+                  </div>
+                  <div class="text-xs font-black text-neutral-900">
+                    ₹${item.price}
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="pt-3 border-t border-neutral-100 flex items-center justify-between text-xs font-black">
+              <span class="text-neutral-500 uppercase">Order Total:</span>
+              <span class="text-sm text-[#2D8CE3]">₹${ord.total}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".cancel-order-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const orderId = btn.dataset.id;
+          const reason = prompt(`Cancel Order #${orderId}?\nPlease state reason (e.g. Placed by mistake, Want different size):`, "Placed by mistake");
+          if (reason !== null) {
+            const target = orders.find(o => o.orderId === orderId);
+            if (target) {
+              target.status = "Cancelled";
+              localStorage.setItem("KODO_ORDERS", JSON.stringify(orders));
+              alert(`Order #${orderId} has been cancelled.\nRefund of ₹${target.total} has been reversed to your source account.`);
+              location.reload();
+            }
+          }
+        });
+      });
+    });
+  </script>
+  <script src="js/extras.js"></script>
+</body>
+</html>
