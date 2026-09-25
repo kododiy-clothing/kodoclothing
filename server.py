@@ -183,10 +183,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 "shipping": body.get("shipping", 0),
                 "total": body.get("total", 0),
                 "paymentMethod": body.get("paymentMethod", "UPI"),
-                "paymentStatus": "Paid",
-                "status": "Confirmed",
-                "courier": "BlueDart Express",
-                "awb": f"BD-{int(datetime.now().timestamp()) % 100000000:08d}"
+                "paymentStatus": body.get("paymentStatus", "Pending Payment Verification"),
+                "status": body.get("status", "Order Request Received"),
+                "courier": body.get("courier", ""),
+                "awb": body.get("awb", "")
             }
 
             # Deduct real stock from products

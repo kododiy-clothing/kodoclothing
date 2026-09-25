@@ -81,7 +81,7 @@
     updateWishlistBadge();
   }
 
-  function saveOrder(order) {
+  async function saveOrder(order) {
     try {
       const existing = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
       existing.unshift(order);
@@ -90,15 +90,18 @@
       console.error("Order save error:", e);
     }
 
-    // Sync to backend real order storage
-    fetch("/api/orders", {
+    // Sync only when the production backend is available.
+    return fetch("/api/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(order)
     }).then(res => {
-      if (res.ok) console.log("Order synced to live backend:", order.orderId);
+      if (!res.ok) throw new Error(`Order API responded ${res.status}`);
+      console.log("Order synced to live backend:", order.orderId);
+      return true;
     }).catch(err => {
       console.warn("Backend order sync error:", err);
+      return false;
     });
   }
 
@@ -1222,7 +1225,7 @@
     modal.classList.add("active");
   }
 
-  // 11. Gokwik 1-Click Fast Checkout with Realistic UPI QR Simulator
+  // 11. Honest checkout: no fake payment success, no auto-confirmed payment.
   function initCheckoutModal() {
     const checkoutBtn = document.getElementById("cart-checkout-btn");
     if (checkoutBtn) {
@@ -1252,7 +1255,7 @@
         <div class="bg-gradient-to-r from-[#2D8CE3] via-blue-600 to-[#8F54F0] p-4 text-white flex items-center justify-between">
           <div class="flex items-center gap-3">
             <img src="assets/kodo-logo.png" alt="KODO Logo" class="h-7 w-auto object-contain bg-white/10 px-2 py-0.5 rounded-lg">
-            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">⚡ 1-Click Fast Checkout</span>
+            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Secure Order Request</span>
           </div>
           <button type="button" id="checkout-close" class="text-white hover:text-white/80 text-xl font-bold">✕</button>
         </div>
@@ -1264,12 +1267,12 @@
               Delivery Address
             </h4>
             <div class="space-y-2.5">
-              <input type="text" id="chk-name" value="Aryan Sharma" placeholder="Full Name" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
-              <input type="tel" id="chk-phone" value="+91 98765 43210" placeholder="Mobile Number" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
-              <input type="text" id="chk-addr" value="Flat 402, Skyline Towers, Indiranagar" placeholder="Complete Street Address" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+              <input type="text" id="chk-name" placeholder="Full Name" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+              <input type="tel" id="chk-phone" placeholder="Mobile Number" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+              <input type="text" id="chk-addr" placeholder="Complete Street Address" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
               <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="chk-city" value="Bengaluru" placeholder="City" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
-                <input type="text" id="chk-pin" value="560038" placeholder="Pincode" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+                <input type="text" id="chk-city" placeholder="City" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+                <input type="text" id="chk-pin" placeholder="Pincode" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
               </div>
             </div>
           </div>
@@ -1323,8 +1326,7 @@
           </div>
 
           <button type="button" id="confirm-place-order-btn" class="w-full py-4 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-sm rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
-            <span>PROCEED TO PAY (₹${total})</span>
-            <span>🔒</span>
+            <span>CONTINUE ORDER REQUEST (₹${total})</span>
           </button>
         </div>
       </div>
@@ -1352,13 +1354,36 @@
     modal.querySelector("#confirm-place-order-btn").addEventListener("click", () => {
       const content = modal.querySelector("#checkout-content-area");
       const orderId = "KD-" + Math.floor(100000 + Math.random() * 900000);
-      const name = modal.querySelector("#chk-name").value || "Aryan Sharma";
-      const phone = modal.querySelector("#chk-phone").value || "+91 98765 43210";
-      const addr = modal.querySelector("#chk-addr").value || "Indiranagar, Bangalore";
-      const city = modal.querySelector("#chk-city").value || "Bengaluru";
-      const pin = modal.querySelector("#chk-pin").value || "560038";
+      const name = modal.querySelector("#chk-name").value.trim();
+      const phone = modal.querySelector("#chk-phone").value.trim();
+      const addr = modal.querySelector("#chk-addr").value.trim();
+      const city = modal.querySelector("#chk-city").value.trim();
+      const pin = modal.querySelector("#chk-pin").value.trim();
 
-      // If UPI / QR selected -> Show High-Tech QR Scanner Screen
+      if (!name || !phone || !addr || !city || !/^\d{6}$/.test(pin)) {
+        showToast("Please enter a real name, phone, address, city, and 6-digit PIN.");
+        return;
+      }
+
+      const orderLines = cart.map(it => `${it.quantity} x ${it.title} (${it.size || "Size not selected"}) - ₹${it.price * it.quantity}`).join("\n");
+      const whatsappText = [
+        `KODO order request ${orderId}`,
+        "",
+        orderLines,
+        "",
+        `Subtotal: ₹${subtotal}`,
+        `Discount: ₹${discount}`,
+        `Shipping: ₹${shipping}`,
+        `Total: ₹${total}`,
+        `Payment: ${selectedPayment}`,
+        "",
+        `Customer: ${name}`,
+        `Phone: ${phone}`,
+        `Address: ${addr}, ${city} - ${pin}`
+      ].join("\n");
+      const whatsappUrl = `https://wa.me/917046702094?text=${encodeURIComponent(whatsappText)}`;
+
+      // If UPI / QR selected -> show the real payment QR and ask for manual verification.
       if (selectedPayment === "UPI / QR") {
         content.innerHTML = `
           <div class="py-6 text-center space-y-4">
@@ -1378,26 +1403,22 @@
             </div>
 
             <div class="text-xs text-neutral-400">
-              Amount: <b class="text-neutral-900 text-sm">₹${total}</b> • Waiting for bank confirmation...
+              Amount: <b class="text-neutral-900 text-sm">₹${total}</b> • Payment is verified manually before dispatch.
             </div>
 
-            <button type="button" id="simulate-upi-success-btn" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <span>✓ I have Paid & Confirm Order</span>
+            <button type="button" id="confirm-manual-upi-btn" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <span>I PAID / WILL PAY - SEND ORDER ON WHATSAPP</span>
             </button>
           </div>
         `;
 
-        modal.querySelector("#simulate-upi-success-btn").addEventListener("click", finalizeOrder);
-        // Auto-finalize after 6 seconds if user waits
-        setTimeout(() => {
-          if (modal.classList.contains("active")) finalizeOrder();
-        }, 6000);
+        modal.querySelector("#confirm-manual-upi-btn").addEventListener("click", finalizeOrder);
         return;
       }
 
       finalizeOrder();
 
-      function finalizeOrder() {
+      async function finalizeOrder() {
         const newOrder = {
           orderId,
           date: new Date().toISOString(),
@@ -1408,29 +1429,30 @@
           shipping,
           total,
           paymentMethod: selectedPayment,
-          status: "Confirmed"
+          paymentStatus: selectedPayment === "Cash On Delivery" ? "COD Pending" : "Pending Payment Verification",
+          status: "Order Request Received"
         };
-        saveOrder(newOrder);
+        const synced = await saveOrder(newOrder);
 
         content.innerHTML = `
           <div class="py-8 text-center">
-            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
-              ✓
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+              →
             </div>
-            <h3 class="text-lg font-black text-neutral-900">ORDER CONFIRMED!</h3>
+            <h3 class="text-lg font-black text-neutral-900">ORDER REQUEST READY</h3>
             <p class="text-xs font-bold text-[#2D8CE3] mt-1">Order #${orderId}</p>
             <p class="text-xs text-neutral-500 mt-2 max-w-xs mx-auto">
-              Thank you for shopping with <b>KODO.DIY</b>! Your order is being printed & packed at our atelier.
+              Send this order on WhatsApp so the KODO team can verify payment, confirm stock, and dispatch only after real confirmation.
             </p>
 
             <div class="mt-6 p-4 bg-neutral-50 rounded-2xl text-left border border-neutral-200 text-xs space-y-1">
-              <div class="font-bold text-neutral-800">Estimated Delivery: 2-3 Business Days</div>
-              <div class="text-neutral-500">Track shipment on WhatsApp: +91 70467 02094</div>
+              <div class="font-bold text-neutral-800">Payment Status: ${newOrder.paymentStatus}</div>
+              <div class="text-neutral-500">${synced ? "Saved to backend order queue." : "Static site mode: WhatsApp confirmation is required."}</div>
             </div>
 
             <div class="mt-6 flex flex-col sm:flex-row gap-2">
-              <a href="track.html?id=${orderId}" class="flex-1 py-3.5 bg-blue-600 text-white text-center font-extrabold text-xs rounded-xl hover:bg-blue-700 transition-colors">
-                TRACK SHIPMENT LIVE 🚚
+              <a href="${whatsappUrl}" target="_blank" rel="noopener" class="flex-1 py-3.5 bg-emerald-600 text-white text-center font-extrabold text-xs rounded-xl hover:bg-emerald-700 transition-colors">
+                SEND ON WHATSAPP
               </a>
               <button type="button" id="order-success-done-btn" class="flex-1 py-3.5 bg-neutral-900 text-white font-extrabold text-xs rounded-xl hover:bg-neutral-800 transition-colors">
                 CONTINUE SHOPPING
