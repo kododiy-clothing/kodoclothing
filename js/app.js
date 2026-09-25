@@ -127,7 +127,7 @@
     }
 
     // Sync only when the production backend is available.
-    return fetch("/api/orders", {
+    return fetch(`${API_BASE_URL}/api/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(order)

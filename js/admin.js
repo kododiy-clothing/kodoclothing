@@ -4,6 +4,8 @@
 (function () {
   let orders = [];
   let currentStatusFilter = "all";
+  const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
+  const apiUrl = (path) => `${API_BASE_URL}${path}`;
 
   document.addEventListener("DOMContentLoaded", async () => {
     await loadProducts();
@@ -24,7 +26,7 @@
      ------------------------------------------------------------- */
   async function loadProducts() {
     try {
-      const res = await fetch("/api/products");
+      const res = await fetch(apiUrl("/api/products"));
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
@@ -33,7 +35,7 @@
         }
       }
     } catch (e) {
-      console.warn("Could not fetch /api/products, using local catalog data", e);
+      console.warn("Could not fetch products API, using local catalog data", e);
     }
   }
 
@@ -42,7 +44,7 @@
      ------------------------------------------------------------- */
   async function loadOrders() {
     try {
-      const res = await fetch("/api/orders");
+      const res = await fetch(apiUrl("/api/orders"));
       if (res.ok) {
         const liveOrders = await res.json();
         if (Array.isArray(liveOrders) && liveOrders.length > 0) {
@@ -52,7 +54,7 @@
         }
       }
     } catch (e) {
-      console.warn("Could not fetch /api/orders, checking local storage", e);
+      console.warn("Could not fetch orders API, checking local storage", e);
     }
 
     const stored = localStorage.getItem("KODO_ORDERS");
@@ -313,7 +315,7 @@
 
           // Sync with backend API
           try {
-            await fetch("/api/orders/update", {
+            await fetch(apiUrl("/api/orders/update"), {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ orderId, status: newStatus })
@@ -522,7 +524,7 @@
 
         // Sync with backend API
         try {
-          await fetch("/api/products/update", {
+          await fetch(apiUrl("/api/products/update"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id, stock: newStock, price: newPrice })
@@ -721,7 +723,7 @@
 
       // Persist to server
       try {
-        await fetch("/api/products/update", {
+        await fetch(apiUrl("/api/products/update"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newProduct)

@@ -251,8 +251,10 @@
     KODO.DIY • Powered by Veirdo Inspired Architecture
   </footer>
 
+  <script src="js/backend-config.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+      const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
       // Tab switching
       const tabBtns = document.querySelectorAll(".account-tab-btn");
       const tabContents = document.querySelectorAll(".account-tab-content");
@@ -274,58 +276,30 @@
         });
       });
 
-      // Render Orders from localStorage or mock orders
+      // Render real orders from backend or local checkout storage.
       const ordersContainer = document.getElementById("orders-list-container");
       const emptyState = document.getElementById("orders-empty-state");
       const countTab = document.getElementById("orders-tab-count");
 
       let orders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
-
-      // If empty, provide high quality default demo orders
-      if (orders.length === 0) {
-        orders = [
-          {
-            orderId: "KD-98214",
-            date: "17 Sep 2026",
-            items: [
-              {
-                title: "Alpine Summit: 'Beyond Limits' 280 GSM Oversized T-Shirt",
-                size: "L",
-                price: 699,
-                quantity: 1,
-                image: "assets/products/altitude-tee/front.jpg"
-              },
-              {
-                title: "Custom 3D Puff Print Tee (KODO 3D Retro)",
-                size: "L",
-                price: 799,
-                quantity: 1,
-                image: "assets/kodo-logo.png?v=3"
-              }
-            ],
-            total: 1498,
-            paymentMethod: "UPI (Google Pay)",
-            status: "In Transit",
-            awb: "AWB-KODO-849204"
-          },
-          {
-            orderId: "KD-97103",
-            date: "04 Sep 2026",
-            items: [
-              {
-                title: "Tokyo Drift: Racing Division GT-R 280 GSM Oversized T-Shirt",
-                size: "XL",
-                price: 699,
-                quantity: 1,
-                image: "assets/products/racing-division-tee/front.jpg"
-              }
-            ],
-            total: 699,
-            paymentMethod: "Prepaid Card",
-            status: "Delivered",
-            awb: "AWB-KODO-739182"
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/orders`);
+        if (res.ok) {
+          const liveOrders = await res.json();
+          if (Array.isArray(liveOrders) && liveOrders.length > 0) {
+            orders = liveOrders;
+            localStorage.setItem("KODO_ORDERS", JSON.stringify(orders));
           }
-        ];
+        }
+      } catch (e) {
+        console.warn("Live account orders unavailable", e);
+      }
+
+      if (orders.length === 0) {
+        countTab.textContent = "0";
+        emptyState.classList.remove("hidden");
+        ordersContainer.innerHTML = "";
+        return;
       }
 
       countTab.textContent = orders.length;
@@ -348,7 +322,7 @@
               </div>
 
               <div class="flex items-center gap-2">
-                <a href="track.html?awb=${ord.awb || ord.orderId}" class="px-3.5 py-2 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase transition-colors flex items-center gap-1.5 shadow-sm">
+                <a href="track.html?id=${ord.orderId}" class="px-3.5 py-2 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase transition-colors flex items-center gap-1.5 shadow-sm">
                   <span>📍</span> Track
                 </a>
                 <a href="invoice.html?id=${ord.orderId}" target="_blank" class="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-bold rounded-xl transition-colors">
@@ -387,7 +361,7 @@
       }).join("");
 
       document.querySelectorAll(".cancel-order-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", async () => {
           const orderId = btn.dataset.id;
           const reason = prompt(`Cancel Order #${orderId}?\nPlease state reason (e.g. Placed by mistake, Want different size):`, "Placed by mistake");
           if (reason !== null) {
@@ -395,6 +369,13 @@
             if (target) {
               target.status = "Cancelled";
               localStorage.setItem("KODO_ORDERS", JSON.stringify(orders));
+              try {
+                await fetch(`${API_BASE_URL}/api/orders/update`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ orderId, status: "Cancelled" })
+                });
+              } catch (e) {}
               alert(`Order #${orderId} has been cancelled.\nRefund of ₹${target.total} has been reversed to your source account.`);
               location.reload();
             }

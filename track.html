@@ -183,12 +183,14 @@
     KODO.DIY Express Tracking • Real-time Delhivery API Integrated • 100% Genuine Veirdo Style
   </footer>
 
+  <script src="js/backend-config.js"></script>
   <script src="js/data.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("track-order-form");
       const input = document.getElementById("track-input");
       const resultCard = document.getElementById("tracking-result-card");
+      const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
 
       // Auto load if order parameter passed
       const urlParams = new URLSearchParams(window.location.search);
@@ -211,7 +213,7 @@
         });
       });
 
-      function lookupOrder(query) {
+      async function lookupOrder(query) {
         let orders = [];
         try {
           orders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
@@ -221,17 +223,23 @@
         let found = orders.find(o => o.orderId.toLowerCase() === q || o.customer.phone.includes(q));
 
         if (!found) {
-          // Fallback mock order
-          found = {
-            orderId: query.startsWith("KD-") ? query : "KD-892140",
-            customer: { name: "Aryan Sharma", phone: "+91 98765 43210", address: "Flat 402, Skyline Towers, Indiranagar", city: "Bengaluru", pincode: "560038" },
-            items: [
-              { title: "Solar Eclipse: 'Same Sky Different Stories' 280 GSM Oversized T-Shirt", size: "L", price: 699, quantity: 1, image: "assets/products/same-sky-tee/front.jpg" },
-              { title: "Nocturnal Crescent Moon Embroidered 280 GSM Oversized T-Shirt", size: "L", price: 699, quantity: 1, image: "assets/products/crescent-moon-tee/front.jpg" }
-            ],
-            status: "In Transit",
-            total: 999
-          };
+          try {
+            const res = await fetch(`${API_BASE_URL}/api/orders`);
+            if (res.ok) {
+              const liveOrders = await res.json();
+              if (Array.isArray(liveOrders)) {
+                found = liveOrders.find(o => o.orderId.toLowerCase() === q || (o.customer?.phone || "").includes(q));
+              }
+            }
+          } catch (e) {
+            console.warn("Live order lookup failed", e);
+          }
+        }
+
+        if (!found) {
+          resultCard.classList.add("hidden");
+          alert("No real order found for this ID/phone yet. Please check the order ID or contact support.");
+          return;
         }
 
         renderTracking(found);

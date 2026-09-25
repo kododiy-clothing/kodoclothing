@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: kodo-backend
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: "python3 server.py"
+    healthCheckPath: "/api/health"
+    envVars:
+      - key: PUBLIC_SITE_URL
+        value: "https://kododiy-clothing.github.io/kodoclothing"
+      - key: DODO_API_BASE
+        value: "https://live.dodopayments.com"
+      - key: DODO_SEND_DYNAMIC_AMOUNTS
+        value: "true"
+      - key: DODO_PAYMENTS_API_KEY
+        sync: false
+      - key: DODO_PRODUCT_ID_DEFAULT
+        sync: false
+      - key: DODO_PRODUCT_MAP_JSON
+        sync: false

@@ -22,7 +22,7 @@ JS_DATA_FILE = BASE_DIR / "js" / "data.js"
 
 DATA_DIR.mkdir(exist_ok=True)
 
-PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8085
+PORT = int(sys.argv[1]) if len(sys.argv) > 1 else int(os.environ.get("PORT", 8085))
 DODO_API_BASE = os.environ.get("DODO_API_BASE", "https://live.dodopayments.com")
 DODO_API_KEY = os.environ.get("DODO_PAYMENTS_API_KEY", "")
 DODO_DEFAULT_PRODUCT_ID = os.environ.get("DODO_PRODUCT_ID_DEFAULT", "")
@@ -166,6 +166,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
+
+        # 1. Real Orders List
+        if path == "/api/health":
+            self.send_json({
+                "ok": True,
+                "service": "kodo-backend",
+                "time": datetime.now(timezone.utc).isoformat(),
+                "orders": len(load_orders()),
+                "products": len(load_products()),
+                "dodoConfigured": bool(DODO_API_KEY)
+            })
+            return
 
         # 1. Real Orders List
         if path == "/api/orders":
