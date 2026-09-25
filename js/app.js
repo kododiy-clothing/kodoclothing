@@ -1307,7 +1307,7 @@
       <div class="modal-box bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-neutral-200">
         <div class="bg-gradient-to-r from-[#2D8CE3] via-blue-600 to-[#8F54F0] p-4 text-white flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <img src="assets/kodo-logo.png" alt="KODO Logo" class="h-7 w-auto object-contain bg-white/10 px-2 py-0.5 rounded-lg">
+            <img src="assets/kodo-logo.png?v=4" alt="KODO Logo" class="h-7 w-auto object-contain bg-white/10 px-2 py-0.5 rounded-lg">
             <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Secure Order Request</span>
           </div>
           <button type="button" id="checkout-close" class="text-white hover:text-white/80 text-xl font-bold">✕</button>

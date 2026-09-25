@@ -220,7 +220,7 @@
             text: state.back.customText || "None",
             hasCustomUpload: !!state.back.userImage
           },
-          image: "assets/kodo-logo.png",
+          image: "assets/kodo-logo.png?v=4",
           quantity: 1,
           isDiy: true
         };
@@ -387,7 +387,7 @@
     const yOffset = state.currentView === 'front' ? -120 : -40;
 
     const logoImg = new Image();
-    logoImg.src = cur.graphic && cur.graphic.imgSrc ? cur.graphic.imgSrc : "assets/kodo-logo.png";
+    logoImg.src = cur.graphic && cur.graphic.imgSrc ? cur.graphic.imgSrc : "assets/kodo-logo.png?v=4";
     logoImg.onload = () => {
       const w = 240 * cur.scale;
       const h = 80 * cur.scale;

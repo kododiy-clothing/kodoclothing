@@ -251,7 +251,7 @@
             <div class="space-y-1">
               ${(ord.items || []).map(it => `
                 <div class="flex items-center gap-2">
-                  <img src="${it.image || 'assets/kodo-logo.png'}" class="w-8 h-9 object-cover rounded-lg border border-neutral-700">
+                  <img src="${it.image || 'assets/kodo-logo.png?v=4'}" class="w-8 h-9 object-cover rounded-lg border border-neutral-700">
                   <div class="min-w-0">
                     <div class="truncate max-w-[160px] text-neutral-200 font-bold">${it.title}</div>
                     <div class="text-[10px] text-neutral-400 font-mono-tech">Size: ${it.size || 'L'} • Qty: ${it.quantity || 1}</div>
@@ -429,7 +429,7 @@
         <tr class="hover:bg-neutral-900/50 transition-colors" id="prod-row-${p.id}">
           <td class="p-4">
             <div class="flex items-center gap-3">
-              <img src="${p.images?.[0] || 'assets/kodo-logo.png'}" class="w-11 h-14 object-cover rounded-lg border border-neutral-700 flex-shrink-0">
+              <img src="${p.images?.[0] || 'assets/kodo-logo.png?v=4'}" class="w-11 h-14 object-cover rounded-lg border border-neutral-700 flex-shrink-0">
               <div class="min-w-0">
                 <div class="font-bold text-white max-w-xs truncate">${p.title}</div>
                 <div class="text-[10px] text-neutral-400 font-mono-tech mt-1 flex items-center gap-2 flex-wrap">
