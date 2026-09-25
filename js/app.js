@@ -32,6 +32,7 @@
 	  let appliedCoupon = null;
 	  const FREE_SHIPPING_THRESHOLD = 799;
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
+  const formatMoney = (value, product) => `${product?.currency === "USD" ? "$" : "₹"}${value}`;
 
   const filterState = {
     maxPrice: 3000,
@@ -329,8 +330,8 @@
                 <div>
                   <h4 class="text-xs font-bold text-neutral-900 line-clamp-1">${p.title}</h4>
                   <div class="flex items-center gap-2 mt-0.5">
-                    <span class="text-xs font-extrabold text-[#2D8CE3]">₹${p.price}</span>
-                    <span class="text-[10px] text-neutral-400 line-through">₹${p.comparePrice}</span>
+                    <span class="text-xs font-extrabold text-[#2D8CE3]">${formatMoney(p.price, p)}</span>
+                    <span class="text-[10px] text-neutral-400 line-through">${formatMoney(p.comparePrice, p)}</span>
                     <span class="text-[10px] font-bold text-emerald-600">${p.discount}</span>
                   </div>
                 </div>
@@ -605,8 +606,8 @@
               </a>
 
               <div class="flex items-baseline gap-2 mt-2">
-                <span class="text-sm md:text-base font-extrabold text-neutral-900">₹${product.price}</span>
-                <span class="text-xs text-neutral-400 line-through">₹${product.comparePrice}</span>
+                <span class="text-sm md:text-base font-extrabold text-neutral-900">${formatMoney(product.price, product)}</span>
+                <span class="text-xs text-neutral-400 line-through">${formatMoney(product.comparePrice, product)}</span>
                 <span class="text-xs font-extrabold text-emerald-600">${product.discount}</span>
               </div>
 
@@ -1080,11 +1081,11 @@
             </a>
             
             <div class="flex items-baseline gap-3 mt-3">
-              <span class="text-2xl font-black text-neutral-900">₹${product.price}</span>
-              <span class="text-sm text-neutral-400 line-through">₹${product.comparePrice}</span>
+              <span class="text-2xl font-black text-neutral-900">${formatMoney(product.price, product)}</span>
+              <span class="text-sm text-neutral-400 line-through">${formatMoney(product.comparePrice, product)}</span>
               <span class="text-sm font-extrabold text-emerald-600">${product.discount}</span>
             </div>
-            <p class="text-xs text-neutral-500 mt-1">Inclusive of all taxes. Free shipping on orders over ₹799.</p>
+            <p class="text-xs text-neutral-500 mt-1">${product.currency === "USD" ? "USD flash price for this special capsule." : "Inclusive of all taxes. Free shipping on orders over ₹799."}</p>
 
             <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
               <span class="text-xs font-bold text-blue-900">⚡ Special Deal: ${product.offer}</span>

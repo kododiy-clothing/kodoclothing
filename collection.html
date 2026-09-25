@@ -234,6 +234,7 @@
       const gsmBtns = document.querySelectorAll(".col-gsm-btn");
       const fitCheckboxes = document.querySelectorAll(".col-fit-cb");
       const resetBtn = document.getElementById("col-reset-filters");
+      const formatMoney = (value, product) => `${product?.currency === "USD" ? "$" : "₹"}${value}`;
 
       let activeCat = "all";
       let activeGender = "all";
@@ -333,8 +334,8 @@
                 ${p.title}
               </a>
               <div class="flex items-baseline gap-2">
-                <span class="text-sm font-black text-neutral-900">₹${p.price}</span>
-                <span class="text-[11px] text-neutral-400 line-through">₹${p.comparePrice}</span>
+                <span class="text-sm font-black text-neutral-900">${formatMoney(p.price, p)}</span>
+                <span class="text-[11px] text-neutral-400 line-through">${formatMoney(p.comparePrice, p)}</span>
               </div>
               <a href="product.html?id=${p.id}" class="block text-center w-full py-2 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black uppercase rounded-xl transition-colors mt-2">
                 VIEW DROP →

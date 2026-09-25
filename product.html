@@ -215,6 +215,8 @@
 
   <script src="js/data.js"></script>
   <script>
+    const formatMoney = (value, product) => `${product?.currency === "USD" ? "$" : "₹"}${value}`;
+
     document.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const productId = urlParams.get("id") || (window.KODO_DATA.PRODUCTS[0]?.id || "kd-auto-tokyo-cyber-136-113");
@@ -255,8 +257,8 @@
             </h1>
 
             <div class="flex items-baseline gap-3">
-              <span class="text-3xl font-black text-neutral-900">₹${product.price}</span>
-              <span class="text-sm text-neutral-400 line-through">₹${product.comparePrice}</span>
+              <span class="text-3xl font-black text-neutral-900">${formatMoney(product.price, product)}</span>
+              <span class="text-sm text-neutral-400 line-through">${formatMoney(product.comparePrice, product)}</span>
               <span class="text-sm font-black text-emerald-600">${product.discount}</span>
             </div>
 
