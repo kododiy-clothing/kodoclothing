@@ -9,6 +9,8 @@ import os
 import sys
 import json
 import urllib.parse
+import urllib.request
+import urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -21,6 +23,12 @@ JS_DATA_FILE = BASE_DIR / "js" / "data.js"
 DATA_DIR.mkdir(exist_ok=True)
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8085
+DODO_API_BASE = os.environ.get("DODO_API_BASE", "https://live.dodopayments.com")
+DODO_API_KEY = os.environ.get("DODO_PAYMENTS_API_KEY", "")
+DODO_DEFAULT_PRODUCT_ID = os.environ.get("DODO_PRODUCT_ID_DEFAULT", "")
+DODO_PRODUCT_MAP = os.environ.get("DODO_PRODUCT_MAP_JSON", "{}")
+DODO_SEND_DYNAMIC_AMOUNTS = os.environ.get("DODO_SEND_DYNAMIC_AMOUNTS", "true").lower() != "false"
+PUBLIC_SITE_URL = os.environ.get("PUBLIC_SITE_URL", "https://kododiy-clothing.github.io/kodoclothing")
 
 def load_orders():
     if not ORDERS_FILE.exists():
@@ -58,6 +66,82 @@ def save_products(products):
             f.write("const PRODUCTS = window.KODO_DATA.PRODUCTS;\n")
     except Exception as e:
         print(f"Error syncing js/data.js: {e}")
+
+def get_dodo_product_id(item):
+    try:
+        product_map = json.loads(DODO_PRODUCT_MAP) if DODO_PRODUCT_MAP else {}
+    except Exception:
+        product_map = {}
+    local_id = item.get("productId") or item.get("id", "").split("-")[0]
+    return item.get("dodoProductId") or product_map.get(local_id) or DODO_DEFAULT_PRODUCT_ID
+
+def create_dodo_payment_link(order):
+    if not DODO_API_KEY:
+        raise ValueError("DODO_PAYMENTS_API_KEY is not configured on the backend")
+
+    items = order.get("items", [])
+    if not items:
+        raise ValueError("Cart is empty")
+
+    product_cart = []
+    for item in items:
+        product_id = get_dodo_product_id(item)
+        if not product_id:
+            raise ValueError("DODO_PRODUCT_ID_DEFAULT or DODO_PRODUCT_MAP_JSON is required")
+        cart_item = {
+            "product_id": product_id,
+            "quantity": max(1, int(item.get("quantity", 1)))
+        }
+        if DODO_SEND_DYNAMIC_AMOUNTS:
+            cart_item["amount"] = max(1, int(round(float(item.get("price", 0)) * 100)))
+        product_cart.append(cart_item)
+
+    customer = order.get("customer", {})
+    payload = {
+        "billing": {
+            "country": "IN",
+            "city": customer.get("city") or "",
+            "street": customer.get("address") or "",
+            "zipcode": customer.get("pincode") or ""
+        },
+        "customer": {
+            "email": customer.get("email") or f"{order.get('orderId', 'order').lower()}@kododiy.local",
+            "name": customer.get("name") or "KODO Customer",
+            "phone_number": customer.get("phone") or None
+        },
+        "product_cart": product_cart[:100],
+        "payment_link": True,
+        "require_phone_number": True,
+        "billing_currency": "INR",
+        "allowed_payment_method_types": ["upi_collect", "upi_intent", "credit", "debit"],
+        "return_url": f"{PUBLIC_SITE_URL}/track.html?id={urllib.parse.quote(order.get('orderId', ''))}",
+        "metadata": {
+            "order_id": order.get("orderId", ""),
+            "source": "kodo-web-checkout",
+            "subtotal": str(order.get("subtotal", "")),
+            "discount": str(order.get("discount", "")),
+            "shipping": str(order.get("shipping", "")),
+            "total": str(order.get("total", ""))
+        }
+    }
+
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        f"{DODO_API_BASE.rstrip('/')}/payments",
+        data=data,
+        headers={
+            "Authorization": f"Bearer {DODO_API_KEY}",
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as res:
+            return json.loads(res.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Dodo Payments error {e.code}: {detail}") from e
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -168,6 +252,32 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             body = {}
 
         # 1. Place Real Order
+        if path == "/api/dodo/checkout":
+            order_id = body.get("orderId") or f"KD-{int(datetime.now().timestamp()) % 1000000:06d}"
+            checkout_order = {
+                "orderId": order_id,
+                "date": body.get("date") or datetime.now(timezone.utc).isoformat(),
+                "customer": body.get("customer", {}),
+                "items": body.get("items", []),
+                "subtotal": body.get("subtotal", 0),
+                "discount": body.get("discount", 0),
+                "shipping": body.get("shipping", 0),
+                "total": body.get("total", 0)
+            }
+            try:
+                payment = create_dodo_payment_link(checkout_order)
+                self.send_json({
+                    "success": True,
+                    "orderId": order_id,
+                    "paymentId": payment.get("payment_id"),
+                    "paymentLink": payment.get("payment_link"),
+                    "checkoutUrl": payment.get("payment_link")
+                })
+            except Exception as e:
+                self.send_json({"success": False, "error": str(e)}, status_code=502)
+            return
+
+        # 2. Place Real Order
         if path == "/api/orders":
             orders = load_orders()
             prods = load_products()
@@ -205,7 +315,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_json({"success": True, "order": new_order})
             return
 
-        # 2. Update Order Status (Fulfill, Dispatch, Deliver)
+        # 3. Update Order Status (Fulfill, Dispatch, Deliver)
         elif path == "/api/orders/update":
             order_id = body.get("orderId")
             new_status = body.get("status")
@@ -229,7 +339,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_json({"error": "Order not found"}, status_code=404)
             return
 
-        # 3. Update Product (Price, Stock, Title, Category)
+        # 4. Update Product (Price, Stock, Title, Category)
         elif path == "/api/products/update":
             prod_id = body.get("id")
             prods = load_products()

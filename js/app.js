@@ -29,8 +29,9 @@
   let currentCategory = 'all';
   let cart = [];
   let wishlist = [];
-  let appliedCoupon = null;
-  const FREE_SHIPPING_THRESHOLD = 799;
+	  let appliedCoupon = null;
+	  const FREE_SHIPPING_THRESHOLD = 799;
+  const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
 
   const filterState = {
     maxPrice: 3000,
@@ -106,7 +107,7 @@
     updateWishlistBadge();
   }
 
-  async function saveOrder(order) {
+	  async function saveOrder(order) {
     try {
       const existing = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
       existing.unshift(order);
@@ -127,7 +128,24 @@
     }).catch(err => {
       console.warn("Backend order sync error:", err);
       return false;
+	    });
+	  }
+
+  async function createDodoCheckout(order) {
+    const endpoint = `${API_BASE_URL}/api/dodo/checkout`;
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order)
     });
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (e) {}
+    if (!res.ok || !data.success || !(data.checkoutUrl || data.paymentLink)) {
+      throw new Error(data.error || `Dodo checkout failed (${res.status})`);
+    }
+    return data;
   }
 
   function showToast(msg) {
@@ -1307,18 +1325,12 @@
               <span class="w-5 h-5 rounded-full bg-[#2D8CE3] text-white flex items-center justify-center text-[10px]">2</span>
               Payment Method
             </h4>
-            <div class="grid grid-cols-3 gap-2">
+            <div class="grid grid-cols-2 gap-2">
               <label class="flex flex-col items-center justify-center p-3 rounded-xl border-2 border-blue-500 bg-blue-50/50 cursor-pointer payment-option">
-                <input type="radio" name="payment-method" value="UPI / QR" checked class="hidden">
-                <span class="text-lg mb-1">📱</span>
-                <span class="text-[11px] font-extrabold text-blue-900">UPI / QR</span>
-                <span class="text-[9px] text-emerald-600 font-bold">Instant Flat ₹50 OFF</span>
-              </label>
-              <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 cursor-pointer payment-option">
-                <input type="radio" name="payment-method" value="Cards / Netbanking" class="hidden">
-                <span class="text-lg mb-1">💳</span>
-                <span class="text-[11px] font-extrabold text-neutral-800">Card / Net</span>
-                <span class="text-[9px] text-neutral-400">All Major Banks</span>
+                <input type="radio" name="payment-method" value="Dodo Secure Checkout" checked class="hidden">
+                <span class="text-lg mb-1">🔒</span>
+                <span class="text-[11px] font-extrabold text-blue-900">Secure Pay</span>
+                <span class="text-[9px] text-emerald-600 font-bold">UPI / Card / Netbanking</span>
               </label>
               <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 cursor-pointer payment-option">
                 <input type="radio" name="payment-method" value="Cash On Delivery" class="hidden">
@@ -1351,13 +1363,13 @@
           </div>
 
           <button type="button" id="confirm-place-order-btn" class="w-full py-4 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-sm rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
-            <span>CONTINUE ORDER REQUEST (₹${total})</span>
+            <span>PAY SECURELY ₹${total}</span>
           </button>
         </div>
       </div>
     `;
 
-    let selectedPayment = "UPI / QR";
+    let selectedPayment = "Dodo Secure Checkout";
     modal.querySelectorAll(".payment-option").forEach(lbl => {
       lbl.addEventListener("click", () => {
         modal.querySelectorAll(".payment-option").forEach(l => {
@@ -1376,8 +1388,9 @@
       document.body.style.overflow = "";
     });
 
-    modal.querySelector("#confirm-place-order-btn").addEventListener("click", () => {
+    modal.querySelector("#confirm-place-order-btn").addEventListener("click", async () => {
       const content = modal.querySelector("#checkout-content-area");
+      const payBtn = modal.querySelector("#confirm-place-order-btn");
       const orderId = "KD-" + Math.floor(100000 + Math.random() * 900000);
       const name = modal.querySelector("#chk-name").value.trim();
       const phone = modal.querySelector("#chk-phone").value.trim();
@@ -1408,43 +1421,41 @@
       ].join("\n");
       const whatsappUrl = `https://wa.me/917046702094?text=${encodeURIComponent(whatsappText)}`;
 
-      // If UPI / QR selected -> show the real payment QR and ask for manual verification.
-      if (selectedPayment === "UPI / QR") {
-        content.innerHTML = `
-          <div class="py-6 text-center space-y-4">
-            <div class="text-xs font-black uppercase text-blue-600 tracking-wider">Scan & Pay via any UPI App</div>
-            
-            <!-- Real Dynamic QR Code Box -->
-            <div class="p-4 bg-white rounded-2xl border-2 border-dashed border-blue-500 inline-block shadow-lg">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=kodo.diy@icici&pn=KODO_DIY&am=${total}&cu=INR" alt="UPI QR" class="w-44 h-44 mx-auto rounded-lg">
-              <div class="mt-2 text-[10px] font-bold text-neutral-500">Scan using GPay, PhonePe, Paytm or BHIM</div>
+      if (selectedPayment !== "Cash On Delivery") {
+        const newOrder = buildOrder("Dodo Secure Checkout", "Redirected to Dodo Checkout", "Awaiting Payment");
+        if (payBtn) {
+          payBtn.disabled = true;
+          payBtn.classList.add("opacity-70", "cursor-wait");
+          payBtn.innerHTML = "<span>CREATING SECURE PAYMENT...</span>";
+        }
+        try {
+          const checkout = await createDodoCheckout(newOrder);
+          newOrder.dodoPaymentId = checkout.paymentId;
+          newOrder.paymentLink = checkout.checkoutUrl || checkout.paymentLink;
+          await saveOrder(newOrder);
+          window.location.href = newOrder.paymentLink;
+        } catch (err) {
+          console.error("Dodo checkout error:", err);
+          if (payBtn) {
+            payBtn.disabled = false;
+            payBtn.classList.remove("opacity-70", "cursor-wait");
+            payBtn.innerHTML = `<span>PAY SECURELY ₹${total}</span>`;
+          }
+          content.querySelector("#checkout-payment-error")?.remove();
+          content.insertAdjacentHTML("beforeend", `
+            <div id="checkout-payment-error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-700 leading-relaxed">
+              <b>Payment gateway is not configured on this host yet.</b><br>
+              Backend needs <code>DODO_PAYMENTS_API_KEY</code> and a Dodo product id/map. No fake payment was created.
             </div>
-
-            <div class="flex items-center justify-center gap-3">
-              <span class="bg-neutral-100 text-[10px] font-bold px-2 py-1 rounded">Google Pay</span>
-              <span class="bg-neutral-100 text-[10px] font-bold px-2 py-1 rounded">PhonePe</span>
-              <span class="bg-neutral-100 text-[10px] font-bold px-2 py-1 rounded">PayTM</span>
-              <span class="bg-neutral-100 text-[10px] font-bold px-2 py-1 rounded">BHIM UPI</span>
-            </div>
-
-            <div class="text-xs text-neutral-400">
-              Amount: <b class="text-neutral-900 text-sm">₹${total}</b> • Payment is verified manually before dispatch.
-            </div>
-
-            <button type="button" id="confirm-manual-upi-btn" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <span>I PAID / WILL PAY - SEND ORDER ON WHATSAPP</span>
-            </button>
-          </div>
-        `;
-
-        modal.querySelector("#confirm-manual-upi-btn").addEventListener("click", finalizeOrder);
+          `);
+        }
         return;
       }
 
       finalizeOrder();
 
-      async function finalizeOrder() {
-        const newOrder = {
+      function buildOrder(paymentMethod, paymentStatus, status) {
+        return {
           orderId,
           date: new Date().toISOString(),
           customer: { name, phone, address: addr, city, pincode: pin },
@@ -1453,10 +1464,14 @@
           discount,
           shipping,
           total,
-          paymentMethod: selectedPayment,
-          paymentStatus: selectedPayment === "Cash On Delivery" ? "COD Pending" : "Pending Payment Verification",
-          status: "Order Request Received"
+          paymentMethod,
+          paymentStatus,
+          status
         };
+      }
+
+      async function finalizeOrder() {
+        const newOrder = buildOrder(selectedPayment, "COD Pending", "Order Request Received");
         const synced = await saveOrder(newOrder);
 
         content.innerHTML = `

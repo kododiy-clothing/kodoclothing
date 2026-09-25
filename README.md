@@ -34,6 +34,7 @@ kodoclothing/
 ├── mystery-box.html           # Streetwear Mystery Box gamified unboxing
 ├── invoice.html               # Dynamic printable GST Tax Invoice
 ├── server.py                  # Real backend REST API server
+├── api/dodo/checkout.js       # Vercel serverless Dodo checkout endpoint
 ├── data/
 │   ├── orders.json            # Real-world customer orders database
 │   └── auto_products.json     # 42 active streetwear drops with stock & SKUs
@@ -63,7 +64,25 @@ Run the built-in REST API server:
 python3 server.py 8085
 ```
 
-### 3. Open in Browser
+### 3. Configure Real Dodo Payments
+Keep the API key in environment variables only. Do not paste it into frontend files.
+
+```bash
+export DODO_PAYMENTS_API_KEY="your_live_dodo_api_key"
+export DODO_PRODUCT_ID_DEFAULT="pdt_your_dodo_product_id"
+export PUBLIC_SITE_URL="https://your-live-store-url"
+python3 server.py 8085
+```
+
+For exact product mapping, set `DODO_PRODUCT_MAP_JSON`:
+
+```bash
+export DODO_PRODUCT_MAP_JSON='{"kd-man-drop-01":"pdt_xxx","kd-woman-together-01":"pdt_yyy"}'
+```
+
+The storefront posts to `/api/dodo/checkout`, the backend creates a Dodo payment link, and the customer is redirected to Dodo Checkout. GitHub Pages cannot run this secret backend; use `server.py` on a server or deploy the included Vercel function with the same env vars.
+
+### 4. Open in Browser
 - **Storefront**: [http://127.0.0.1:8085/](http://127.0.0.1:8085/)
 - **Admin Panel**: [http://127.0.0.1:8085/admin.html](http://127.0.0.1:8085/admin.html)
 - **Virtual Drip Mirror**: [http://127.0.0.1:8085/tryon.html](http://127.0.0.1:8085/tryon.html)
