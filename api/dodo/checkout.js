@@ -16,6 +16,16 @@ function getDodoProductId(item) {
   return item.dodoProductId || productMap[localId] || process.env.DODO_PRODUCT_ID_DEFAULT;
 }
 
+function formatPhoneNumber(phone) {
+  const raw = String(phone || "").trim();
+  if (!raw) return null;
+  if (raw.startsWith("+")) return raw;
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 10) return `+91${digits}`;
+  if (digits.length === 12 && digits.startsWith("91")) return `+${digits}`;
+  return raw;
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -66,7 +76,7 @@ module.exports = async function handler(req, res) {
     customer: {
       email: customer.email || `${String(order.orderId || "order").toLowerCase()}@kododiy.local`,
       name: customer.name || "KODO Customer",
-      phone_number: customer.phone || null
+      phone_number: formatPhoneNumber(customer.phone)
     },
     product_cart: productCart.slice(0, 100),
     payment_link: true,
