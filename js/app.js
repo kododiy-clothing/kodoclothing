@@ -455,17 +455,11 @@
     filterState.selectedGender = gender;
     document.querySelectorAll(".gender-tab-btn").forEach(btn => {
       if (btn.dataset.gender === gender) {
-        btn.classList.add("bg-white", "text-neutral-950", "border-white", "shadow-sm");
-        btn.classList.remove("bg-white/5", "bg-pink-500/10", "text-neutral-200", "text-pink-100", "border-white/10", "border-pink-400/35");
+        btn.classList.add("bg-neutral-950", "text-white", "border-neutral-950", "shadow-sm");
+        btn.classList.remove("bg-neutral-50", "text-neutral-700", "border-neutral-200", "text-pink-700", "text-blue-700");
       } else {
-        btn.classList.remove("bg-white", "text-neutral-950", "border-white", "shadow-sm");
-        if (btn.dataset.gender === "women") {
-          btn.classList.add("bg-pink-500/10", "text-pink-100", "border-pink-400/35");
-          btn.classList.remove("bg-white/5", "text-neutral-200", "border-white/10");
-        } else {
-          btn.classList.add("bg-white/5", "text-neutral-200", "border-white/10");
-          btn.classList.remove("bg-pink-500/10", "text-pink-100", "border-pink-400/35");
-        }
+        btn.classList.remove("bg-neutral-950", "text-white", "border-neutral-950", "shadow-sm");
+        btn.classList.add("bg-neutral-50", "text-neutral-700", "border-neutral-200");
       }
     });
 
