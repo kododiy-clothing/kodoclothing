@@ -2,7 +2,6 @@
 
 (function () {
   document.addEventListener("DOMContentLoaded", () => {
-    initWhatsAppWidget();
     initHeroBannerCarousel();
     initUgcReviewModal();
     initExitIntentModal();
@@ -774,7 +773,7 @@
     const trigger = document.createElement("button");
     trigger.id = "kodo-bot-trigger";
     trigger.type = "button";
-    trigger.className = "fixed bottom-6 right-6 z-40 bg-neutral-950 text-white p-3 sm:px-4 sm:py-3 rounded-full shadow-2xl border-2 border-[#2D8CE3] flex items-center gap-2.5 hover:scale-105 transition-all group font-syne cursor-pointer";
+    trigger.className = "fixed bottom-6 right-6 z-40 bg-neutral-950 text-white p-3 sm:px-4 sm:py-3 rounded-full shadow-2xl border-2 border-[#2D8CE3] hidden md:flex items-center gap-2.5 hover:scale-105 transition-all group font-syne cursor-pointer";
     trigger.innerHTML = `
       <div class="relative flex items-center justify-center">
         <span class="text-xl">🤖</span>
@@ -871,6 +870,7 @@
         chatWin.classList.add("scale-95", "opacity-0", "pointer-events-none");
       }
     }
+    window.openKodoBot = () => toggleChat(true);
 
     trigger.addEventListener("click", () => toggleChat());
     chatWin.querySelector("#kodo-bot-close")?.addEventListener("click", () => toggleChat(false));
@@ -1075,6 +1075,7 @@
     const currentPath = window.location.pathname.split("/").pop() || "index.html";
     const currentSearch = window.location.search;
     const isWomen = currentSearch.includes("gender=women");
+    const isMen = currentSearch.includes("gender=men");
 
     const dock = document.createElement("nav");
     dock.id = "kodo-mobile-dock";
@@ -1082,39 +1083,41 @@
 
     const links = [
       {
-        href: "index.html",
-        icon: "🏠",
-        label: "Home",
-        active: (currentPath === "index.html" || currentPath === "") && !isWomen
+        href: "collection.html?gender=men",
+        icon: "♂",
+        label: "Men",
+        active: isMen
       },
       {
         href: "collection.html?gender=women",
-        icon: "🎀",
+        icon: "♀",
         label: "Women",
         active: isWomen
       },
       {
-        href: "lookbook.html",
-        icon: "📸",
-        label: "Lookbook",
-        active: currentPath === "lookbook.html"
+        href: "index.html",
+        icon: "⌂",
+        label: "Home",
+        active: (currentPath === "index.html" || currentPath === "") && !isWomen && !isMen
       },
       {
-        href: "tryon.html",
-        icon: "🪞",
-        label: "Mirror",
-        active: currentPath === "tryon.html"
+        href: "#cart",
+        icon: "🛒",
+        label: "Checkout",
+        active: false,
+        action: "checkout"
       },
       {
-        href: "account.html",
-        icon: "👑",
-        label: "VIP Hub",
-        active: currentPath === "account.html"
+        href: "#chat",
+        icon: "✦",
+        label: "Chat",
+        active: false,
+        action: "chat"
       }
     ];
 
     dock.innerHTML = links.map(l => `
-      <a href="${l.href}" class="flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-xl transition-all text-[10px] uppercase ${
+      <a href="${l.href}" data-action="${l.action || ""}" class="kodo-dock-link flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-xl transition-all text-[10px] uppercase ${
         l.active 
           ? 'text-[#2D8CE3] font-black scale-105' 
           : 'text-neutral-600 dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white'
@@ -1125,6 +1128,19 @@
     `).join("");
 
     document.body.appendChild(dock);
+    dock.querySelectorAll(".kodo-dock-link").forEach(link => {
+      link.addEventListener("click", (event) => {
+        const action = link.dataset.action;
+        if (!action) return;
+        event.preventDefault();
+        if (action === "checkout") {
+          document.querySelector(".cart-drawer-trigger")?.click();
+        }
+        if (action === "chat") {
+          window.openKodoBot?.();
+        }
+      });
+    });
     document.body.classList.add("pb-14", "md:pb-0");
   }
 })();

@@ -966,53 +966,7 @@
     </div>
   </div>
 
-  <!-- 5. FLOATING GAMIFIED DROP WHEEL BUTTON -->
-  <div id="spin-wheel-trigger" class="fixed bottom-6 right-6 z-40 bg-neutral-950 text-white p-1 rounded-full shadow-2xl hover:scale-105 transition-all cursor-pointer flex items-center gap-2 pr-4 border border-amber-400/40 animate-bounce group" title="Spin the Wheel to win up to 20% OFF!">
-    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-[#2D8CE3] flex items-center justify-center text-lg shadow-inner">
-      🎡
-    </div>
-    <div class="text-left">
-      <div class="text-[9px] font-mono-tech text-amber-400 font-bold uppercase tracking-widest">LUCKY DROP</div>
-      <div class="text-xs font-black uppercase text-white group-hover:text-amber-300">SPIN & WIN ⚡</div>
-    </div>
-  </div>
-
-  <!-- 6. SPIN THE WHEEL MODAL -->
-  <div id="spin-wheel-modal" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="modal-box bg-neutral-950 text-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-white/15 relative text-center overflow-hidden">
-      <button type="button" id="spin-wheel-close" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center font-bold">
-        ✕
-      </button>
-
-      <div class="text-xs font-black tracking-widest text-amber-400 uppercase font-mono-tech mb-1">
-        ⚡ STREETWEAR REBEL LOTTERY
-      </div>
-      <h3 class="font-syne text-2xl font-black uppercase tracking-tight">
-        SPIN FOR YOUR DROP DISCOUNT
-      </h3>
-      <p class="text-xs text-neutral-400 mt-1 mb-4">
-        Every spin unlocks an exclusive VIP voucher or mystery gift.
-      </p>
-
-      <!-- Wheel Container -->
-      <div class="relative w-64 h-64 mx-auto my-4 flex items-center justify-center">
-        <!-- Pointer arrow -->
-        <div class="absolute -top-3 z-30 transform -translate-x-1/2 left-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[18px] border-t-amber-400 filter drop-shadow-md"></div>
-        <canvas id="spin-canvas" width="260" height="260" class="rounded-full shadow-2xl border-4 border-neutral-800"></canvas>
-      </div>
-
-      <div id="spin-result-box" class="hidden my-3 p-3 bg-white/10 rounded-2xl border border-white/20 space-y-1">
-        <div class="text-[11px] text-amber-300 font-bold uppercase">🎉 YOU UNLOCKED:</div>
-        <div id="spin-win-text" class="text-lg font-black font-syne text-white">20% OFF (STREET20)</div>
-      </div>
-
-      <button type="button" id="spin-wheel-action-btn" class="w-full py-4 bg-gradient-to-r from-amber-400 via-pink-500 to-[#2D8CE3] hover:opacity-95 text-neutral-950 font-black text-xs md:text-sm rounded-2xl uppercase tracking-wider transition-all shadow-lg shadow-pink-500/25">
-        SPIN THE REBEL WHEEL 🎯
-      </button>
-    </div>
-  </div>
-
-  <!-- 7. SMART SIZE FINDER AI MODAL -->
+  <!-- 5. SMART SIZE FINDER AI MODAL -->
   <div id="size-finder-modal" class="modal-overlay fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="modal-box bg-white text-neutral-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-neutral-200 relative">
       <button type="button" id="size-finder-close" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-neutral-100 text-neutral-500 hover:text-neutral-900 flex items-center justify-center font-bold">
