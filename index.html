@@ -824,10 +824,13 @@
       <!-- Quick Support in Drawer -->
       <div class="bg-blue-100/50 rounded-2xl p-4 text-xs space-y-2 border border-blue-200/50">
         <div class="font-bold text-blue-900">Need sizing help?</div>
-        <p class="text-[11px] text-blue-700">Chat with our streetwear stylist on WhatsApp for real-time recommendations.</p>
-        <button type="button" onclick="window.showToast('Opening WhatsApp Support (+91 70467 02094)...')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors">
-          Chat on WhatsApp 💬
+        <p class="text-[11px] text-blue-700">Ask the KODO AI stylist instantly, or chat with our team on WhatsApp.</p>
+        <button type="button" onclick="window.openKodoBot?.(); window.showToast('Opening KODO AI Stylist...')" class="w-full py-2 bg-neutral-950 hover:bg-neutral-800 text-white rounded-xl text-xs font-bold transition-colors">
+          Ask AI Stylist 🤖
         </button>
+        <a href="https://wa.me/917046702094?text=Hey%20KODO%20Stylist%2C%20help%20me%20choose%20my%20size" target="_blank" rel="noopener" class="block w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors text-center">
+          Chat on WhatsApp 💬
+        </a>
       </div>
     </div>
 
