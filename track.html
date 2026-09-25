@@ -41,21 +41,21 @@
     
     <!-- Search Order Box -->
     <div class="bg-white rounded-3xl p-6 md:p-8 border border-neutral-200 shadow-sm text-center">
-      <span class="text-xs font-black tracking-widest text-[#2D8CE3] uppercase">REAL-TIME DISPATCH RADAR</span>
+      <span class="text-xs font-black tracking-widest text-[#2D8CE3] uppercase">ORDER STATUS RADAR</span>
       <h1 class="font-syne text-2xl sm:text-3xl font-black uppercase text-neutral-900 mt-1">TRACK YOUR STREETWEAR SHIPMENT</h1>
       <p class="text-xs text-neutral-500 max-w-md mx-auto mt-1">
-        Enter your 6-digit Order ID (e.g. <b>KD-892140</b>) or Phone Number to view live courier status.
+        Enter your KODO Order ID or phone number to view the latest real order status.
       </p>
 
       <form id="track-order-form" class="mt-6 flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-        <input type="text" id="track-input" placeholder="e.g. KD-892140 or Phone" required class="flex-1 px-4 py-3 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-blue-500 uppercase">
+        <input type="text" id="track-input" placeholder="e.g. KD-123456 or Phone" required class="flex-1 px-4 py-3 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-blue-500 uppercase">
         <button type="submit" class="px-6 py-3 bg-[#2D8CE3] hover:bg-blue-600 text-white text-xs font-black rounded-xl uppercase tracking-wider transition-colors shadow-md">
           TRACK ORDER
         </button>
       </form>
 
       <div class="mt-3 text-[11px] text-neutral-400">
-        Demo Orders: <button type="button" class="demo-track-btn text-blue-600 font-bold underline" data-id="KD-892140">KD-892140</button>, <button type="button" class="demo-track-btn text-blue-600 font-bold underline" data-id="KD-774192">KD-774192</button>
+        Only real orders saved from checkout or the live backend will appear here.
       </div>
     </div>
 
@@ -66,19 +66,19 @@
       <div class="bg-gradient-to-r from-neutral-900 via-neutral-950 to-blue-950 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <span id="track-order-id-display" class="font-syne text-xl sm:text-2xl font-black text-white">KD-892140</span>
-            <span id="track-status-pill" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-              IN TRANSIT
+            <span id="track-order-id-display" class="font-syne text-xl sm:text-2xl font-black text-white">KD-ORDER</span>
+            <span id="track-status-pill" class="bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+              ORDER RECEIVED
             </span>
           </div>
-          <div class="text-xs text-neutral-400 mt-1">
-            Courier: <b class="text-white">Delhivery Surface Express</b> • AWB: <b id="track-awb-num" class="text-blue-400">DEL-984021980</b>
+          <div id="track-courier-line" class="text-xs text-neutral-400 mt-1">
+            Courier and AWB will appear after dispatch.
           </div>
         </div>
 
         <div class="text-left sm:text-right">
-          <div class="text-[11px] text-neutral-400 uppercase tracking-wider">Estimated Delivery</div>
-          <div id="track-eta-date" class="text-base sm:text-lg font-black text-[#00E599]">Tomorrow, by 8:00 PM</div>
+          <div class="text-[11px] text-neutral-400 uppercase tracking-wider">Payment</div>
+          <div id="track-payment-status" class="text-base sm:text-lg font-black text-[#00E599]">Pending</div>
         </div>
       </div>
 
@@ -88,40 +88,40 @@
           
           <!-- Step 1 -->
           <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
-            <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-md">
-              ✓
+            <div id="track-step-order-icon" class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-sm shadow-md">
+              1
             </div>
             <div>
-              <div class="text-xs font-black text-neutral-900">Order Confirmed</div>
-              <div class="text-[10px] text-neutral-400">Payment Verified</div>
+              <div id="track-step-order-title" class="text-xs font-black text-blue-600">Order Request Received</div>
+              <div id="track-step-order-subtitle" class="text-[10px] text-neutral-400">Awaiting team confirmation</div>
             </div>
           </div>
 
           <!-- Connector -->
-          <div class="hidden md:block w-full h-1 bg-emerald-500 rounded my-auto -mx-4"></div>
+          <div id="track-connector-1" class="hidden md:block w-full h-1 bg-neutral-200 rounded my-auto -mx-4"></div>
 
           <!-- Step 2 -->
           <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
-            <div class="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-md">
-              ✓
+            <div id="track-step-qc-icon" class="w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 border border-neutral-300 flex items-center justify-center font-bold text-sm shadow-md">
+              2
             </div>
             <div>
-              <div class="text-xs font-black text-neutral-900">Quality Check & Printing</div>
-              <div class="text-[10px] text-neutral-400">Mumbai Atelier</div>
+              <div id="track-step-qc-title" class="text-xs font-bold text-neutral-400">Quality Check & Packing</div>
+              <div class="text-[10px] text-neutral-400">Starts after confirmation</div>
             </div>
           </div>
 
           <!-- Connector -->
-          <div class="hidden md:block w-full h-1 bg-blue-500 rounded my-auto -mx-4"></div>
+          <div id="track-connector-2" class="hidden md:block w-full h-1 bg-neutral-200 rounded my-auto -mx-4"></div>
 
           <!-- Step 3 -->
           <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
-            <div class="w-10 h-10 rounded-full bg-[#2D8CE3] text-white flex items-center justify-center font-bold text-sm shadow-lg animate-pulse">
-              🚚
+            <div id="track-step-ship-icon" class="w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 border border-neutral-300 flex items-center justify-center font-bold text-sm">
+              3
             </div>
             <div>
-              <div class="text-xs font-black text-blue-600">Dispatched in Transit</div>
-              <div class="text-[10px] text-neutral-400">Hub Sort Facility</div>
+              <div id="track-step-ship-title" class="text-xs font-bold text-neutral-400">Dispatched</div>
+              <div id="track-step-ship-subtitle" class="text-[10px] text-neutral-400">Courier details pending</div>
             </div>
           </div>
 
@@ -130,8 +130,8 @@
 
           <!-- Step 4 -->
           <div class="flex md:flex-col items-center gap-3 text-left md:text-center flex-1">
-            <div class="w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 border border-neutral-300 flex items-center justify-center font-bold text-sm">
-              🛵
+            <div id="track-step-delivery-icon" class="w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 border border-neutral-300 flex items-center justify-center font-bold text-sm">
+              4
             </div>
             <div>
               <div class="text-xs font-bold text-neutral-400">Out for Delivery</div>
@@ -181,7 +181,7 @@
 
   <!-- FOOTER -->
   <footer class="bg-white border-t border-neutral-200 py-6 text-center text-xs text-neutral-400">
-    KODO.DIY Express Tracking • Real-time Delhivery API Integrated • 100% Genuine Veirdo Style
+    KODO.DIY Express Tracking • Real order status only
   </footer>
 
   <script src="js/backend-config.js"></script>
@@ -249,9 +249,15 @@
       function renderTracking(order) {
         resultCard.classList.remove("hidden");
         document.getElementById("track-order-id-display").textContent = order.orderId;
+        document.getElementById("track-status-pill").textContent = order.status || "Order Request Received";
+        document.getElementById("track-payment-status").textContent = order.paymentStatus || order.paymentMethod || "Pending";
+        document.getElementById("track-courier-line").innerHTML = order.awb
+          ? `Courier: <b class="text-white">${order.courier || "Courier assigned"}</b> • AWB: <b class="text-blue-400">${order.awb}</b>`
+          : "Courier and AWB will appear after dispatch.";
         document.getElementById("track-customer-name").textContent = order.customer.name;
         document.getElementById("track-customer-addr").textContent = `${order.customer.address}, ${order.customer.city} - ${order.customer.pincode}`;
         document.getElementById("track-customer-phone").textContent = `Phone: ${order.customer.phone}`;
+        updateProgress(order);
 
         const itemsList = document.getElementById("track-items-list");
         itemsList.innerHTML = order.items.map(it => `
@@ -266,6 +272,46 @@
         `).join("");
 
         resultCard.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function updateProgress(order) {
+        const status = String(order.status || "").toLowerCase();
+        const hasAwb = Boolean(order.awb);
+        const isConfirmed = /confirm|production|pack|dispatch|deliver|transit/.test(status);
+        const isPacked = /production|pack|dispatch|deliver|transit/.test(status);
+        const isShipped = hasAwb || /dispatch|transit|deliver/.test(status);
+        const isDelivered = /deliver/.test(status);
+
+        setStep("order", true, isConfirmed ? "Order Confirmed" : "Order Request Received", order.paymentStatus || "Awaiting confirmation");
+        setConnector("1", isPacked);
+        setStep("qc", isPacked, isPacked ? "Quality Check & Packing" : "Quality Check & Packing", isPacked ? "In progress" : "Starts after confirmation");
+        setConnector("2", isShipped);
+        setStep("ship", isShipped, isShipped ? "Dispatched" : "Dispatched", isShipped ? (order.awb ? `AWB ${order.awb}` : "Courier assigned") : "Courier details pending");
+        setStep("delivery", isDelivered, "Out for Delivery", isDelivered ? "Delivered" : "Local hub pending");
+      }
+
+      function setStep(id, active, title, subtitle) {
+        const icon = document.getElementById(`track-step-${id}-icon`);
+        const titleEl = document.getElementById(`track-step-${id}-title`);
+        const subEl = document.getElementById(`track-step-${id}-subtitle`);
+        if (icon) {
+          icon.className = active
+            ? "w-10 h-10 rounded-full bg-[#2D8CE3] text-white flex items-center justify-center font-bold text-sm shadow-md"
+            : "w-10 h-10 rounded-full bg-neutral-100 text-neutral-400 border border-neutral-300 flex items-center justify-center font-bold text-sm shadow-md";
+          icon.textContent = active ? "✓" : icon.textContent;
+        }
+        if (titleEl) {
+          titleEl.className = active ? "text-xs font-black text-blue-600" : "text-xs font-bold text-neutral-400";
+          titleEl.textContent = title;
+        }
+        if (subEl) subEl.textContent = subtitle;
+      }
+
+      function setConnector(id, active) {
+        const connector = document.getElementById(`track-connector-${id}`);
+        if (connector) {
+          connector.className = `hidden md:block w-full h-1 ${active ? "bg-blue-500" : "bg-neutral-200"} rounded my-auto -mx-4`;
+        }
       }
     });
   </script>

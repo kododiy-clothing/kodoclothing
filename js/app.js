@@ -1501,6 +1501,9 @@
             </div>
 
             <div class="mt-6 flex flex-col sm:flex-row gap-2">
+              <a href="track.html?id=${encodeURIComponent(orderId)}" class="flex-1 py-3.5 bg-blue-600 text-white text-center font-extrabold text-xs rounded-xl hover:bg-blue-700 transition-colors">
+                TRACK ORDER
+              </a>
               <a href="${whatsappUrl}" target="_blank" rel="noopener" class="flex-1 py-3.5 bg-emerald-600 text-white text-center font-extrabold text-xs rounded-xl hover:bg-emerald-700 transition-colors">
                 SEND ON WHATSAPP
               </a>
