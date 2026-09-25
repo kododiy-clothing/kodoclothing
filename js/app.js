@@ -1303,7 +1303,8 @@
     let discount = appliedCoupon && appliedCoupon.discountPercent ? Math.round(subtotal * (appliedCoupon.discountPercent / 100)) : 0;
     let shipping = (subtotal >= FREE_SHIPPING_THRESHOLD || (appliedCoupon && appliedCoupon.freeShipping)) ? 0 : 99;
     let total = subtotal - discount + shipping;
-    const codAdvance = Math.max(1, Math.round(total * 0.25));
+    const MIN_GATEWAY_AMOUNT = 50;
+    const codAdvance = Math.min(total, Math.max(MIN_GATEWAY_AMOUNT, Math.round(total * 0.25)));
     const codBalance = Math.max(0, total - codAdvance);
 
     modal.innerHTML = `

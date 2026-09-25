@@ -49,6 +49,12 @@ module.exports = async function handler(req, res) {
   const productCart = [];
   const gatewayAmount = Number(order.gatewayAmount || 0);
   if (gatewayAmount > 0) {
+    if (gatewayAmount < 50) {
+      return res.status(400).json({
+        success: false,
+        error: "Minimum online payment amount is ₹50. Please use prepaid checkout or increase the COD advance."
+      });
+    }
     const productId = process.env.DODO_PRODUCT_ID_DEFAULT || getDodoProductId(items[0]);
     if (!productId) {
       return res.status(500).json({
