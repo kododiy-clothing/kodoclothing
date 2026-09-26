@@ -198,6 +198,10 @@
       const urlParams = new URLSearchParams(window.location.search);
       const urlOrderId = urlParams.get("id");
       if (urlOrderId) {
+        window.KODO_META_PIXEL?.trackCustom?.("PaymentReturn", {
+          order_id: urlOrderId,
+          source: "dodo_return_or_order_tracking"
+        });
         input.value = urlOrderId;
         lookupOrder(urlOrderId);
       }

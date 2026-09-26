@@ -309,6 +309,14 @@
         p.description.toLowerCase().includes(q) ||
         (p.tags && p.tags.some(t => t.toLowerCase().includes(q)))
       );
+      if (query.length >= 3) {
+        window.KODO_META_PIXEL?.track?.("Search", {
+          search_string: query,
+          content_category: "streetwear",
+          value: matches.length,
+          currency: "INR"
+        });
+      }
 
       if (matches.length === 0) {
         resultsContainer.innerHTML = `
@@ -668,6 +676,13 @@
           wishlist.push(prod);
           btn.innerHTML = `<span class="text-red-500">♥</span>`;
           showToast(`Added to wishlist!`);
+          window.KODO_META_PIXEL?.track?.("AddToWishlist", {
+            content_ids: [prod.id],
+            content_name: prod.title,
+            content_type: "product",
+            value: prod.price,
+            currency: prod.currency || "INR"
+          });
         }
         saveWishlist();
       });
@@ -708,6 +723,13 @@
           size: selectedSize,
           sizes: prod.sizes,
           quantity: 1
+        });
+        window.KODO_META_PIXEL?.track?.("AddToCart", {
+          content_ids: [prod.id],
+          content_name: prod.title,
+          content_type: "product",
+          value: prod.price,
+          currency: prod.currency || "INR"
         });
 
         openCartDrawer();
@@ -1284,6 +1306,19 @@
     const checkoutBtn = document.getElementById("cart-checkout-btn");
     if (checkoutBtn) {
       checkoutBtn.addEventListener("click", () => {
+        const subtotal = cart.reduce((s, item) => s + ((item.price || 0) * (item.quantity || 1)), 0);
+        window.KODO_META_PIXEL?.track?.("InitiateCheckout", {
+          content_ids: cart.map(item => item.productId || item.id),
+          contents: cart.map(item => ({
+            id: item.productId || item.id,
+            quantity: item.quantity || 1,
+            item_price: item.price
+          })),
+          content_type: "product",
+          num_items: cart.reduce((sum, item) => sum + (item.quantity || 1), 0),
+          value: subtotal,
+          currency: "INR"
+        });
         closeCartDrawer();
         openCheckoutModal();
       });

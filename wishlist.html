@@ -180,6 +180,13 @@
             if (existing) existing.quantity++;
             else cart.push(item);
             localStorage.setItem("KODO_CART", JSON.stringify(cart));
+            window.KODO_META_PIXEL?.track?.("AddToCart", {
+              content_ids: [p.id],
+              content_name: p.title,
+              content_type: "product",
+              value: p.price,
+              currency: p.currency || "INR"
+            });
 
             btn.textContent = "✓ Added";
             btn.classList.add("bg-emerald-600");

@@ -244,6 +244,22 @@
       let activeFits = [];
       let maxPrice = 3499;
       let sortBy = "featured";
+      let lastTrackedCategoryState = "";
+
+      function trackCollectionView(resultCount) {
+        const state = `${activeGender}|${activeCat}|${activeGSM || "all"}|${activeFits.join(",") || "all"}|${maxPrice}|${sortBy}`;
+        if (state === lastTrackedCategoryState) return;
+        lastTrackedCategoryState = state;
+        window.KODO_META_PIXEL?.trackCustom?.("ViewCategory", {
+          gender: activeGender,
+          category: activeCat,
+          gsm: activeGSM || "all",
+          fits: activeFits.join(",") || "all",
+          max_price: maxPrice,
+          sort: sortBy,
+          result_count: resultCount
+        });
+      }
 
       // Read URL params
       const urlParams = new URLSearchParams(window.location.search);
@@ -306,6 +322,7 @@
         else if (sortBy === "rating") list.sort((a, b) => b.rating - a.rating);
 
         countEl.textContent = list.length;
+        trackCollectionView(list.length);
 
         if (list.length === 0) {
           grid.innerHTML = `
