@@ -4,6 +4,7 @@
 (function () {
   let orders = [];
   let chatLogs = [];
+  let analyticsSummary = null;
   let currentStatusFilter = "all";
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
   const apiUrl = (path) => `${API_BASE_URL}${path}`;
@@ -12,6 +13,7 @@
     await loadProducts();
     await loadOrders();
     await loadChatLogs();
+    await loadAnalyticsSummary();
     initTabNavigation();
     initKPIs();
     renderOrders();
@@ -19,10 +21,12 @@
     renderDiscounts();
     renderCustomers();
     renderChatInbox();
+    renderAnalyticsSummary();
     initModals();
     initExportCSV();
     initSyncOrdersBtn();
     initChatRefreshBtn();
+    initAnalyticsRefreshBtn();
   });
 
   /* -------------------------------------------------------------
@@ -105,6 +109,19 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+
+  async function loadAnalyticsSummary() {
+    try {
+      const res = await fetch(apiUrl("/api/analytics/track"));
+      if (res.ok) {
+        const data = await res.json();
+        analyticsSummary = data.summary || null;
+      }
+    } catch (e) {
+      console.warn("Could not fetch analytics summary", e);
+      analyticsSummary = null;
+    }
   }
 
   /* -------------------------------------------------------------
@@ -727,7 +744,83 @@
   }
 
   /* -------------------------------------------------------------
-     9. AI CHAT INBOX
+     9. LIVE SALES & VISITOR ANALYTICS
+     ------------------------------------------------------------- */
+  function renderAnalyticsSummary() {
+    const summary = analyticsSummary || {};
+    const setText = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    };
+    const money = (value) => `₹${Number(value || 0).toLocaleString("en-IN")}`;
+
+    setText("analytics-visitors", Number(summary.visitors || 0).toLocaleString("en-IN"));
+    setText("analytics-pageviews", Number(summary.pageviews || 0).toLocaleString("en-IN"));
+    setText("analytics-clicks", Number(summary.clicks || 0).toLocaleString("en-IN"));
+    setText("analytics-checkouts", Number(summary.checkoutStarted || 0).toLocaleString("en-IN"));
+    setText("analytics-sales", `${Number(summary.sales || 0).toLocaleString("en-IN")} / ${money(summary.revenue)}`);
+    setText("analytics-bounce", `${Number(summary.bounceRate || 0)}%`);
+
+    const renderRank = (id, rows, empty) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (!rows || !rows.length) {
+        el.innerHTML = `<div class="p-4 bg-neutral-900 rounded-2xl border border-neutral-800 text-neutral-500">${empty}</div>`;
+        return;
+      }
+      const max = Math.max(...rows.map(r => r.count), 1);
+      el.innerHTML = rows.slice(0, 8).map(row => `
+        <div class="p-3 bg-neutral-900 rounded-2xl border border-neutral-800">
+          <div class="flex justify-between gap-3 mb-1">
+            <span class="font-bold text-white truncate">${escapeHtml(row.name)}</span>
+            <span class="font-mono-tech text-blue-300 font-black">${row.count}</span>
+          </div>
+          <div class="h-1.5 bg-neutral-800 rounded-full overflow-hidden">
+            <div class="h-full bg-blue-500 rounded-full" style="width:${Math.max(8, Math.round((row.count / max) * 100))}%"></div>
+          </div>
+        </div>
+      `).join("");
+    };
+
+    renderRank("analytics-top-pages", summary.topPages, "No page visits yet.");
+    renderRank("analytics-countries", summary.topCountries, "No country data yet.");
+    renderRank("analytics-top-clicks", summary.topClicks, "No click data yet.");
+
+    const stream = document.getElementById("analytics-event-stream");
+    if (!stream) return;
+    const events = summary.recentEvents || [];
+    if (!events.length) {
+      stream.innerHTML = `<div class="p-8 text-center text-neutral-500">No visitor analytics yet.</div>`;
+      return;
+    }
+    stream.innerHTML = events.slice(0, 50).map(event => {
+      const date = event.createdAt ? new Date(event.createdAt).toLocaleString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Recent";
+      const typeClass = event.type === "order_created" ? "text-emerald-300 bg-emerald-500/10" :
+        event.type === "checkout_started" ? "text-amber-300 bg-amber-500/10" :
+        event.type === "click" ? "text-purple-300 bg-purple-500/10" :
+        event.type === "exit" ? "text-red-300 bg-red-500/10" :
+        "text-blue-300 bg-blue-500/10";
+      return `
+        <div class="p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 hover:bg-neutral-900/50">
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${typeClass}">${escapeHtml(event.type)}</span>
+              <span class="font-bold text-white truncate">${escapeHtml(event.label || event.page || "Visitor event")}</span>
+              ${event.value ? `<span class="text-emerald-300 font-mono-tech font-black">${money(event.value)}</span>` : ""}
+            </div>
+            <div class="text-[11px] text-neutral-500 mt-1 truncate">${escapeHtml(event.page)} • ${escapeHtml(event.sessionId)}</div>
+          </div>
+          <div class="flex items-center gap-3 text-[11px] text-neutral-400 font-mono-tech">
+            <span>${escapeHtml(event.country || "Unknown")}</span>
+            <span>${date}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  /* -------------------------------------------------------------
+     10. AI CHAT INBOX
      ------------------------------------------------------------- */
   function renderChatInbox() {
     const list = document.getElementById("admin-chat-log-list");
@@ -789,7 +882,7 @@
   }
 
   /* -------------------------------------------------------------
-     10. MODALS & FORMS HANDLERS
+     11. MODALS & FORMS HANDLERS
      ------------------------------------------------------------- */
   function initModals() {
     // Add Product Modal
@@ -887,7 +980,7 @@
   }
 
   /* -------------------------------------------------------------
-     11. EXPORT CSV GENERATOR
+     12. EXPORT CSV GENERATOR
      ------------------------------------------------------------- */
   function initExportCSV() {
     const btn = document.getElementById("admin-export-csv-btn");
@@ -907,7 +1000,7 @@
   }
 
   /* -------------------------------------------------------------
-     12. SYNC ORDERS BUTTON
+     13. SYNC ORDERS BUTTON
      ------------------------------------------------------------- */
   function initSyncOrdersBtn() {
     const btn = document.getElementById("admin-refresh-orders-btn");
@@ -920,7 +1013,9 @@
         renderProducts();
         renderCustomers();
         await loadChatLogs();
+        await loadAnalyticsSummary();
         renderChatInbox();
+        renderAnalyticsSummary();
         btn.innerHTML = `<span>✓</span> <span>Synced!</span>`;
       setTimeout(() => {
         btn.innerHTML = `<span>🔄</span> <span>Sync Live Orders</span>`;
@@ -937,6 +1032,19 @@
       btn.textContent = "Chat Logs Synced";
       setTimeout(() => {
         btn.textContent = "Refresh Chat Logs";
+      }, 1500);
+    });
+  }
+
+  function initAnalyticsRefreshBtn() {
+    const btn = document.getElementById("admin-refresh-analytics-btn");
+    btn?.addEventListener("click", async () => {
+      btn.textContent = "Refreshing...";
+      await loadAnalyticsSummary();
+      renderAnalyticsSummary();
+      btn.textContent = "Analytics Synced";
+      setTimeout(() => {
+        btn.textContent = "Refresh Analytics";
       }, 1500);
     });
   }

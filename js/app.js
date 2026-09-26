@@ -1482,10 +1482,22 @@
         payBtn.innerHTML = isCod ? "<span>CREATING COD ADVANCE PAYMENT...</span>" : "<span>CREATING SECURE PAYMENT...</span>";
       }
       try {
+        window.KODO_ANALYTICS?.track?.({
+          type: "checkout_started",
+          label: selectedPayment,
+          value: total,
+          currency: "INR"
+        });
         const checkout = await createDodoCheckout(newOrder);
         newOrder.dodoPaymentId = checkout.paymentId;
         newOrder.paymentLink = checkout.checkoutUrl || checkout.paymentLink;
         await saveOrder(newOrder);
+        window.KODO_ANALYTICS?.track?.({
+          type: "order_created",
+          label: newOrder.paymentMode,
+          value: total,
+          currency: "INR"
+        });
         window.location.href = newOrder.paymentLink;
       } catch (err) {
         console.error("Dodo checkout error:", err);

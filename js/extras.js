@@ -1181,4 +1181,61 @@
     });
     document.body.classList.add("pb-14", "md:pb-0");
   }
+
+  /* -------------------------------------------------------------
+     12. VISITOR ANALYTICS TRACKER
+     ------------------------------------------------------------- */
+  function initKodoAnalytics() {
+    if (window.location.pathname.includes("admin.html")) return;
+    const apiBase = (window.KODO_API_BASE_URL || "").replace(/\/$/, "");
+    const endpoint = `${apiBase}/api/analytics/track`;
+    const sessionKey = "KODO_ANALYTICS_SESSION_ID";
+    let sessionId = localStorage.getItem(sessionKey);
+    if (!sessionId) {
+      sessionId = `visitor_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      localStorage.setItem(sessionKey, sessionId);
+    }
+
+    const page = () => window.location.pathname + window.location.search;
+    const productId = () => new URLSearchParams(window.location.search).get("id") || "";
+    const send = (payload, useBeacon = false) => {
+      const body = JSON.stringify({
+        sessionId,
+        page: page(),
+        productId: productId(),
+        referrer: document.referrer || "",
+        ...payload
+      });
+      if (useBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(endpoint, new Blob([body], { type: "application/json" }));
+        return;
+      }
+      fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body }).catch(() => {});
+    };
+
+    window.KODO_ANALYTICS = { track: send, sessionId };
+    send({ type: "pageview", label: document.title || page() });
+
+    document.addEventListener("click", (event) => {
+      const target = event.target.closest("a,button,[data-product-id],[data-action]");
+      if (!target) return;
+      const label = target.getAttribute("aria-label") ||
+        target.getAttribute("title") ||
+        target.dataset.action ||
+        target.dataset.productId ||
+        target.textContent?.trim()?.slice(0, 80) ||
+        target.tagName;
+      send({
+        type: "click",
+        label,
+        productId: target.dataset.productId || productId()
+      });
+    }, true);
+
+    window.addEventListener("pagehide", () => {
+      send({ type: "exit", label: page() }, true);
+    });
+  }
+
+  initKodoAnalytics();
 })();

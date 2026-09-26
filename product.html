@@ -583,11 +583,13 @@
       // Add to bag
       document.getElementById("pdp-add-bag-btn").addEventListener("click", () => {
         addCurrentProductToCart();
+        window.KODO_ANALYTICS?.track?.({ type: "add_to_cart", label: product.title, productId: product.id, value: product.price, currency: product.currency || "INR" });
         openCart();
       });
 
       document.getElementById("pdp-buy-now-btn")?.addEventListener("click", () => {
         addCurrentProductToCart();
+        window.KODO_ANALYTICS?.track?.({ type: "checkout_started", label: `Buy Now: ${product.title}`, productId: product.id, value: product.price, currency: product.currency || "INR" });
         window.location.href = "index.html?checkout=1";
       });
     });
