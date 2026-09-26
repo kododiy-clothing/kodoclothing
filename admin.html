@@ -68,9 +68,24 @@
             <span>Discounts & Coupons</span>
           </button>
 
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="payments">
+            <span class="text-base">💳</span>
+            <span>Payments & COD</span>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="shipping">
+            <span class="text-base">🚚</span>
+            <span>Shipping & Returns</span>
+          </button>
+
           <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="customers">
             <span class="text-base">👥</span>
             <span>Customers CRM</span>
+          </button>
+
+          <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="support">
+            <span class="text-base">🤖</span>
+            <span>AI Support Desk</span>
           </button>
 
           <button type="button" class="admin-nav-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" data-tab="analytics">
@@ -203,6 +218,63 @@
             <div class="text-[11px] font-black uppercase text-neutral-500 tracking-wider">Total Warehouse Stock</div>
             <div id="kpi-stock-count" class="text-2xl sm:text-3xl font-black text-emerald-400 mt-2 font-mono-tech">0</div>
             <div class="text-[11px] text-emerald-500 font-bold mt-1">📦 42 Drop SKUs Available</div>
+          </div>
+        </div>
+
+        <!-- OWNER OPERATIONS CHECKLIST -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div class="bg-[#161b22] rounded-3xl border border-neutral-800 p-5">
+            <div class="text-[11px] font-black uppercase tracking-wider text-blue-400 mb-3">Today Owner Checklist</div>
+            <div class="space-y-2 text-xs">
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-neutral-900 border border-neutral-800">
+                <input type="checkbox" checked class="accent-blue-500">
+                <span class="font-bold text-neutral-200">Payment gateway health checked</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-neutral-900 border border-neutral-800">
+                <input type="checkbox" class="accent-blue-500">
+                <span class="font-bold text-neutral-200">COD advance orders verified</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-neutral-900 border border-neutral-800">
+                <input type="checkbox" class="accent-blue-500">
+                <span class="font-bold text-neutral-200">Low-stock SKUs restocked</span>
+              </label>
+              <label class="flex items-center gap-2 p-2 rounded-xl bg-neutral-900 border border-neutral-800">
+                <input type="checkbox" class="accent-blue-500">
+                <span class="font-bold text-neutral-200">WhatsApp support pending replies cleared</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="bg-[#161b22] rounded-3xl border border-neutral-800 p-5">
+            <div class="text-[11px] font-black uppercase tracking-wider text-emerald-400 mb-3">Store Health</div>
+            <div class="space-y-3 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-neutral-400">Google Admin Login</span>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 font-black">ACTIVE</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-neutral-400">Dodo Payments</span>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 font-black">LIVE</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-neutral-400">COD Advance Rule</span>
+                <span class="px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 font-black">25%</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-neutral-400">Owner Email</span>
+                <span class="font-mono-tech text-neutral-200">kododiy@gmail.com</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#161b22] rounded-3xl border border-neutral-800 p-5">
+            <div class="text-[11px] font-black uppercase tracking-wider text-amber-400 mb-3">Quick Actions</div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <button type="button" onclick="document.querySelector('[data-tab=\'orders\']').click();" class="p-3 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-2xl text-left font-black text-white">Dispatch<br><span class="text-neutral-500 font-bold">Orders</span></button>
+              <button type="button" onclick="document.querySelector('[data-tab=\'payments\']').click();" class="p-3 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-2xl text-left font-black text-white">Check<br><span class="text-neutral-500 font-bold">Payments</span></button>
+              <button type="button" onclick="document.querySelector('[data-tab=\'products\']').click();" class="p-3 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-2xl text-left font-black text-white">Update<br><span class="text-neutral-500 font-bold">Stock</span></button>
+              <button type="button" onclick="document.querySelector('[data-tab=\'support\']').click();" class="p-3 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-2xl text-left font-black text-white">Reply<br><span class="text-neutral-500 font-bold">Customers</span></button>
+            </div>
           </div>
         </div>
 
@@ -392,6 +464,132 @@
         </div>
       </div>
 
+      <!-- TAB 5: PAYMENTS & COD -->
+      <div id="tab-payments" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div>
+          <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">PAYMENTS, COD ADVANCE & SETTLEMENTS</h2>
+          <p class="text-xs text-neutral-400 mt-0.5">Monitor Dodo checkout, prepaid payments, COD advance collection, refunds, and settlement readiness.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-black uppercase text-neutral-500">Gateway Status</div>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 text-[10px] font-black">LIVE</span>
+            </div>
+            <div class="text-2xl font-black text-white font-syne">Dodo Payments</div>
+            <p class="text-xs text-neutral-400">Secure Pay supports UPI, cards, netbanking, and COD advance collection from the storefront checkout.</p>
+            <div class="p-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-[11px] text-neutral-300">
+              Public site URL: <span class="font-mono-tech text-blue-300">https://www.kodo.diy</span>
+            </div>
+          </div>
+
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4">
+            <div class="text-xs font-black uppercase text-neutral-500">COD Rule</div>
+            <div class="text-3xl font-black text-amber-400 font-mono-tech">25%</div>
+            <p class="text-xs text-neutral-400">COD orders require 25% non-refundable advance through secure checkout. Remaining balance is collected on delivery.</p>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div class="p-3 bg-neutral-900 rounded-2xl border border-neutral-800">
+                <div class="text-neutral-500 uppercase font-black">Minimum Gateway</div>
+                <div class="text-white font-mono-tech font-black">₹50</div>
+              </div>
+              <div class="p-3 bg-neutral-900 rounded-2xl border border-neutral-800">
+                <div class="text-neutral-500 uppercase font-black">Risk Hold</div>
+                <div class="text-white font-mono-tech font-black">Manual</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4">
+            <div class="text-xs font-black uppercase text-neutral-500">Owner Controls</div>
+            <button type="button" onclick="document.querySelector('[data-tab=\'orders\']').click();" class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-500 rounded-2xl text-xs font-black uppercase text-white">Review Paid Orders</button>
+            <button type="button" onclick="document.getElementById('admin-export-csv-btn').click();" class="w-full px-4 py-3 bg-neutral-900 hover:bg-neutral-800 rounded-2xl text-xs font-black uppercase text-white border border-neutral-800">Export Payment CSV</button>
+            <a href="https://app.dodopayments.com/" target="_blank" class="block w-full px-4 py-3 bg-neutral-900 hover:bg-neutral-800 rounded-2xl text-xs font-black uppercase text-white border border-neutral-800 text-center">Open Dodo Dashboard ↗</a>
+          </div>
+        </div>
+
+        <div class="bg-[#161b22] rounded-3xl border border-neutral-800 overflow-hidden">
+          <div class="p-4 border-b border-neutral-800 flex items-center justify-between">
+            <div>
+              <div class="font-syne font-black text-white uppercase text-sm">Payment Method Rules</div>
+              <p class="text-[11px] text-neutral-500">Customer checkout must charge through the selected method only.</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-neutral-800 text-xs">
+            <div class="p-5">
+              <div class="text-lg mb-2">🔐</div>
+              <div class="font-black text-white uppercase">Secure Pay</div>
+              <p class="text-neutral-400 mt-1">Full prepaid checkout. Order can move directly to Confirmed after payment success.</p>
+            </div>
+            <div class="p-5">
+              <div class="text-lg mb-2">💵</div>
+              <div class="font-black text-white uppercase">COD + 25% Advance</div>
+              <p class="text-neutral-400 mt-1">Gateway charges only the advance amount. Remaining cash is shown on the order note.</p>
+            </div>
+            <div class="p-5">
+              <div class="text-lg mb-2">↩️</div>
+              <div class="font-black text-white uppercase">Refund Queue</div>
+              <p class="text-neutral-400 mt-1">Cancelled prepaid orders should be checked in Dodo before marking refunded.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 6: SHIPPING & RETURNS -->
+      <div id="tab-shipping" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div>
+          <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">SHIPPING, AWB & RETURN OPS</h2>
+          <p class="text-xs text-neutral-400 mt-0.5">Courier workflow, packing quality checks, return requests, and delivery SLAs.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div class="bg-[#161b22] p-5 rounded-3xl border border-neutral-800">
+            <div class="text-[11px] font-black uppercase text-neutral-500">Confirmed</div>
+            <div class="text-2xl font-black text-amber-400 mt-2">Pack</div>
+            <p class="text-xs text-neutral-400 mt-2">Check size, color, SKU, invoice, and customer phone before AWB.</p>
+          </div>
+          <div class="bg-[#161b22] p-5 rounded-3xl border border-neutral-800">
+            <div class="text-[11px] font-black uppercase text-neutral-500">In Production</div>
+            <div class="text-2xl font-black text-purple-400 mt-2">Print</div>
+            <p class="text-xs text-neutral-400 mt-2">Print packing slip and GST invoice from the Orders tab.</p>
+          </div>
+          <div class="bg-[#161b22] p-5 rounded-3xl border border-neutral-800">
+            <div class="text-[11px] font-black uppercase text-neutral-500">Dispatched</div>
+            <div class="text-2xl font-black text-blue-400 mt-2">Track</div>
+            <p class="text-xs text-neutral-400 mt-2">Share AWB with customer and monitor courier movement.</p>
+          </div>
+          <div class="bg-[#161b22] p-5 rounded-3xl border border-neutral-800">
+            <div class="text-[11px] font-black uppercase text-neutral-500">Delivered</div>
+            <div class="text-2xl font-black text-emerald-400 mt-2">Close</div>
+            <p class="text-xs text-neutral-400 mt-2">Move to delivered after courier confirmation and support window starts.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4">
+            <div class="font-syne font-black text-white uppercase text-sm">Courier Rules</div>
+            <div class="space-y-3 text-xs">
+              <div class="flex justify-between p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><span class="text-neutral-400">Primary courier</span><span class="font-black text-white">BlueDart / Delhivery</span></div>
+              <div class="flex justify-between p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><span class="text-neutral-400">Dispatch SLA</span><span class="font-black text-white">24-48 hrs</span></div>
+              <div class="flex justify-between p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><span class="text-neutral-400">Free shipping</span><span class="font-black text-white">Above ₹799</span></div>
+              <div class="flex justify-between p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><span class="text-neutral-400">Return window</span><span class="font-black text-white">7 days</span></div>
+            </div>
+          </div>
+
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4">
+            <div class="font-syne font-black text-white uppercase text-sm">Packing QC Checklist</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <label class="flex items-center gap-2 p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><input type="checkbox" class="accent-blue-500"><span>SKU matched</span></label>
+              <label class="flex items-center gap-2 p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><input type="checkbox" class="accent-blue-500"><span>Size tag checked</span></label>
+              <label class="flex items-center gap-2 p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><input type="checkbox" class="accent-blue-500"><span>Invoice packed</span></label>
+              <label class="flex items-center gap-2 p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><input type="checkbox" class="accent-blue-500"><span>AWB label pasted</span></label>
+              <label class="flex items-center gap-2 p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><input type="checkbox" class="accent-blue-500"><span>No fabric damage</span></label>
+              <label class="flex items-center gap-2 p-3 rounded-2xl bg-neutral-900 border border-neutral-800"><input type="checkbox" class="accent-blue-500"><span>WhatsApp update sent</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- TAB 6: CUSTOMERS CRM -->
       <div id="tab-customers" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
         <div>
@@ -419,7 +617,48 @@
         </div>
       </div>
 
-      <!-- TAB 7: SALES ANALYTICS RADAR -->
+      <!-- TAB 8: AI SUPPORT DESK -->
+      <div id="tab-support" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
+        <div>
+          <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">AI SUPPORT DESK & WHATSAPP FLOW</h2>
+          <p class="text-xs text-neutral-400 mt-0.5">Fast replies for sizing, order status, COD advance, returns, and product recommendations.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div class="lg:col-span-2 bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4">
+            <div class="font-syne font-black text-white uppercase text-sm">Saved Reply Templates</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <button type="button" onclick="navigator.clipboard?.writeText('Hey! For oversized KODO fit, choose your usual size for relaxed fit or one size down for regular fit.'); alert('Sizing reply copied');" class="p-4 bg-neutral-900 border border-neutral-800 hover:border-blue-500 rounded-2xl text-left">
+                <div class="font-black text-white uppercase">Sizing Help</div>
+                <p class="text-neutral-400 mt-1">Oversized tee size recommendation.</p>
+              </button>
+              <button type="button" onclick="navigator.clipboard?.writeText('Your order is confirmed. We dispatch most KODO drops within 24-48 hours and share AWB tracking once packed.'); alert('Order reply copied');" class="p-4 bg-neutral-900 border border-neutral-800 hover:border-blue-500 rounded-2xl text-left">
+                <div class="font-black text-white uppercase">Order Confirmed</div>
+                <p class="text-neutral-400 mt-1">Dispatch status reply.</p>
+              </button>
+              <button type="button" onclick="navigator.clipboard?.writeText('COD is available with 25% advance payment. The remaining amount is paid in cash at delivery.'); alert('COD reply copied');" class="p-4 bg-neutral-900 border border-neutral-800 hover:border-blue-500 rounded-2xl text-left">
+                <div class="font-black text-white uppercase">COD Advance</div>
+                <p class="text-neutral-400 mt-1">COD payment explanation.</p>
+              </button>
+              <button type="button" onclick="navigator.clipboard?.writeText('Exchange/return requests are accepted within 7 days if the product is unused with tags and packaging.'); alert('Return reply copied');" class="p-4 bg-neutral-900 border border-neutral-800 hover:border-blue-500 rounded-2xl text-left">
+                <div class="font-black text-white uppercase">Returns</div>
+                <p class="text-neutral-400 mt-1">Return policy reply.</p>
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4">
+            <div class="font-syne font-black text-white uppercase text-sm">Support Channels</div>
+            <a href="https://wa.me/917046702094" target="_blank" class="block px-4 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-2xl text-xs font-black uppercase text-white text-center">Open WhatsApp ↗</a>
+            <a href="mailto:kododiy@gmail.com" class="block px-4 py-3 bg-neutral-900 hover:bg-neutral-800 rounded-2xl text-xs font-black uppercase text-white text-center border border-neutral-800">Email Owner</a>
+            <div class="p-4 bg-neutral-900 rounded-2xl border border-neutral-800 text-[11px] text-neutral-400">
+              AI chatbot on storefront should answer sizing/product questions and send checkout/order issues to WhatsApp support.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 9: SALES ANALYTICS RADAR -->
       <div id="tab-analytics" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
         <div>
           <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">SALES & VELOCITY ANALYTICS</h2>
@@ -447,14 +686,15 @@
         </div>
       </div>
 
-      <!-- TAB 8: STORE SETTINGS -->
+      <!-- TAB 10: STORE SETTINGS -->
       <div id="tab-settings" class="admin-tab-pane p-6 sm:p-8 space-y-6 hidden">
         <div>
           <h2 class="font-syne text-2xl font-black uppercase tracking-tight text-white">STORE CONFIGURATION & LOGISTICS</h2>
           <p class="text-xs text-neutral-400 mt-0.5">Manage store credentials, free shipping limits, and support contact.</p>
         </div>
 
-        <div class="max-w-2xl bg-[#161b22] p-6 sm:p-8 rounded-3xl border border-neutral-800 space-y-5 text-xs">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div class="lg:col-span-2 bg-[#161b22] p-6 sm:p-8 rounded-3xl border border-neutral-800 space-y-5 text-xs">
           <div>
             <label class="font-black uppercase tracking-wider text-neutral-400 block mb-1">Store Name</label>
             <input type="text" value="KODO.DIY Streetwear India" class="w-full px-4 py-2.5 bg-neutral-900 border border-neutral-700 rounded-xl text-xs font-bold text-white">
@@ -478,6 +718,23 @@
           <button type="button" onclick="alert('Store settings saved successfully!');" class="px-6 py-3 bg-[#2D8CE3] text-white font-black uppercase rounded-xl">
             SAVE SETTINGS
           </button>
+          </div>
+
+          <div class="bg-[#161b22] p-6 rounded-3xl border border-neutral-800 space-y-4 text-xs">
+            <div class="font-syne font-black text-white uppercase text-sm">Admin Access</div>
+            <div class="p-4 bg-neutral-900 border border-neutral-800 rounded-2xl">
+              <div class="text-neutral-500 font-black uppercase text-[10px]">Owner Email</div>
+              <div class="font-mono-tech text-white mt-1">kododiy@gmail.com</div>
+            </div>
+            <div class="p-4 bg-neutral-900 border border-neutral-800 rounded-2xl">
+              <div class="text-neutral-500 font-black uppercase text-[10px]">Google OAuth</div>
+              <div class="text-emerald-300 font-black mt-1">Connected</div>
+            </div>
+            <div class="p-4 bg-neutral-900 border border-neutral-800 rounded-2xl">
+              <div class="text-neutral-500 font-black uppercase text-[10px]">Live Domain</div>
+              <a href="https://www.kodo.diy" target="_blank" class="text-blue-300 font-mono-tech mt-1 inline-block">www.kodo.diy ↗</a>
+            </div>
+          </div>
         </div>
       </div>
 
