@@ -1247,7 +1247,7 @@
           height: "100%",
           zIndex: "2",
           objectFit: window.getComputedStyle(img).objectFit || "cover",
-          transform: "translateX(100%)",
+          transform: "translateX(-100%)",
           transition: `transform ${slideDuration}ms cubic-bezier(0.22, 1, 0.36, 1)`,
           pointerEvents: "none"
         });
@@ -1256,7 +1256,7 @@
         img.style.transform = "translateX(0)";
         img.parentElement?.appendChild(incoming);
         incoming.getBoundingClientRect();
-        img.style.transform = "translateX(-100%)";
+        img.style.transform = "translateX(100%)";
         incoming.style.transform = "translateX(0)";
 
         window.setTimeout(() => {
