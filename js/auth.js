@@ -47,7 +47,15 @@
           <p class="text-sm text-neutral-400 leading-relaxed mb-5">
             Admin opens only for <b class="text-white">${ADMIN_EMAIL}</b>. Configure a real Google OAuth client id in <code class="text-blue-300">js/backend-config.js</code> to enable secure sign in.
           </p>
-          <div id="google-admin-signin" class="flex justify-center mb-4"></div>
+          <div id="google-admin-signin" class="flex justify-center mb-4">
+            <button type="button" id="google-admin-placeholder" class="inline-flex items-center justify-center gap-3 w-full px-4 py-3 bg-white text-neutral-900 rounded-xl text-sm font-black shadow-lg">
+              <span class="w-5 h-5 rounded-full bg-white text-blue-600 flex items-center justify-center font-black border border-neutral-200">G</span>
+              <span>Sign in with Google</span>
+            </button>
+          </div>
+          <p id="google-admin-status" class="text-[11px] text-amber-300 leading-relaxed mb-4">
+            Google button is ready. Add OAuth Client ID to make it active.
+          </p>
           <a href="index.html" class="inline-flex items-center justify-center px-4 py-3 bg-white text-neutral-950 rounded-xl text-xs font-black uppercase">
             Back to Store
           </a>
@@ -58,6 +66,8 @@
     const clientId = window.KODO_GOOGLE_CLIENT_ID || "";
     const renderGoogleButton = () => {
       if (!clientId || !window.google?.accounts?.id) return false;
+      const status = document.getElementById("google-admin-status");
+      if (status) status.textContent = "Use kododiy@gmail.com to open Merchant Admin.";
       window.google.accounts.id.initialize({
         client_id: clientId,
         callback: (response) => {
@@ -83,6 +93,10 @@
       });
       return true;
     };
+
+    document.getElementById("google-admin-placeholder")?.addEventListener("click", () => {
+      alert("Google OAuth Client ID is required first. Add it as window.KODO_GOOGLE_CLIENT_ID in js/backend-config.js for www.kodo.diy.");
+    });
 
     if (!renderGoogleButton() && clientId) {
       let attempts = 0;
