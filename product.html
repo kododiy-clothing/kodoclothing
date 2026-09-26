@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/png" href="assets/favicon.png?v=1">
   <link rel="apple-touch-icon" href="assets/favicon.png?v=1">
+  <script src="js/meta-pixel.js?v=1"></script>
 </head>
 <body class="min-h-full flex flex-col text-neutral-900 selection:bg-[#2D8CE3] selection:text-white">
 
@@ -585,12 +586,26 @@
       document.getElementById("pdp-add-bag-btn").addEventListener("click", () => {
         addCurrentProductToCart();
         window.KODO_ANALYTICS?.track?.({ type: "add_to_cart", label: product.title, productId: product.id, value: product.price, currency: product.currency || "INR" });
+        window.KODO_META_PIXEL?.track?.("AddToCart", {
+          content_ids: [product.id],
+          content_name: product.title,
+          content_type: "product",
+          value: product.price,
+          currency: product.currency || "INR"
+        });
         openCart();
       });
 
       document.getElementById("pdp-buy-now-btn")?.addEventListener("click", () => {
         addCurrentProductToCart();
         window.KODO_ANALYTICS?.track?.({ type: "checkout_started", label: `Buy Now: ${product.title}`, productId: product.id, value: product.price, currency: product.currency || "INR" });
+        window.KODO_META_PIXEL?.track?.("InitiateCheckout", {
+          content_ids: [product.id],
+          content_name: product.title,
+          content_type: "product",
+          value: product.price,
+          currency: product.currency || "INR"
+        });
         window.location.href = "index.html?checkout=1";
       });
     });

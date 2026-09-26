@@ -1488,6 +1488,18 @@
           value: total,
           currency: "INR"
         });
+        window.KODO_META_PIXEL?.track?.("InitiateCheckout", {
+          content_ids: cart.map(item => item.productId || item.id),
+          contents: cart.map(item => ({
+            id: item.productId || item.id,
+            quantity: item.quantity || 1,
+            item_price: item.price
+          })),
+          content_type: "product",
+          num_items: cart.reduce((sum, item) => sum + (item.quantity || 1), 0),
+          value: total,
+          currency: "INR"
+        });
         const checkout = await createDodoCheckout(newOrder);
         newOrder.dodoPaymentId = checkout.paymentId;
         newOrder.paymentLink = checkout.checkoutUrl || checkout.paymentLink;
@@ -1495,6 +1507,12 @@
         window.KODO_ANALYTICS?.track?.({
           type: "order_created",
           label: newOrder.paymentMode,
+          value: total,
+          currency: "INR"
+        });
+        window.KODO_META_PIXEL?.trackCustom?.("PaymentLinkCreated", {
+          payment_mode: newOrder.paymentMode,
+          order_id: newOrder.orderId,
           value: total,
           currency: "INR"
         });
