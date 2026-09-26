@@ -12,7 +12,6 @@
     initVisualSizeChartModal();
     initKodoStylistBot();
     initMobileBottomDock();
-    initProductPhotoRotator();
   });
 
   /* -------------------------------------------------------------
