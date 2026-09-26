@@ -222,6 +222,7 @@
   </footer>
 
   <script src="js/data.js"></script>
+  <script src="js/currency.js?v=1"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const grid = document.getElementById("col-products-grid");
@@ -234,7 +235,7 @@
       const gsmBtns = document.querySelectorAll(".col-gsm-btn");
       const fitCheckboxes = document.querySelectorAll(".col-fit-cb");
       const resetBtn = document.getElementById("col-reset-filters");
-      const formatMoney = (value, product) => `${product?.currency === "USD" ? "$" : "₹"}${value}`;
+      const formatMoney = (value) => window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(value) : `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
       let activeCat = "all";
       let activeGender = "all";

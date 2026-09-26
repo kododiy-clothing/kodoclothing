@@ -214,8 +214,9 @@
   </footer>
 
   <script src="js/data.js"></script>
+  <script src="js/currency.js?v=1"></script>
   <script>
-    const formatMoney = (value, product) => `${product?.currency === "USD" ? "$" : "₹"}${value}`;
+    const formatMoney = (value) => window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(value) : `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
     document.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);

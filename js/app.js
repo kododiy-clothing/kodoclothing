@@ -32,7 +32,7 @@
 	  let appliedCoupon = null;
 	  const FREE_SHIPPING_THRESHOLD = 799;
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
-  const formatMoney = (value, product) => `${product?.currency === "USD" ? "$" : "₹"}${value}`;
+  const formatMoney = (value) => window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(value) : `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
   const filterState = {
     maxPrice: 3000,
@@ -1085,7 +1085,7 @@
               <span class="text-sm text-neutral-400 line-through">${formatMoney(product.comparePrice, product)}</span>
               <span class="text-sm font-extrabold text-emerald-600">${product.discount}</span>
             </div>
-            <p class="text-xs text-neutral-500 mt-1">${product.currency === "USD" ? "USD flash price for this special capsule." : "Inclusive of all taxes. Free shipping on orders over ₹799."}</p>
+            <p class="text-xs text-neutral-500 mt-1">Inclusive of all taxes for India. International visitors see USD display pricing.</p>
 
             <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
               <span class="text-xs font-bold text-blue-900">⚡ Special Deal: ${product.offer}</span>
