@@ -45,7 +45,7 @@
           <div class="text-[10px] font-black uppercase tracking-[0.25em] text-blue-400 mb-2">Merchant Admin Locked</div>
           <h1 class="font-syne text-2xl font-black uppercase mb-3">Owner Sign In Required</h1>
           <p class="text-sm text-neutral-400 leading-relaxed mb-5">
-            Admin opens only for <b class="text-white">${ADMIN_EMAIL}</b>. Configure a real Google OAuth client id in <code class="text-blue-300">js/backend-config.js</code> to enable secure sign in.
+            Admin opens only for <b class="text-white">${ADMIN_EMAIL}</b>. Sign in with the owner Google account to continue.
           </p>
           <div id="google-admin-signin" class="flex justify-center mb-4">
             <button type="button" id="google-admin-placeholder" class="inline-flex items-center justify-center gap-3 w-full px-4 py-3 bg-white text-neutral-900 rounded-xl text-sm font-black shadow-lg">
@@ -54,7 +54,7 @@
             </button>
           </div>
           <p id="google-admin-status" class="text-[11px] text-amber-300 leading-relaxed mb-4">
-            Google button is ready. Add OAuth Client ID to make it active.
+            Loading secure Google sign in...
           </p>
           <a href="index.html" class="inline-flex items-center justify-center px-4 py-3 bg-white text-neutral-950 rounded-xl text-xs font-black uppercase">
             Back to Store
