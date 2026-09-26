@@ -24,9 +24,14 @@
       background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.46));
       pointer-events: none;
     }
+    .flash-drop-page #kodo-fomo-toast,
+    .flash-drop-page #kodo-bot-trigger,
+    .flash-drop-page #kodo-bot-window {
+      display: none !important;
+    }
   </style>
 </head>
-<body class="min-h-full overflow-x-hidden text-white bg-[#080808] selection:bg-orange-500 selection:text-white">
+<body class="flash-drop-page min-h-full overflow-x-hidden text-white bg-[#080808] selection:bg-orange-500 selection:text-white">
   <div class="flash-shell min-h-screen">
     <div class="bg-[#111] border-b border-white/10 text-white">
       <div class="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[10px] sm:text-xs font-black uppercase tracking-[0.18em]">
