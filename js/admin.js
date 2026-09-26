@@ -3,6 +3,7 @@
 
 (function () {
   let orders = [];
+  let chatLogs = [];
   let currentStatusFilter = "all";
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
   const apiUrl = (path) => `${API_BASE_URL}${path}`;
@@ -10,15 +11,18 @@
   document.addEventListener("DOMContentLoaded", async () => {
     await loadProducts();
     await loadOrders();
+    await loadChatLogs();
     initTabNavigation();
     initKPIs();
     renderOrders();
     renderProducts();
     renderDiscounts();
     renderCustomers();
+    renderChatInbox();
     initModals();
     initExportCSV();
     initSyncOrdersBtn();
+    initChatRefreshBtn();
   });
 
   /* -------------------------------------------------------------
@@ -71,6 +75,36 @@
     try {
       localStorage.setItem("KODO_ORDERS", JSON.stringify(orders));
     } catch (e) {}
+  }
+
+  async function loadChatLogs() {
+    try {
+      const res = await fetch(apiUrl("/api/chat/log"));
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.conversations)) {
+          chatLogs = data.conversations;
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Could not fetch chat logs API, using local chat backup", e);
+    }
+
+    try {
+      chatLogs = JSON.parse(localStorage.getItem("KODO_CHAT_LOGS") || "[]").reverse();
+    } catch (e) {
+      chatLogs = [];
+    }
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   /* -------------------------------------------------------------
@@ -663,7 +697,69 @@
   }
 
   /* -------------------------------------------------------------
-     9. MODALS & FORMS HANDLERS
+     9. AI CHAT INBOX
+     ------------------------------------------------------------- */
+  function renderChatInbox() {
+    const list = document.getElementById("admin-chat-log-list");
+    if (!list) return;
+
+    if (!chatLogs.length) {
+      list.innerHTML = `<div class="p-8 text-center text-xs text-neutral-500">No chatbot messages yet. Customer conversations will appear here after they use KODO BOT.</div>`;
+      return;
+    }
+
+    const grouped = chatLogs.reduce((acc, event) => {
+      const key = event.sessionId || "guest";
+      acc[key] = acc[key] || [];
+      acc[key].push(event);
+      return acc;
+    }, {});
+
+    list.innerHTML = Object.entries(grouped).slice(0, 25).map(([sessionId, events]) => {
+      const latest = events[0] || {};
+      const customerMessages = events.filter(e => e.sender !== "bot").length;
+      const botMessages = events.filter(e => e.sender === "bot").length;
+      const latestDate = latest.createdAt ? new Date(latest.createdAt).toLocaleString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Recent";
+      const page = latest.page || "storefront";
+      const transcript = [...events].reverse().map(event => `
+        <div class="flex ${event.sender === "bot" ? "justify-start" : "justify-end"}">
+          <div class="max-w-[82%] rounded-2xl px-3 py-2 ${event.sender === "bot" ? "bg-neutral-900 text-neutral-300 border border-neutral-800" : "bg-blue-600 text-white"}">
+            <div class="text-[9px] font-black uppercase opacity-70 mb-1">${event.sender === "bot" ? "KODO BOT" : "Customer"}</div>
+            <div class="text-[11px] leading-relaxed">${escapeHtml(event.message)}</div>
+          </div>
+        </div>
+      `).join("");
+
+      return `
+        <details class="group">
+          <summary class="list-none cursor-pointer p-5 hover:bg-neutral-900/60 transition-colors">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+                  <span class="font-mono-tech text-xs font-black text-white">${escapeHtml(sessionId)}</span>
+                  <span class="px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-300 text-[10px] font-black">${customerMessages} customer / ${botMessages} bot</span>
+                </div>
+                <div class="text-[11px] text-neutral-500 mt-1">${escapeHtml(page)}</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-[11px] text-neutral-400 font-mono-tech">${latestDate}</span>
+                <span class="text-neutral-500 group-open:rotate-180 transition-transform">⌄</span>
+              </div>
+            </div>
+          </summary>
+          <div class="px-5 pb-5">
+            <div class="bg-neutral-950 rounded-3xl border border-neutral-800 p-4 space-y-3 max-h-96 overflow-y-auto">
+              ${transcript}
+            </div>
+          </div>
+        </details>
+      `;
+    }).join("");
+  }
+
+  /* -------------------------------------------------------------
+     10. MODALS & FORMS HANDLERS
      ------------------------------------------------------------- */
   function initModals() {
     // Add Product Modal
@@ -761,7 +857,7 @@
   }
 
   /* -------------------------------------------------------------
-     10. EXPORT CSV GENERATOR
+     11. EXPORT CSV GENERATOR
      ------------------------------------------------------------- */
   function initExportCSV() {
     const btn = document.getElementById("admin-export-csv-btn");
@@ -781,7 +877,7 @@
   }
 
   /* -------------------------------------------------------------
-     11. SYNC ORDERS BUTTON
+     12. SYNC ORDERS BUTTON
      ------------------------------------------------------------- */
   function initSyncOrdersBtn() {
     const btn = document.getElementById("admin-refresh-orders-btn");
@@ -791,11 +887,26 @@
       await loadOrders();
       initKPIs();
       renderOrders();
-      renderProducts();
-      renderCustomers();
-      btn.innerHTML = `<span>✓</span> <span>Synced!</span>`;
+        renderProducts();
+        renderCustomers();
+        await loadChatLogs();
+        renderChatInbox();
+        btn.innerHTML = `<span>✓</span> <span>Synced!</span>`;
       setTimeout(() => {
         btn.innerHTML = `<span>🔄</span> <span>Sync Live Orders</span>`;
+      }, 1500);
+    });
+  }
+
+  function initChatRefreshBtn() {
+    const btn = document.getElementById("admin-refresh-chat-btn");
+    btn?.addEventListener("click", async () => {
+      btn.textContent = "Refreshing...";
+      await loadChatLogs();
+      renderChatInbox();
+      btn.textContent = "Chat Logs Synced";
+      setTimeout(() => {
+        btn.textContent = "Refresh Chat Logs";
       }, 1500);
     });
   }

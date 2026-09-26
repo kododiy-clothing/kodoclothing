@@ -870,6 +870,47 @@
 
     // Preset chips & form submission
     const msgContainer = chatWin.querySelector("#kodo-bot-messages");
+    const chatSessionId = (() => {
+      const key = "KODO_CHAT_SESSION_ID";
+      let existing = localStorage.getItem(key);
+      if (!existing) {
+        existing = `web_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        localStorage.setItem(key, existing);
+      }
+      return existing;
+    })();
+
+    function saveChatLocal(sender, message) {
+      try {
+        const key = "KODO_CHAT_LOGS";
+        const logs = JSON.parse(localStorage.getItem(key) || "[]");
+        logs.push({
+          id: `local_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+          sessionId: chatSessionId,
+          sender,
+          message,
+          page: window.location.pathname + window.location.search,
+          productId: new URLSearchParams(window.location.search).get("id") || "",
+          createdAt: new Date().toISOString()
+        });
+        localStorage.setItem(key, JSON.stringify(logs.slice(-200)));
+      } catch (e) {}
+    }
+
+    function logChatMessage(sender, message) {
+      saveChatLocal(sender, message);
+      fetch("/api/chat/log", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: chatSessionId,
+          sender,
+          message,
+          page: window.location.pathname + window.location.search,
+          productId: new URLSearchParams(window.location.search).get("id") || ""
+        })
+      }).catch(() => {});
+    }
 
     function addMessage(sender, text, outfitCard) {
       const msgDiv = document.createElement("div");
@@ -998,6 +1039,7 @@
       }
 
       addMessage("bot", replyText, outfitCard);
+      logChatMessage("bot", replyText);
     }
 
     // Handle Form Submit
@@ -1009,6 +1051,7 @@
       const val = (input.value || "").trim();
       if (!val) return;
       addMessage("user", val);
+      logChatMessage("customer", val);
       input.value = "";
 
       // Bot thinking delay
@@ -1021,7 +1064,9 @@
     chatWin.querySelectorAll(".bot-preset-chip").forEach(chip => {
       chip.addEventListener("click", () => {
         const query = chip.dataset.query;
-        addMessage("user", chip.textContent.trim());
+        const chipText = chip.textContent.trim();
+        addMessage("user", chipText);
+        logChatMessage("customer", chipText);
         setTimeout(() => {
           handleStylistQuery(query);
         }, 400);
