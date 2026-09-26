@@ -12,6 +12,7 @@
     initVisualSizeChartModal();
     initKodoStylistBot();
     initMobileBottomDock();
+    initProductPhotoRotator();
   });
 
   /* -------------------------------------------------------------
@@ -1183,7 +1184,77 @@
   }
 
   /* -------------------------------------------------------------
-     12. VISITOR ANALYTICS TRACKER
+     12. SITEWIDE PRODUCT PHOTO ROTATOR
+     ------------------------------------------------------------- */
+  function initProductPhotoRotator() {
+    const productMap = () => new Map((window.KODO_DATA?.PRODUCTS || []).map(product => [product.id, product]));
+    const findProductFromNode = (node, productsById) => {
+      const explicitId = node.dataset?.id || node.dataset?.productId;
+      if (explicitId && productsById.has(explicitId)) return productsById.get(explicitId);
+
+      const link = node.matches?.("a[href*='product.html?id=']")
+        ? node
+        : node.querySelector?.("a[href*='product.html?id=']");
+      if (!link) return null;
+
+      try {
+        const id = new URL(link.getAttribute("href"), window.location.href).searchParams.get("id");
+        return id ? productsById.get(id) : null;
+      } catch (_) {
+        return null;
+      }
+    };
+
+    const attachRotator = (img, product) => {
+      const images = (product?.images || []).filter(Boolean);
+      if (!img || img.dataset.kodoRotating === "1" || images.length < 2) return;
+
+      img.dataset.kodoRotating = "1";
+      img.dataset.kodoImageIndex = String(Math.max(0, images.indexOf(img.getAttribute("src"))));
+      if (!img.style.transition) img.style.transition = "opacity 180ms ease, transform 500ms ease";
+
+      const timer = setInterval(() => {
+        if (!img.isConnected) {
+          clearInterval(timer);
+          return;
+        }
+
+        const current = Number.parseInt(img.dataset.kodoImageIndex || "0", 10) || 0;
+        const next = (current + 1) % images.length;
+        img.dataset.kodoImageIndex = String(next);
+        img.style.opacity = "0.35";
+        window.setTimeout(() => {
+          if (!img.isConnected) return;
+          img.src = images[next];
+          img.alt = `${product.title || "KODO product"} view ${next + 1}`;
+          img.style.opacity = "1";
+        }, 120);
+      }, 1000);
+    };
+
+    const wireCards = () => {
+      const productsById = productMap();
+      document.querySelectorAll(".product-card[data-id], .quick-view-trigger[data-id], a[href*='product.html?id=']").forEach(node => {
+        const product = findProductFromNode(node, productsById);
+        const img = node.matches?.("img") ? node : node.querySelector?.("img");
+        attachRotator(img, product);
+      });
+
+      const pdpImg = document.getElementById("pdp-main-image");
+      const pdpId = new URLSearchParams(window.location.search).get("id");
+      if (pdpImg && pdpId) attachRotator(pdpImg, productsById.get(pdpId));
+    };
+
+    wireCards();
+    let rewireTimer = null;
+    new MutationObserver(() => {
+      window.clearTimeout(rewireTimer);
+      rewireTimer = window.setTimeout(wireCards, 200);
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  /* -------------------------------------------------------------
+     13. VISITOR ANALYTICS TRACKER
      ------------------------------------------------------------- */
   function initKodoAnalytics() {
     if (window.location.pathname.includes("admin.html")) return;
