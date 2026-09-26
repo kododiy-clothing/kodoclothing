@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-neutral-950">
+<html lang="en" class="h-full bg-[#080808] scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,90 +8,153 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/png" href="assets/favicon.png?v=1">
   <link rel="apple-touch-icon" href="assets/favicon.png?v=1">
+  <style>
+    .flash-shell {
+      background:
+        radial-gradient(circle at 14% 14%, rgba(255, 107, 0, 0.22), transparent 28%),
+        radial-gradient(circle at 88% 4%, rgba(45, 140, 227, 0.18), transparent 24%),
+        linear-gradient(180deg, #070707 0%, #101010 42%, #f6f4ef 42%, #f6f4ef 100%);
+    }
+    .flash-card-shadow { box-shadow: 0 22px 60px rgba(0, 0, 0, 0.12); }
+    .flash-product-media::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 34%;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.46));
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body class="min-h-full text-white bg-neutral-950 selection:bg-orange-500 selection:text-white">
-  <div class="bg-gradient-to-r from-orange-500 via-red-500 to-pink-600 px-4 py-2 text-center text-[11px] sm:text-xs font-black uppercase tracking-wider">
-    48H FLASH DROP LIVE • BUY 2 @ ₹999 • EXPRESS DISPATCH IN 2-3 DAYS
-  </div>
-
-  <header class="sticky top-0 z-40 bg-neutral-950/90 backdrop-blur-md border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4">
-      <a href="index.html" class="flex items-center">
-        <img src="assets/kodo-logo.png?v=4" alt="KODO.DIY" class="h-7 sm:h-8 md:h-9 w-auto object-contain">
-      </a>
-      <nav class="hidden md:flex items-center gap-5 text-xs font-black uppercase tracking-wider text-neutral-300">
-        <a href="flash-drop.html" class="px-3 py-1.5 rounded-full bg-white text-neutral-950">48H Flash Drop</a>
-        <a href="collection.html?gender=men" class="hover:text-orange-400">Men</a>
-        <a href="collection.html?gender=women" class="hover:text-pink-400">Women</a>
-        <a href="drops.html" class="hover:text-orange-400">Drops</a>
-        <a href="index.html#combo-builder-section" class="hover:text-blue-400">Buy 2 @ ₹999</a>
-      </nav>
-      <a href="index.html#cart" class="px-4 py-2 rounded-xl bg-white text-neutral-950 text-xs font-black uppercase hover:bg-orange-400 transition-colors">Bag</a>
+<body class="min-h-full overflow-x-hidden text-white bg-[#080808] selection:bg-orange-500 selection:text-white">
+  <div class="flash-shell min-h-screen">
+    <div class="bg-[#111] border-b border-white/10 text-white">
+      <div class="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[10px] sm:text-xs font-black uppercase tracking-[0.18em]">
+        <span class="text-orange-300">48H Flash Drop Live</span>
+        <span class="hidden sm:inline text-white/30">/</span>
+        <span>Buy 2 @ ₹999</span>
+        <span class="hidden sm:inline text-white/30">/</span>
+        <span class="text-blue-200">Express dispatch in 2-3 days</span>
+      </div>
     </div>
-  </header>
 
-  <main>
-    <section class="relative overflow-hidden border-b border-white/10">
-      <div class="absolute inset-0 opacity-30">
-        <img src="assets/banners/banner-tiger-tech.jpg" alt="" class="w-full h-full object-cover">
+    <header class="sticky top-0 z-40 bg-white/92 text-neutral-950 backdrop-blur-xl border-b border-black/10">
+      <div class="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between gap-4">
+        <a href="index.html" class="flex items-center" aria-label="KODO home">
+          <img src="assets/kodo-logo.png?v=4" alt="KODO.DIY" class="h-8 sm:h-9 md:h-10 w-auto object-contain">
+        </a>
+        <nav class="hidden lg:flex items-center gap-6 text-xs font-black uppercase tracking-wider">
+          <a href="flash-drop.html" class="text-orange-600">48H Flash Drop</a>
+          <a href="collection.html?gender=men" class="text-neutral-500 hover:text-neutral-950">Men</a>
+          <a href="collection.html?gender=women" class="text-neutral-500 hover:text-neutral-950">Women</a>
+          <a href="drops.html" class="text-neutral-500 hover:text-neutral-950">Drops</a>
+          <a href="index.html#combo-builder-section" class="text-neutral-500 hover:text-neutral-950">Buy 2 @ ₹999</a>
+        </nav>
+        <a href="index.html?checkout=1" class="px-4 py-2.5 rounded-full bg-neutral-950 text-white text-xs font-black uppercase hover:bg-orange-600 transition-colors">Bag</a>
       </div>
-      <div class="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/90 to-neutral-950/55"></div>
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-end">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-200 border border-orange-400/40 text-xs font-black uppercase tracking-wider mb-5">
-            Live for 48 hours only
+    </header>
+
+    <main>
+      <section class="relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-[72%] opacity-45">
+          <img src="assets/banners/banner-solar-edition.jpg" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/72 via-black/80 to-[#080808]"></div>
+
+        <div class="relative max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-16 lg:pt-20 pb-10">
+          <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-end">
+            <div class="max-w-4xl">
+              <div class="inline-flex items-center gap-2 rounded-full border border-orange-300/40 bg-orange-500/15 px-4 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-orange-100">
+                <span class="h-2 w-2 rounded-full bg-orange-400 animate-pulse"></span>
+                Private capsule, 48 hours only
+              </div>
+              <h1 class="mt-6 font-syne text-[3.55rem] sm:text-[7rem] lg:text-[9.5rem] font-black uppercase leading-[0.82] sm:leading-[0.78] tracking-tight">
+                48H<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 via-white to-blue-200">Flash Drop</span>
+              </h1>
+              <p class="mt-6 max-w-2xl text-sm sm:text-base text-neutral-200 leading-relaxed">
+                Premium oversized streetwear from the active KODO vault. Real product photography, limited sizes, INR pricing for India, and USD display for international visitors.
+              </p>
+              <div class="mt-7 flex flex-wrap gap-3">
+                <a href="#flash-products" class="rounded-full bg-white px-6 py-3 text-xs font-black uppercase text-neutral-950 hover:bg-orange-300 transition-colors">Shop the drop</a>
+                <a href="product.html?id=kd-special-drop-01" class="rounded-full border border-white/25 px-6 py-3 text-xs font-black uppercase text-white hover:border-blue-300 hover:text-blue-200 transition-colors">Open hero piece</a>
+              </div>
+            </div>
+
+            <aside class="rounded-[2rem] border border-white/14 bg-white/10 p-4 sm:p-5 backdrop-blur-xl flash-card-shadow">
+              <div class="rounded-[1.5rem] bg-neutral-950/75 border border-white/10 p-5">
+                <div class="flex items-center justify-between gap-4">
+                  <div>
+                    <div class="text-[10px] font-black uppercase tracking-[0.25em] text-neutral-400">Drop closes in</div>
+                    <div id="flash-page-countdown" class="mt-2 font-mono text-4xl sm:text-5xl font-black tracking-widest text-white">48:00:00</div>
+                  </div>
+                  <div class="h-14 w-14 rounded-2xl bg-orange-500 text-white grid place-items-center text-2xl font-black">48</div>
+                </div>
+                <div class="mt-6 grid grid-cols-3 gap-2 text-center">
+                  <div class="rounded-2xl bg-white/8 border border-white/10 p-3">
+                    <div class="text-xl font-black">42</div>
+                    <div class="mt-1 text-[9px] uppercase text-neutral-400 font-bold">Pieces</div>
+                  </div>
+                  <div class="rounded-2xl bg-white/8 border border-white/10 p-3">
+                    <div class="text-xl font-black">280</div>
+                    <div class="mt-1 text-[9px] uppercase text-neutral-400 font-bold">GSM</div>
+                  </div>
+                  <div class="rounded-2xl bg-white/8 border border-white/10 p-3">
+                    <div class="text-xl font-black">2-3</div>
+                    <div class="mt-1 text-[9px] uppercase text-neutral-400 font-bold">Days</div>
+                  </div>
+                </div>
+                <div class="mt-5 rounded-2xl bg-white text-neutral-950 p-4">
+                  <div class="text-[11px] font-black uppercase tracking-wider text-orange-600">Checkout offer</div>
+                  <div class="mt-1 text-2xl font-black">Buy 2 @ ₹999</div>
+                  <p class="mt-1 text-xs text-neutral-500 font-bold">Secure pay and COD advance flows are enabled from product checkout.</p>
+                </div>
+              </div>
+            </aside>
           </div>
-          <h1 class="font-syne text-5xl sm:text-7xl lg:text-8xl font-black uppercase leading-[0.86] tracking-tight">
-            48H<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-400 to-pink-400">Flash Drop</span>
-          </h1>
-          <p class="max-w-xl text-neutral-300 text-sm sm:text-base mt-6 leading-relaxed">
-            Limited streetwear picks pulled from KODO's active capsule vault. Heavyweight oversized fits, fast dispatch, real product photos, and the live combo offer.
-          </p>
-          <div class="flex flex-wrap gap-3 mt-7">
-            <a href="#flash-products" class="px-5 py-3 rounded-xl bg-white text-neutral-950 text-xs font-black uppercase hover:bg-orange-300 transition-colors">Shop Flash Picks</a>
-            <a href="collection.html?gender=women" class="px-5 py-3 rounded-xl border border-white/20 text-white text-xs font-black uppercase hover:border-pink-400 hover:text-pink-300 transition-colors">Women's Drops</a>
-            <a href="collection.html?gender=men" class="px-5 py-3 rounded-xl border border-white/20 text-white text-xs font-black uppercase hover:border-orange-400 hover:text-orange-300 transition-colors">Men's Drops</a>
+
+          <div class="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 text-neutral-950">
+            <div class="rounded-2xl bg-white/95 p-4">
+              <div class="text-[10px] font-black uppercase tracking-widest text-neutral-400">Quality</div>
+              <div class="mt-1 text-sm font-black">Heavyweight cotton fleece</div>
+            </div>
+            <div class="rounded-2xl bg-white/95 p-4">
+              <div class="text-[10px] font-black uppercase tracking-widest text-neutral-400">Photos</div>
+              <div class="mt-1 text-sm font-black">Auto sliding product views</div>
+            </div>
+            <div class="rounded-2xl bg-white/95 p-4">
+              <div class="text-[10px] font-black uppercase tracking-widest text-neutral-400">Pricing</div>
+              <div class="mt-1 text-sm font-black">INR India, USD overseas</div>
+            </div>
+            <div class="rounded-2xl bg-white/95 p-4">
+              <div class="text-[10px] font-black uppercase tracking-widest text-neutral-400">Stock</div>
+              <div class="mt-1 text-sm font-black">Limited size runs</div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="bg-white/10 border border-white/15 rounded-2xl p-5 sm:p-6 backdrop-blur-md">
-          <div class="text-xs font-black uppercase tracking-wider text-orange-200">Drop closes in</div>
-          <div id="flash-page-countdown" class="font-mono text-4xl sm:text-5xl font-black tracking-widest mt-2">48:00:00</div>
-          <div class="grid grid-cols-3 gap-3 mt-6 text-center">
-            <div class="rounded-xl bg-black/30 border border-white/10 p-3">
-              <div class="text-2xl font-black">42</div>
-              <div class="text-[10px] uppercase text-neutral-400 font-bold">Live Pieces</div>
-            </div>
-            <div class="rounded-xl bg-black/30 border border-white/10 p-3">
-              <div class="text-2xl font-black">280</div>
-              <div class="text-[10px] uppercase text-neutral-400 font-bold">GSM Cotton</div>
-            </div>
-            <div class="rounded-xl bg-black/30 border border-white/10 p-3">
-              <div class="text-2xl font-black">2-3</div>
-              <div class="text-[10px] uppercase text-neutral-400 font-bold">Day Dispatch</div>
+      <section class="bg-[#f6f4ef] text-neutral-950">
+        <div class="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+          <div class="sticky top-16 md:top-20 z-30 -mx-4 sm:mx-0 mb-8 border-y sm:border border-neutral-200 bg-[#f6f4ef]/95 px-4 sm:px-5 py-4 backdrop-blur-xl sm:rounded-3xl">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div>
+                <div class="text-[11px] font-black uppercase tracking-[0.35em] text-orange-600">Curated flash rack</div>
+                <h2 class="font-syne text-3xl sm:text-5xl font-black uppercase tracking-tight mt-1">Shop the 48H edit</h2>
+              </div>
+              <div class="flex gap-2 overflow-x-auto pb-1 text-xs font-black uppercase">
+                <button type="button" class="flash-filter shrink-0 px-5 py-3 rounded-full bg-neutral-950 text-white" data-filter="all">All drops</button>
+                <button type="button" class="flash-filter shrink-0 px-5 py-3 rounded-full bg-white border border-neutral-200 text-neutral-600" data-filter="men">Men</button>
+                <button type="button" class="flash-filter shrink-0 px-5 py-3 rounded-full bg-white border border-neutral-200 text-neutral-600" data-filter="women">Women</button>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="bg-white text-neutral-950">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
-          <div>
-            <div class="text-xs font-black uppercase tracking-[0.3em] text-orange-500">Flash rack</div>
-            <h2 class="font-syne text-3xl sm:text-5xl font-black uppercase tracking-tight mt-1">Shop the 48H edit</h2>
-          </div>
-          <div class="inline-flex rounded-full bg-neutral-100 p-1 text-xs font-black uppercase">
-            <button type="button" class="flash-filter px-4 py-2 rounded-full bg-neutral-950 text-white" data-filter="all">All</button>
-            <button type="button" class="flash-filter px-4 py-2 rounded-full text-neutral-600" data-filter="men">Men</button>
-            <button type="button" class="flash-filter px-4 py-2 rounded-full text-neutral-600" data-filter="women">Women</button>
-          </div>
+          <div id="flash-products" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6"></div>
         </div>
-        <div id="flash-products" class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"></div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <script src="js/data.js"></script>
   <script src="js/currency.js?v=1"></script>
@@ -111,22 +174,34 @@
       const image = product.images?.[0] || "assets/kodo-logo.png?v=4";
       const price = product.price || 999;
       const compare = product.comparePrice || 1499;
+      const views = product.images?.length || 1;
+      const off = compare > price ? Math.round(((compare - price) / compare) * 100) : 0;
       return `
-        <a href="product.html?id=${encodeURIComponent(product.id)}" class="group block bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all">
-          <div class="relative aspect-[4/5] bg-neutral-100 overflow-hidden">
-            <img src="${image}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute left-3 top-3 px-2 py-1 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase">48H Drop</div>
-            <div class="absolute right-3 top-3 px-2 py-1 rounded-full bg-white/90 text-neutral-950 text-[10px] font-black uppercase">${product.gender || "unisex"}</div>
-          </div>
-          <div class="p-3 sm:p-4">
-            <div class="text-[10px] font-black uppercase tracking-wider text-orange-500 mb-1">${product.badge || "Limited Drop"}</div>
-            <h3 class="text-xs sm:text-sm font-black leading-tight line-clamp-2 min-h-[2.4em]">${product.title}</h3>
-            <div class="flex items-baseline gap-2 mt-3">
-              <span class="text-lg font-black">${window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(price) : `₹${price}`}</span>
-              <span class="text-xs line-through text-neutral-400">${window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(compare) : `₹${compare}`}</span>
+        <a href="product.html?id=${encodeURIComponent(product.id)}" class="group block overflow-hidden rounded-[1.65rem] bg-white border border-neutral-200 flash-card-shadow transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+          <div class="flash-product-media relative aspect-[4/5] bg-neutral-100 overflow-hidden">
+            <img src="${image}" alt="${product.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="absolute left-3 top-3 z-10 rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-black uppercase text-white shadow-lg shadow-orange-500/25">48H Drop</div>
+            <div class="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase text-neutral-950">${product.gender || "unisex"}</div>
+            <div class="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between gap-2 text-white">
+              <span class="rounded-full bg-black/55 px-3 py-1.5 text-[10px] font-black uppercase backdrop-blur-md">${views} product views</span>
+              <span class="rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-black uppercase text-neutral-950">${off}% off</span>
             </div>
-            <div class="mt-3 w-full py-2 rounded-xl bg-neutral-950 text-white text-center text-[11px] font-black uppercase group-hover:bg-orange-500 transition-colors">
-              Buy Now
+          </div>
+          <div class="p-4 sm:p-5">
+            <div class="text-[10px] font-black uppercase tracking-[0.18em] text-orange-600">${product.badge || "Limited Drop"}</div>
+            <h3 class="mt-2 text-lg font-black leading-[1.05] min-h-[2.2em]">${product.title}</h3>
+            <div class="mt-4 flex items-end justify-between gap-3">
+              <div>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-2xl font-black">${window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(price) : `₹${price}`}</span>
+                  <span class="text-sm line-through text-neutral-400">${window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(compare) : `₹${compare}`}</span>
+                </div>
+                <div class="mt-1 text-[11px] font-bold uppercase tracking-wider text-emerald-600">Express dispatch</div>
+              </div>
+              <div class="h-11 w-11 rounded-full bg-neutral-950 text-white grid place-items-center text-xl transition-colors group-hover:bg-orange-500">→</div>
+            </div>
+            <div class="mt-4 rounded-2xl bg-neutral-950 py-3 text-center text-xs font-black uppercase text-white transition-colors group-hover:bg-orange-500">
+              Buy now
             </div>
           </div>
         </a>
@@ -146,10 +221,10 @@
       button.addEventListener("click", () => {
         document.querySelectorAll(".flash-filter").forEach((btn) => {
           btn.classList.remove("bg-neutral-950", "text-white");
-          btn.classList.add("text-neutral-600");
+          btn.classList.add("bg-white", "border", "border-neutral-200", "text-neutral-600");
         });
         button.classList.add("bg-neutral-950", "text-white");
-        button.classList.remove("text-neutral-600");
+        button.classList.remove("bg-white", "border", "border-neutral-200", "text-neutral-600");
         renderFlashProducts(button.dataset.filter);
       });
     });
