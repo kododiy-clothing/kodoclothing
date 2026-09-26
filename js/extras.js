@@ -1211,6 +1211,8 @@
 
       img.dataset.kodoRotating = "1";
       img.dataset.kodoImageIndex = String(Math.max(0, images.indexOf(img.getAttribute("src"))));
+      const seedText = `${product?.id || product?.title || ""}-${document.querySelectorAll("[data-kodo-rotating='1']").length}`;
+      const stagger = Array.from(seedText).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 700;
       const frame = img.parentElement;
       if (frame) {
         const frameStyle = window.getComputedStyle(frame);
@@ -1218,7 +1220,7 @@
         frame.style.overflow = "hidden";
       }
 
-      const timer = setInterval(() => {
+      const slideNext = () => {
         if (!img.isConnected) {
           clearInterval(timer);
           return;
@@ -1264,7 +1266,14 @@
           incoming.remove();
           img.dataset.kodoSliding = "0";
         }, 440);
-      }, 1000);
+      };
+
+      let timer = null;
+      window.setTimeout(() => {
+        if (!img.isConnected) return;
+        slideNext();
+        timer = setInterval(slideNext, 1000);
+      }, stagger);
     };
 
     const wireCards = () => {
