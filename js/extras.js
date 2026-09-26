@@ -1211,24 +1211,59 @@
 
       img.dataset.kodoRotating = "1";
       img.dataset.kodoImageIndex = String(Math.max(0, images.indexOf(img.getAttribute("src"))));
-      if (!img.style.transition) img.style.transition = "opacity 180ms ease, transform 500ms ease";
+      const frame = img.parentElement;
+      if (frame) {
+        const frameStyle = window.getComputedStyle(frame);
+        if (frameStyle.position === "static") frame.style.position = "relative";
+        frame.style.overflow = "hidden";
+      }
 
       const timer = setInterval(() => {
         if (!img.isConnected) {
           clearInterval(timer);
           return;
         }
+        if (img.dataset.kodoSliding === "1") return;
 
         const current = Number.parseInt(img.dataset.kodoImageIndex || "0", 10) || 0;
         const next = (current + 1) % images.length;
         img.dataset.kodoImageIndex = String(next);
-        img.style.opacity = "0.35";
+        img.dataset.kodoSliding = "1";
+
+        const incoming = img.cloneNode(false);
+        incoming.removeAttribute("id");
+        incoming.src = images[next];
+        incoming.alt = `${product.title || "KODO product"} view ${next + 1}`;
+        incoming.dataset.kodoRotating = "";
+        incoming.dataset.kodoSliding = "";
+        Object.assign(incoming.style, {
+          position: "absolute",
+          inset: "0",
+          width: "100%",
+          height: "100%",
+          zIndex: "2",
+          objectFit: window.getComputedStyle(img).objectFit || "cover",
+          transform: "translateX(100%)",
+          transition: "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
+          pointerEvents: "none"
+        });
+
+        img.style.transition = "transform 420ms cubic-bezier(0.22, 1, 0.36, 1)";
+        img.style.transform = "translateX(0)";
+        img.parentElement?.appendChild(incoming);
+        incoming.getBoundingClientRect();
+        img.style.transform = "translateX(-100%)";
+        incoming.style.transform = "translateX(0)";
+
         window.setTimeout(() => {
           if (!img.isConnected) return;
           img.src = images[next];
-          img.alt = `${product.title || "KODO product"} view ${next + 1}`;
-          img.style.opacity = "1";
-        }, 120);
+          img.alt = incoming.alt;
+          img.style.transition = "";
+          img.style.transform = "";
+          incoming.remove();
+          img.dataset.kodoSliding = "0";
+        }, 440);
       }, 1000);
     };
 
