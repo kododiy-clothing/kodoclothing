@@ -330,6 +330,9 @@
               <button type="button" class="print-slip-btn px-2.5 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg text-[11px] font-bold transition-colors cursor-pointer" data-id="${ord.orderId}" title="Print Packing Slip">
                 🏷️ Slip
               </button>
+              <button type="button" class="delete-order-btn px-2.5 py-1.5 bg-red-950/60 hover:bg-red-700 text-red-300 hover:text-white rounded-lg text-[11px] font-bold transition-colors cursor-pointer" data-id="${ord.orderId}" title="Delete order from admin">
+                🗑️ Delete
+              </button>
             </div>
           </td>
         </tr>
@@ -357,6 +360,33 @@
           } catch (err) {
             console.warn("Backend order update error:", err);
           }
+        }
+      });
+    });
+
+    // Wire order delete
+    document.querySelectorAll(".delete-order-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const orderId = btn.dataset.id;
+        const ord = orders.find(o => o.orderId === orderId);
+        if (!ord) return;
+        const ok = confirm(`Delete order ${orderId} from admin panel? This removes it from the order list.`);
+        if (!ok) return;
+
+        orders = orders.filter(o => o.orderId !== orderId);
+        saveOrders();
+        initKPIs();
+        renderOrders();
+        renderCustomers();
+
+        try {
+          await fetch(apiUrl("/api/orders/delete"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderId })
+          });
+        } catch (err) {
+          console.warn("Backend order delete error:", err);
         }
       });
     });

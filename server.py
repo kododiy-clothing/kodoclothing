@@ -351,7 +351,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_json({"error": "Order not found"}, status_code=404)
             return
 
-        # 4. Update Product (Price, Stock, Title, Category)
+        # 4. Delete Order
+        elif path == "/api/orders/delete":
+            order_id = body.get("orderId")
+            orders = load_orders()
+            next_orders = [o for o in orders if o.get("orderId") != order_id]
+
+            if len(next_orders) != len(orders):
+                save_orders(next_orders)
+                self.send_json({"success": True, "orderId": order_id})
+            else:
+                self.send_json({"error": "Order not found"}, status_code=404)
+            return
+
+        # 5. Update Product (Price, Stock, Title, Category)
         elif path == "/api/products/update":
             prod_id = body.get("id")
             prods = load_products()
