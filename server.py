@@ -11,6 +11,7 @@ import json
 import urllib.parse
 import urllib.request
 import urllib.error
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -28,7 +29,115 @@ DODO_API_KEY = os.environ.get("DODO_PAYMENTS_API_KEY", "")
 DODO_DEFAULT_PRODUCT_ID = os.environ.get("DODO_PRODUCT_ID_DEFAULT", "")
 DODO_PRODUCT_MAP = os.environ.get("DODO_PRODUCT_MAP_JSON", "{}")
 DODO_SEND_DYNAMIC_AMOUNTS = os.environ.get("DODO_SEND_DYNAMIC_AMOUNTS", "true").lower() != "false"
-PUBLIC_SITE_URL = os.environ.get("PUBLIC_SITE_URL", "https://kododiy-clothing.github.io/kodoclothing")
+PUBLIC_SITE_URL = os.environ.get("PUBLIC_SITE_URL", "https://www.kodo.diy")
+ADMIN_EMAIL = os.environ.get("KODO_ADMIN_EMAIL", "kododiy@gmail.com").strip().lower()
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "").strip()
+ALLOWED_ORIGINS = {
+    origin.strip()
+    for origin in os.environ.get(
+        "ALLOWED_ORIGINS",
+        "https://www.kodo.diy,https://kodo.diy,http://localhost:8085,http://127.0.0.1:8085"
+    ).split(",")
+    if origin.strip()
+}
+
+def normalize_phone(value):
+    return "".join(ch for ch in str(value or "") if ch.isdigit())
+
+
+def verify_google_admin_token(auth_header):
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return False
+
+    token = auth_header.split(" ", 1)[1].strip()
+    if not token:
+        return False
+
+    try:
+        url = "https://oauth2.googleapis.com/tokeninfo?id_token=" + urllib.parse.quote(token)
+        with urllib.request.urlopen(url, timeout=8) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+
+        email = str(payload.get("email") or "").strip().lower()
+        email_verified = str(payload.get("email_verified") or "").lower() == "true"
+        audience_ok = not GOOGLE_CLIENT_ID or payload.get("aud") == GOOGLE_CLIENT_ID
+        exp = int(payload.get("exp") or 0)
+        not_expired = exp > int(time.time())
+
+        return email_verified and audience_ok and not_expired and email == ADMIN_EMAIL
+    except Exception as exc:
+        print(f"Admin token verification failed: {exc}")
+        return False
+
+
+def trusted_catalog_price(item, products):
+    item_id = str(item.get("id") or "")
+    product_id = str(item.get("productId") or "")
+
+    if product_id == "kd-street-combo-999" or item_id.startswith("combo-"):
+        return 999
+    if product_id == "kd-diy-custom" or item_id.startswith("diy-"):
+        return 799 if "PUFF" in str(item.get("printStyle") or "").upper() else 699
+    if item_id.startswith("mystery-rookie-"):
+        return 999
+    if item_id.startswith("mystery-rebel-"):
+        return 1799
+    if item_id.startswith("mystery-kingpin-"):
+        return 2999
+
+    for product in products:
+        catalog_id = str(product.get("id") or "")
+        if product_id == catalog_id or item_id == catalog_id or item_id.startswith(catalog_id + "-"):
+            price = int(product.get("price") or 0)
+            if price <= 0:
+                raise ValueError(f"Invalid catalog price for {catalog_id}")
+            return price
+
+    raise ValueError("One or more cart items are not available in the live catalog")
+
+
+def compute_trusted_pricing(order):
+    products = load_products()
+    items = order.get("items") if isinstance(order.get("items"), list) else []
+    if not items:
+        raise ValueError("Cart is empty")
+
+    trusted_items = []
+    subtotal = 0
+
+    for raw_item in items[:100]:
+        item = dict(raw_item or {})
+        quantity = int(item.get("quantity") or 1)
+        if quantity < 1 or quantity > 10:
+            raise ValueError("Invalid item quantity")
+
+        unit_price = trusted_catalog_price(item, products)
+        item["quantity"] = quantity
+        item["price"] = unit_price
+        trusted_items.append(item)
+        subtotal += unit_price * quantity
+
+    coupon_code = str(order.get("couponCode") or "").strip().upper()
+    discount = round(subtotal * 0.15) if coupon_code == "KODO15" else 0
+    shipping = 0 if subtotal >= 799 or coupon_code == "FREESHIP" else 99
+    total = max(0, subtotal - discount + shipping)
+
+    payment_mode = str(order.get("paymentMode") or "prepaid")
+    if payment_mode == "cod_advance":
+        gateway_amount = min(total, max(50, round(total * 0.25)))
+    else:
+        gateway_amount = total
+
+    return {
+        "items": trusted_items,
+        "subtotal": subtotal,
+        "discount": discount,
+        "shipping": shipping,
+        "total": total,
+        "gatewayAmount": gateway_amount,
+        "couponCode": coupon_code
+    }
+
 
 def load_orders():
     if not ORDERS_FILE.exists():
@@ -79,22 +188,16 @@ def create_dodo_payment_link(order):
     if not DODO_API_KEY:
         raise ValueError("DODO_PAYMENTS_API_KEY is not configured on the backend")
 
-    items = order.get("items", [])
-    if not items:
-        raise ValueError("Cart is empty")
+    pricing = compute_trusted_pricing(order)
+    items = pricing["items"]
 
-    product_cart = []
-    for item in items:
-        product_id = get_dodo_product_id(item)
-        if not product_id:
-            raise ValueError("DODO_PRODUCT_ID_DEFAULT or DODO_PRODUCT_MAP_JSON is required")
-        cart_item = {
-            "product_id": product_id,
-            "quantity": max(1, int(item.get("quantity", 1)))
-        }
-        if DODO_SEND_DYNAMIC_AMOUNTS:
-            cart_item["amount"] = max(1, int(round(float(item.get("price", 0)) * 100)))
-        product_cart.append(cart_item)
+    product_id = DODO_DEFAULT_PRODUCT_ID or get_dodo_product_id(items[0])
+    if not product_id:
+        raise ValueError("DODO_PRODUCT_ID_DEFAULT is required for checkout")
+
+    gateway_amount = pricing["gatewayAmount"]
+    if gateway_amount < 50:
+        raise ValueError("Minimum online payment amount is ₹50")
 
     customer = order.get("customer", {})
     payload = {
@@ -109,19 +212,26 @@ def create_dodo_payment_link(order):
             "name": customer.get("name") or "KODO Customer",
             "phone_number": customer.get("phone") or None
         },
-        "product_cart": product_cart[:100],
+        "product_cart": [{
+            "product_id": product_id,
+            "quantity": 1,
+            "amount": max(1, int(round(gateway_amount * 100)))
+        }],
         "payment_link": True,
         "require_phone_number": True,
         "billing_currency": "INR",
         "allowed_payment_method_types": ["upi_collect", "upi_intent", "credit", "debit"],
-        "return_url": f"{PUBLIC_SITE_URL}/track.html?id={urllib.parse.quote(order.get('orderId', ''))}",
+        "return_url": f"{PUBLIC_SITE_URL.rstrip('/')}/track.html?id={urllib.parse.quote(order.get('orderId', ''))}",
         "metadata": {
             "order_id": order.get("orderId", ""),
             "source": "kodo-web-checkout",
-            "subtotal": str(order.get("subtotal", "")),
-            "discount": str(order.get("discount", "")),
-            "shipping": str(order.get("shipping", "")),
-            "total": str(order.get("total", ""))
+            "subtotal": str(pricing["subtotal"]),
+            "discount": str(pricing["discount"]),
+            "shipping": str(pricing["shipping"]),
+            "total": str(pricing["total"]),
+            "gateway_amount": str(pricing["gatewayAmount"]),
+            "payment_mode": order.get("paymentMode", "prepaid"),
+            "coupon_code": pricing["couponCode"]
         }
     }
 
@@ -138,18 +248,30 @@ def create_dodo_payment_link(order):
     )
     try:
         with urllib.request.urlopen(req, timeout=30) as res:
-            return json.loads(res.read().decode("utf-8"))
+            result = json.loads(res.read().decode("utf-8"))
+            result["_trusted_pricing"] = pricing
+            return result
     except urllib.error.HTTPError as e:
         detail = e.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"Dodo Payments error {e.code}: {detail}") from e
 
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        origin = self.headers.get("Origin", "")
+        if origin in ALLOWED_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
         super().end_headers()
+
+    def require_admin(self):
+        if verify_google_admin_token(self.headers.get("Authorization", "")):
+            return True
+        self.send_json({"error": "Admin authentication required"}, status_code=401)
+        return False
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -167,7 +289,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
 
-        # 1. Real Orders List
+        # Never expose persisted customer data or server files as static assets.
+        if path.startswith("/data/") or path.startswith("/.git") or path in {
+            "/server.py", "/.env", "/.env.example", "/render.yaml", "/Procfile"
+        }:
+            self.send_json({"error": "Not found"}, status_code=404)
+            return
+
+        # 1. Public health check
         if path == "/api/health":
             self.send_json({
                 "ok": True,
@@ -179,8 +308,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             })
             return
 
-        # 1. Real Orders List
+        # Merchant-only order directory
         if path == "/api/orders":
+            if not self.require_admin():
+                return
             orders = load_orders()
             self.send_json(orders)
             return
@@ -193,6 +324,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         # 3. Real Store Analytics Computed From Actual Orders
         elif path == "/api/analytics":
+            if not self.require_admin():
+                return
             orders = load_orders()
             prods = load_products()
             
@@ -226,6 +359,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         # 4. Real Customers Directory Compiled From Orders
         elif path == "/api/customers":
+            if not self.require_admin():
+                return
             orders = load_orders()
             cust_map = {}
             for o in orders:
@@ -263,7 +398,31 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         except Exception:
             body = {}
 
-        # 1. Place Real Order
+        # Privacy-safe customer lookup: requires both order ID and checkout phone.
+        if path == "/api/orders/lookup":
+            order_id = str(body.get("orderId") or "").strip().lower()
+            phone = normalize_phone(body.get("phone"))
+            if not order_id or len(phone) < 8:
+                self.send_json({"error": "Order ID and phone are required"}, status_code=400)
+                return
+
+            found = None
+            for order in load_orders():
+                if (
+                    str(order.get("orderId") or "").strip().lower() == order_id
+                    and normalize_phone(order.get("customer", {}).get("phone")) == phone
+                ):
+                    found = order
+                    break
+
+            if not found:
+                self.send_json({"error": "Order not found"}, status_code=404)
+                return
+
+            self.send_json({"order": found})
+            return
+
+        # Create a payment link using server-calculated totals only.
         if path == "/api/dodo/checkout":
             order_id = body.get("orderId") or f"KD-{int(datetime.now().timestamp()) % 1000000:06d}"
             checkout_order = {
@@ -278,81 +437,137 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             }
             try:
                 payment = create_dodo_payment_link(checkout_order)
+                pricing = payment.get("_trusted_pricing", {})
                 self.send_json({
                     "success": True,
                     "orderId": order_id,
                     "paymentId": payment.get("payment_id"),
                     "paymentLink": payment.get("payment_link"),
-                    "checkoutUrl": payment.get("payment_link")
+                    "checkoutUrl": payment.get("payment_link"),
+                    "pricing": {
+                        "subtotal": pricing.get("subtotal"),
+                        "discount": pricing.get("discount"),
+                        "shipping": pricing.get("shipping"),
+                        "total": pricing.get("total"),
+                        "gatewayAmount": pricing.get("gatewayAmount")
+                    }
                 })
             except Exception as e:
                 self.send_json({"success": False, "error": str(e)}, status_code=502)
             return
 
-        # 2. Place Real Order
+        # Store a newly-created checkout request with server-calculated pricing.
         if path == "/api/orders":
             orders = load_orders()
-            prods = load_products()
+            order_id = str(body.get("orderId") or f"KD-{int(datetime.now().timestamp()) % 1000000:06d}").strip()
 
-            order_id = body.get("orderId") or f"KD-{int(datetime.now().timestamp()) % 1000000:06d}"
+            if any(str(o.get("orderId") or "") == order_id for o in orders):
+                self.send_json({"success": True, "order": next(o for o in orders if str(o.get("orderId") or "") == order_id)})
+                return
+
+            try:
+                pricing = compute_trusted_pricing(body)
+            except Exception as exc:
+                self.send_json({"success": False, "error": str(exc)}, status_code=400)
+                return
+
             new_order = {
                 "orderId": order_id,
                 "date": body.get("date") or datetime.now(timezone.utc).isoformat(),
                 "customer": body.get("customer", {}),
-                "items": body.get("items", []),
-                "subtotal": body.get("subtotal", 0),
-                "discount": body.get("discount", 0),
-                "shipping": body.get("shipping", 0),
-                "total": body.get("total", 0),
-                "paymentMethod": body.get("paymentMethod", "UPI"),
-                "paymentStatus": body.get("paymentStatus", "Pending Payment Verification"),
-                "status": body.get("status", "Order Request Received"),
-                "courier": body.get("courier", ""),
-                "awb": body.get("awb", "")
+                "items": pricing["items"],
+                "subtotal": pricing["subtotal"],
+                "discount": pricing["discount"],
+                "shipping": pricing["shipping"],
+                "total": pricing["total"],
+                "couponCode": pricing["couponCode"],
+                "paymentMethod": body.get("paymentMethod", "Secure Checkout"),
+                "paymentStatus": "Awaiting payment confirmation",
+                "status": "Awaiting Payment",
+                "courier": "",
+                "awb": "",
+                "dodoPaymentId": body.get("dodoPaymentId", ""),
+                "paymentLink": body.get("paymentLink", ""),
+                "stockDeducted": False
             }
-
-            # Deduct real stock from products
-            for it in new_order["items"]:
-                p_id = it.get("id")
-                qty = it.get("quantity", 1)
-                for p in prods:
-                    if p.get("id") == p_id:
-                        p["stock"] = max(0, p.get("stock", 30) - qty)
-                        p["salesCount"] = p.get("salesCount", 0) + qty
 
             orders.insert(0, new_order)
             save_orders(orders)
-            save_products(prods)
-
             self.send_json({"success": True, "order": new_order})
             return
 
-        # 3. Update Order Status (Fulfill, Dispatch, Deliver)
-        elif path == "/api/orders/update":
+        # Merchant-only order status updates.
+        if path == "/api/orders/update":
+            if not self.require_admin():
+                return
+
             order_id = body.get("orderId")
             new_status = body.get("status")
             courier = body.get("courier")
             awb = body.get("awb")
+            payment_status = body.get("paymentStatus")
 
             orders = load_orders()
-            updated = False
-            for o in orders:
-                if o.get("orderId") == order_id:
-                    if new_status: o["status"] = new_status
-                    if courier: o["courier"] = courier
-                    if awb: o["awb"] = awb
-                    updated = True
-                    break
+            prods = load_products()
+            updated_order = None
 
-            if updated:
+            for order in orders:
+                if order.get("orderId") != order_id:
+                    continue
+
+                old_status = str(order.get("status") or "").lower()
+                if new_status:
+                    order["status"] = new_status
+                if courier is not None:
+                    order["courier"] = courier
+                if awb is not None:
+                    order["awb"] = awb
+                if payment_status:
+                    order["paymentStatus"] = payment_status
+
+                status_text = str(order.get("status") or "").lower()
+                should_deduct = any(word in status_text for word in ["confirm", "production", "pack", "dispatch", "transit", "deliver"])
+                is_cancelled = "cancel" in status_text
+
+                if should_deduct and not order.get("stockDeducted"):
+                    for item in order.get("items", []):
+                        item_id = str(item.get("productId") or item.get("id") or "")
+                        qty = max(1, int(item.get("quantity") or 1))
+                        for product in prods:
+                            catalog_id = str(product.get("id") or "")
+                            if item_id == catalog_id or item_id.startswith(catalog_id + "-"):
+                                product["stock"] = max(0, int(product.get("stock", 0)) - qty)
+                                product["salesCount"] = int(product.get("salesCount", 0)) + qty
+                                break
+                    order["stockDeducted"] = True
+
+                if is_cancelled and order.get("stockDeducted") and "cancel" not in old_status:
+                    for item in order.get("items", []):
+                        item_id = str(item.get("productId") or item.get("id") or "")
+                        qty = max(1, int(item.get("quantity") or 1))
+                        for product in prods:
+                            catalog_id = str(product.get("id") or "")
+                            if item_id == catalog_id or item_id.startswith(catalog_id + "-"):
+                                product["stock"] = int(product.get("stock", 0)) + qty
+                                product["salesCount"] = max(0, int(product.get("salesCount", 0)) - qty)
+                                break
+                    order["stockDeducted"] = False
+
+                updated_order = order
+                break
+
+            if updated_order:
                 save_orders(orders)
-                self.send_json({"success": True, "orderId": order_id, "status": new_status})
+                save_products(prods)
+                self.send_json({"success": True, "order": updated_order})
             else:
                 self.send_json({"error": "Order not found"}, status_code=404)
             return
 
         # 4. Delete Order
         elif path == "/api/orders/delete":
+            if not self.require_admin():
+                return
             order_id = body.get("orderId")
             orders = load_orders()
             next_orders = [o for o in orders if o.get("orderId") != order_id]
@@ -366,6 +581,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         # 5. Update Product (Price, Stock, Title, Category)
         elif path == "/api/products/update":
+            if not self.require_admin():
+                return
             prod_id = body.get("id")
             prods = load_products()
             updated_prod = None
