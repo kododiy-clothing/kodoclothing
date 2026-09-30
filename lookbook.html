@@ -44,9 +44,9 @@
   <!-- TOP RUNNING MARQUEE -->
   <div class="bg-neutral-950 text-white py-2 px-4 text-xs font-black tracking-widest uppercase overflow-hidden border-b border-neutral-800 flex items-center justify-between">
     <div class="flex items-center gap-6 animate-marquee whitespace-nowrap">
-      <span>📸 SHOP THE STREETS • OVER 18,400+ VERIFIED FIT CHECKS TAGGED</span>
-      <span>⚡ UPLOAD YOUR FIT TO EARN 150 REBEL COINS + CHANCE TO WIN ₹5,000 MONTHLY DRIP PASS</span>
-      <span>🔥 100% AUTHENTIC 240-380 GSM HEAVYWEIGHT STREETWEAR STYLED BY THE COMMUNITY</span>
+      <span>📸 KODO LOOKBOOK • EDITORIAL STREETWEAR STYLING</span>
+      <span>⚡ WANT TO BE FEATURED? SEND YOUR KODO FIT TO OUR TEAM FOR REVIEW</span>
+      <span>🔥 EXPLORE KODO SILHOUETTES, GRAPHICS & OUTFIT INSPIRATION</span>
     </div>
   </div>
 
@@ -82,7 +82,7 @@
       <!-- RIGHT ACTIONS -->
       <div class="flex items-center gap-3">
         <button type="button" id="submit-fit-trigger-btn" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 text-xs font-black uppercase tracking-wider hover:bg-[#2D8CE3] transition-colors shadow-sm">
-          <span>📸</span> Submit Fit (+150 Coins)
+          <span>📸</span> Submit Fit
         </button>
         <a href="wishlist.html" class="p-2 text-neutral-700 dark:text-neutral-200 hover:text-rose-600 transition-colors" title="Wishlist">
           <span class="text-lg">♡</span>
@@ -103,28 +103,28 @@
     <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#2D8CE3_1px,transparent_1px)] [background-size:16px_16px]"></div>
     <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 text-center">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-[#2D8CE3] text-xs font-black font-mono-tech tracking-widest uppercase mb-4">
-        ⚡ REAL REBELS • UNFILTERED STREET DRIP
+        ⚡ KODO EDITORIAL • STREETWEAR LOOKBOOK
       </div>
       <h1 class="font-syne text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-none mb-4">
         SHOP THE <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#2D8CE3] via-sky-400 to-pink-500">STREETS</span>
       </h1>
       <p class="text-sm sm:text-base text-neutral-400 max-w-2xl mx-auto font-medium mb-8">
-        Browse real customer fit checks from Bandra to Shibuya. Tap on any photo to inspect the exact tagged streetwear garments and add the complete look directly to your bag.
+        Browse KODO styling references and editorial outfit ideas. Tap a look to inspect tagged garments and explore matching pieces.
       </p>
 
       <!-- STATS STRIP -->
       <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto text-left">
         <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl">
-          <div class="text-[10px] text-neutral-400 font-mono-tech uppercase">Tagging Rewards</div>
-          <div class="text-lg font-black font-syne text-[#2D8CE3]">+150 Coins / Fit</div>
+          <div class="text-[10px] text-neutral-400 font-mono-tech uppercase">Lookbook</div>
+          <div class="text-lg font-black font-syne text-[#2D8CE3]">Editorial Fits</div>
         </div>
         <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl">
-          <div class="text-[10px] text-neutral-400 font-mono-tech uppercase">Monthly Winner</div>
-          <div class="text-lg font-black font-syne text-amber-400">₹5,000 Pass</div>
+          <div class="text-[10px] text-neutral-400 font-mono-tech uppercase">Shop The Look</div>
+          <div class="text-lg font-black font-syne text-amber-400">Tagged Pieces</div>
         </div>
         <div class="bg-neutral-900/80 border border-neutral-800 p-3 rounded-2xl col-span-2 sm:col-span-1">
-          <div class="text-[10px] text-neutral-400 font-mono-tech uppercase">Community Size</div>
-          <div class="text-lg font-black font-syne text-pink-400">18.4K Rebels</div>
+          <div class="text-[10px] text-neutral-400 font-mono-tech uppercase">Fit Submissions</div>
+          <div class="text-lg font-black font-syne text-pink-400">Reviewed Manually</div>
         </div>
       </div>
     </div>
@@ -172,13 +172,13 @@
       </button>
 
       <div class="text-xs font-black tracking-widest text-[#2D8CE3] uppercase font-mono-tech mb-1">
-        📸 COMMUNITY FIT CHECK
+        📸 KODO FIT SUBMISSION
       </div>
       <h3 class="font-syne text-2xl font-black uppercase tracking-tight">
         SUBMIT YOUR STREET DRIP
       </h3>
       <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 mb-5">
-        Upload your raw street fit pic, tag your Instagram handle, and get awarded <b>150 Rebel Coins</b> added to your VIP wallet instantly!
+        Preview your fit here, then continue to WhatsApp to send it to the KODO team. Features are reviewed manually; no automatic reward or posting is promised.
       </p>
 
       <form id="fit-submit-form" class="space-y-4">
@@ -220,7 +220,7 @@
 
         <div class="pt-2">
           <button type="submit" class="w-full py-3.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-black text-xs uppercase tracking-wider rounded-xl hover:bg-[#2D8CE3] transition-all flex items-center justify-center gap-2">
-            <span>🚀 SUBMIT FIT & CLAIM 150 REBEL COINS</span>
+            <span>🚀 CONTINUE SUBMISSION ON WHATSAPP</span>
           </button>
         </div>
       </form>
@@ -465,21 +465,31 @@
         }
       });
 
-      // Submit Fit Form
+      // Fit submissions are reviewed manually over WhatsApp.
       const form = document.getElementById("fit-submit-form");
       form?.addEventListener("submit", (e) => {
         e.preventDefault();
-        const insta = document.getElementById("fit-insta").value;
-        const currentCoins = parseInt(localStorage.getItem("KODO_COINS") || "850", 10);
-        const updatedCoins = currentCoins + 150;
-        localStorage.setItem("KODO_COINS", updatedCoins.toString());
+        const name = document.getElementById("fit-name").value.trim();
+        const insta = document.getElementById("fit-insta").value.trim();
+        const city = document.getElementById("fit-city").value.trim();
+        const items = document.getElementById("fit-items").value.trim();
 
-        alert(`🔥 Fit pic submitted successfully for review!\n\n👑 150 Rebel Coins have been credited to your VIP wallet!\nTotal Coins: ${updatedCoins} Rebel Coins.\nWe will tag ${insta} on our official Instagram feed.`);
+        const message = [
+          "Hi KODO, I want to submit a fit pic for lookbook review.",
+          "",
+          "Name: " + name,
+          "Instagram: " + insta,
+          "City: " + city,
+          "KODO pieces worn: " + items,
+          "",
+          "I will attach the fit photo in this WhatsApp chat."
+        ].join("\n");
 
-        document.getElementById("upload-fit-modal").classList.remove("active");
-        form.reset();
-        previewImg.classList.add("hidden");
-        uploadPlaceholder.classList.remove("hidden");
+        window.open(
+          "https://wa.me/917046702094?text=" + encodeURIComponent(message),
+          "_blank",
+          "noopener"
+        );
       });
 
       document.getElementById("submit-fit-trigger-btn")?.addEventListener("click", () => {
