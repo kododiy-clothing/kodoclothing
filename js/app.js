@@ -32,6 +32,11 @@
 	  let appliedCoupon = null;
 	  const FREE_SHIPPING_THRESHOLD = 799;
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
+  const ASSET_VERSION = "hd-gallery-2";
+  const assetUrl = (src) => {
+    if (!src || /^(https?:|data:|blob:)/.test(src)) return src;
+    return src.includes("?") ? `${src}&v=${ASSET_VERSION}` : `${src}?v=${ASSET_VERSION}`;
+  };
   const formatMoney = (value) => window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(value) : `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
   const filterState = {
@@ -586,8 +591,8 @@
       return `
         <div class="product-card group relative bg-white rounded-2xl border border-neutral-100 overflow-hidden flex flex-col justify-between" data-id="${product.id}">
           <div class="image-swap-wrapper relative w-full aspect-[3/4] bg-neutral-100 overflow-hidden cursor-pointer quick-view-trigger" data-id="${product.id}">
-            <img src="${product.images[0]}" alt="${product.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            ${product.images[1] ? `<img src="${product.images[1]}" alt="${product.title} view 2" loading="lazy" class="secondary-image absolute inset-0 w-full h-full object-cover">` : ''}
+            <img src="${assetUrl(product.images[0])}" alt="${product.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            ${product.images[1] ? `<img src="${assetUrl(product.images[1])}" alt="${product.title} view 2" loading="lazy" class="secondary-image absolute inset-0 w-full h-full object-cover">` : ''}
             
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
               <span class="${product.badgeColor} text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
@@ -1084,14 +1089,14 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
         <div class="space-y-3">
           <div class="qv-zoom-container relative aspect-[3/4] bg-neutral-100 rounded-2xl overflow-hidden border border-neutral-200 cursor-crosshair group">
-            <img id="qv-main-img" src="${product.images[0]}" alt="${product.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-150 origin-center">
+            <img id="qv-main-img" src="${assetUrl(product.images[0])}" alt="${product.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-150 origin-center">
             <div class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded pointer-events-none">
               🔍 Hover to Zoom
             </div>
           </div>
           <div class="flex gap-2">
             ${product.images.map((img, idx) => `
-              <img src="${img}" class="qv-thumb w-14 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all ${idx === 0 ? 'border-blue-600' : 'border-neutral-200 opacity-70'}" data-src="${img}">
+              <img src="${assetUrl(img)}" class="qv-thumb w-14 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all ${idx === 0 ? 'border-blue-600' : 'border-neutral-200 opacity-70'}" data-src="${assetUrl(img)}">
             `).join("")}
           </div>
         </div>

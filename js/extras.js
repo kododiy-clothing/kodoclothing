@@ -1205,7 +1205,12 @@
     };
 
     const attachRotator = (img, product) => {
-      const images = (product?.images || []).filter(Boolean);
+      const version = "hd-gallery-2";
+      const withVersion = (src) => {
+        if (!src || /^(https?:|data:|blob:)/.test(src)) return src;
+        return src.includes("?") ? `${src}&v=${version}` : `${src}?v=${version}`;
+      };
+      const images = (product?.images || []).filter(Boolean).map(withVersion);
       if (!img || img.dataset.kodoRotating === "1" || images.length < 2) return;
 
       img.dataset.kodoRotating = "1";

@@ -215,9 +215,14 @@
     KODO.DIY • Original streetwear, built for real orders
   </footer>
 
-  <script src="js/data.js"></script>
+  <script src="js/data.js?v=hd-gallery-2"></script>
   <script src="js/currency.js?v=1"></script>
   <script>
+    const KODO_ASSET_VERSION = "hd-gallery-2";
+    const assetUrl = (src) => {
+      if (!src || /^(https?:|data:|blob:)/.test(src)) return src;
+      return src.includes("?") ? `${src}&v=${KODO_ASSET_VERSION}` : `${src}?v=${KODO_ASSET_VERSION}`;
+    };
     const formatMoney = (value) => window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(value) : `₹${Number(value || 0).toLocaleString("en-IN")}`;
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -242,7 +247,7 @@
         <!-- Left: Image Gallery & Zoom (7 Cols) -->
         <div class="lg:col-span-7 space-y-4">
           <div class="relative aspect-[3/4] bg-neutral-100 rounded-3xl overflow-hidden border border-neutral-200 group cursor-crosshair">
-            <img id="pdp-main-image" src="${product.images[0]}" alt="${product.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-150 origin-center">
+            <img id="pdp-main-image" src="${assetUrl(product.images[0])}" alt="${product.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-150 origin-center">
             <div class="absolute top-4 left-4 bg-black/70 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase">
               ${product.badge}
             </div>
@@ -253,7 +258,7 @@
 
           <div id="pdp-thumb-strip" class="flex gap-3 overflow-x-auto no-scrollbar pb-2 -mx-1 px-1 snap-x snap-mandatory overscroll-x-contain">
             ${product.images.map((img, idx) => `
-              <img src="${img}" class="pdp-thumb flex-none w-20 h-24 sm:w-24 sm:h-28 object-cover rounded-xl border-2 cursor-pointer transition-all snap-start ${idx === 0 ? 'border-blue-600' : 'border-neutral-200 opacity-70'}" data-src="${img}" data-index="${idx}" alt="${product.title} view ${idx + 1}">
+              <img src="${assetUrl(img)}" class="pdp-thumb flex-none w-20 h-24 sm:w-24 sm:h-28 object-cover rounded-xl border-2 cursor-pointer transition-all snap-start ${idx === 0 ? 'border-blue-600' : 'border-neutral-200 opacity-70'}" data-src="${assetUrl(img)}" data-index="${idx}" alt="${product.title} view ${idx + 1}">
             `).join("")}
           </div>
         </div>
@@ -581,7 +586,7 @@
           price: product.price,
           comparePrice: product.comparePrice,
           currency: product.currency,
-          image: product.images[0],
+          image: assetUrl(product.images[0]),
           size: activeSize,
           sizes: product.sizes,
           quantity: 1
@@ -623,6 +628,6 @@
       });
     });
   </script>
-  <script src="js/extras.js?v=12"></script>
+  <script src="js/extras.js?v=hd-gallery-2"></script>
 </body>
 </html>
