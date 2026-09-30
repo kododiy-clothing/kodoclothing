@@ -8,9 +8,15 @@ services:
     healthCheckPath: "/api/health"
     envVars:
       - key: PUBLIC_SITE_URL
-        value: "https://kododiy-clothing.github.io/kodoclothing"
+        value: "https://www.kodo.diy"
       - key: DODO_API_BASE
         value: "https://live.dodopayments.com"
+      - key: KODO_ADMIN_EMAIL
+        value: "kododiy@gmail.com"
+      - key: GOOGLE_CLIENT_ID
+        value: "315340311965-akvp9jp8ug8g24h0236mb68k2iot9frp.apps.googleusercontent.com"
+      - key: ALLOWED_ORIGINS
+        value: "https://www.kodo.diy,https://kodo.diy"
       - key: DODO_SEND_DYNAMIC_AMOUNTS
         value: "true"
       - key: DODO_PAYMENTS_API_KEY
