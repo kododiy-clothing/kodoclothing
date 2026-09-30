@@ -1694,11 +1694,9 @@
 
     const segments = [
       { label: "15% OFF", code: "KODO15", color: "#ff6a00" },
-      { label: "₹200 CASH", code: "REBEL200", color: "#18181b" },
-      { label: "20% OFF", code: "STREET20", color: "#ec4899" },
       { label: "FREE SHIP", code: "FREESHIP", color: "#8b5cf6" },
-      { label: "3D PUFF", code: "FREEPUFF", color: "#059669" },
-      { label: "10% OFF", code: "EXTRA10", color: "#d97706" }
+      { label: "15% OFF", code: "KODO15", color: "#18181b" },
+      { label: "FREE SHIP", code: "FREESHIP", color: "#059669" }
     ];
 
     const ctx = canvas.getContext("2d");
@@ -1772,8 +1770,11 @@
 
       if (actionBtn.dataset.won) {
         const wonCode = actionBtn.dataset.won;
-        appliedCoupon = { code: wonCode, discountPercent: 20, discountFlat: 0 };
+        appliedCoupon = wonCode === "FREESHIP"
+          ? { code: "FREESHIP", freeShipping: true }
+          : { code: "KODO15", discountPercent: 15 };
         showToast(`Coupon ${wonCode} auto-applied!`);
+        renderCart();
         modal.classList.remove("active");
         document.body.style.overflow = "";
         openCartDrawer();
