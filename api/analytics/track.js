@@ -1,3 +1,5 @@
+const { requireAdmin } = require("../_admin-auth");
+
 const MAX_EVENTS = 3000;
 
 function store() {
@@ -78,6 +80,7 @@ module.exports = async function handler(req, res) {
   const events = store();
 
   if (req.method === "GET") {
+    if (!(await requireAdmin(req, res))) return;
     return res.status(200).json({ success: true, summary: summarize(events) });
   }
 
