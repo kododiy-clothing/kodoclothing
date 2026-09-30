@@ -1,3 +1,5 @@
+const { requireAdmin } = require("../_admin-auth");
+
 const MAX_EVENTS = 500;
 
 function getStore() {
@@ -13,6 +15,7 @@ module.exports = async function handler(req, res) {
   const store = getStore();
 
   if (req.method === "GET") {
+    if (!(await requireAdmin(req, res))) return;
     const sessionId = cleanText(req.query?.sessionId, 120);
     const events = sessionId ? store.filter((event) => event.sessionId === sessionId) : store;
     return res.status(200).json({
