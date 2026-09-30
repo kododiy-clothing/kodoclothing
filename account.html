@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KODO VIP Rebel Hub — Customer Account</title>
+  <title>KODO Order Hub — Orders & Tracking</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/styles.css">
@@ -16,7 +16,7 @@
 
   <!-- TOP ANNOUNCEMENT -->
   <div class="bg-neutral-950 text-white text-[11px] py-2 px-4 text-center font-mono-tech tracking-wider border-b border-neutral-800">
-    ⚡ KODO ACCOUNT • REAL ORDERS, TRACKING, RETURNS & STORE CREDIT
+    ⚡ KODO ORDER HUB • ORDERS SAVED ON THIS DEVICE
   </div>
 
   <!-- HEADER -->
@@ -33,16 +33,15 @@
         <a href="index.html#combo-builder-section" class="text-blue-600 hover:underline">Buy 2 @ ₹999</a>
         <a href="index.html#combo-builder-section" class="text-pink-600 hover:underline">2 @ ₹999 Combo</a>
         <a href="track.html" class="hover:text-[#2D8CE3]">Track Order</a>
-        <a href="admin.html" class="text-neutral-500 hover:text-neutral-900">Admin</a>
       </nav>
 
       <div class="flex items-center gap-3">
         <a href="index.html" class="text-xs font-bold text-neutral-600 hover:text-neutral-900">
           ← Back to Shop
         </a>
-        <button type="button" onclick="window.KODO_AUTH?.signOut('index.html')" class="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase">
-          Sign Out
-        </button>
+        <a href="track.html" class="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-black uppercase">
+          Track Order
+        </a>
       </div>
     </div>
   </header>
@@ -63,14 +62,12 @@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h1 id="account-display-name" class="font-syne text-xl sm:text-2xl font-black uppercase tracking-tight">KODO Customer</h1>
-              <span class="bg-amber-400 text-neutral-950 font-mono-tech text-[10px] font-black px-2 py-0.5 rounded-full uppercase">VERIFIED ACCOUNT</span>
+              <h1 id="account-display-name" class="font-syne text-xl sm:text-2xl font-black uppercase tracking-tight">KODO Order Hub</h1>
+              <span class="bg-blue-400 text-neutral-950 font-mono-tech text-[10px] font-black px-2 py-0.5 rounded-full uppercase">LOCAL ORDER HISTORY</span>
             </div>
-            <p id="account-display-email" class="text-xs text-neutral-400 mt-0.5 font-mono-tech">Sign in to sync your real order history</p>
+            <p id="account-display-email" class="text-xs text-neutral-400 mt-0.5 font-mono-tech">Orders placed from this browser are shown below</p>
             <div class="mt-2 flex items-center gap-3 text-xs text-neutral-300">
-              <span>Member Since: <b id="account-member-since">After sign in</b></span>
-              <span>•</span>
-              <span class="text-emerald-400 font-bold">✓ Real checkout orders only</span>
+              <span class="text-emerald-400 font-bold">✓ No demo customer data is shown</span>
             </div>
           </div>
         </div>
@@ -80,12 +77,12 @@
           <div>
             <div class="text-[10px] font-black uppercase tracking-widest text-neutral-300">KODO REBEL COINS</div>
             <div class="text-3xl font-black text-amber-400 font-syne flex items-center gap-1">
-              <span>🪙</span> <span id="account-coin-balance">850</span>
+              <span>🪙</span> <span id="account-coin-balance">0</span>
             </div>
-            <div class="text-[11px] text-neutral-400">1 Coin = ₹1.00 at Checkout</div>
+            <div class="text-[11px] text-neutral-400">Rewards balance starts at zero and updates only when a live rewards program is active</div>
           </div>
-          <button type="button" onclick="alert('Redeem 850 Coins at checkout using code REBEL850!');" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-black text-xs uppercase rounded-xl transition-all shadow-md">
-            Redeem ₹850
+          <button type="button" disabled class="px-4 py-2.5 bg-neutral-600 text-neutral-300 rounded-xl text-xs font-black uppercase cursor-not-allowed">
+            Rewards Coming Soon
           </button>
         </div>
       </div>
@@ -100,7 +97,7 @@
         🎨 Saved DIY Creations
       </button>
       <button type="button" class="account-tab-btn px-4 py-2 rounded-xl text-xs font-black uppercase transition-colors text-neutral-600 hover:bg-neutral-200" data-tab="addresses">
-        📍 Saved Addresses (2)
+        📍 Saved Addresses (0)
       </button>
       <button type="button" class="account-tab-btn px-4 py-2 rounded-xl text-xs font-black uppercase transition-colors text-neutral-600 hover:bg-neutral-200" data-tab="vip-perks">
         👑 VIP Perks & Referral
@@ -122,128 +119,29 @@
 
     <!-- TAB 2: SAVED DIY CREATIONS -->
     <section id="tab-diy-vault" class="account-tab-content hidden">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <!-- Creation 1 -->
-        <div class="bg-white rounded-3xl p-5 border border-neutral-200 shadow-sm space-y-3">
-          <div class="aspect-square bg-neutral-900 rounded-2xl flex items-center justify-center p-6 relative group overflow-hidden">
-            <img src="assets/kodo-logo.png?v=4" class="w-32 h-auto object-contain">
-            <span class="absolute top-3 left-3 bg-pink-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">3D PUFF INK</span>
-          </div>
-          <div>
-            <div class="text-xs font-black uppercase text-neutral-900">KODO RETRO ACID // BACK MURAL</div>
-            <div class="text-[11px] text-neutral-500 font-mono-tech">Onyx Black • 240 GSM • Size L</div>
-            <div class="text-xs font-black text-[#2D8CE3] mt-1">₹799</div>
-          </div>
-          <button type="button" onclick="alert('Added saved custom tee to your bag!'); window.location.href='index.html';" class="w-full py-2.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase transition-colors">
-            Re-Order Now (₹799)
-          </button>
-        </div>
-
-        <!-- Creation 2 -->
-        <div class="bg-white rounded-3xl p-5 border border-neutral-200 shadow-sm space-y-3">
-          <div class="aspect-square bg-neutral-900 rounded-2xl flex items-center justify-center p-6 relative group overflow-hidden" style="background-color: #f8fafc;">
-            <div class="text-center text-neutral-900">
-              <span class="text-5xl">⚡</span>
-              <div class="font-syne font-black text-sm uppercase mt-2">CYBER PUNK DIVISION</div>
-            </div>
-            <span class="absolute top-3 left-3 bg-neutral-800 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">FLAT DTG</span>
-          </div>
-          <div>
-            <div class="text-xs font-black uppercase text-neutral-900">CYBER PUNK STREET CHEST</div>
-            <div class="text-[11px] text-neutral-500 font-mono-tech">Chalk White • 260 GSM • Size XL</div>
-            <div class="text-xs font-black text-[#2D8CE3] mt-1">₹699</div>
-          </div>
-          <button type="button" onclick="alert('Added saved custom tee to your bag!'); window.location.href='index.html';" class="w-full py-2.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase transition-colors">
-            Re-Order Now (₹699)
-          </button>
-        </div>
-
-        <!-- Create New Card -->
-        <div class="bg-white rounded-3xl p-5 border-2 border-dashed border-neutral-300 flex flex-col items-center justify-center text-center p-8 space-y-3">
-          <span class="text-3xl">🎨</span>
-          <h4 class="font-syne text-sm font-black uppercase">Create New DIY Tee</h4>
-          <p class="text-xs text-neutral-400">Design your next oversized streetwear piece with 3D puff print finish.</p>
-          <a href="index.html#combo-builder-section" class="px-4 py-2 bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase">Open Studio</a>
-        </div>
-
+      <div class="text-center py-14 bg-white rounded-3xl border border-neutral-200 p-8 space-y-4">
+        <span class="text-4xl">🎨</span>
+        <h3 class="font-syne text-lg font-black uppercase">No Saved DIY Creations</h3>
+        <p class="text-xs text-neutral-500 max-w-sm mx-auto">Saved custom designs will appear here after the feature is connected to a real customer account.</p>
+        <a href="index.html#combo-builder-section" class="inline-block px-6 py-3 bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase">Open Combo Builder</a>
       </div>
     </section>
 
     <!-- TAB 3: SAVED ADDRESSES -->
     <section id="tab-addresses" class="account-tab-content hidden">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-3xl p-6 border border-neutral-200 shadow-sm relative">
-          <span class="absolute top-6 right-6 text-[10px] font-black bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full uppercase">DEFAULT</span>
-          <div class="text-xs font-black uppercase text-neutral-400 mb-1">HOME</div>
-          <h4 class="text-sm font-black text-neutral-900">Primary Shipping Address</h4>
-          <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
-            Flat 402, Skyline Residency, Sector 45<br>
-            Near City Centre Mall<br>
-            Gurugram, Haryana — 122003
-          </p>
-          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: saved after first checkout</p>
-          <div class="mt-4 pt-4 border-t border-neutral-100 flex gap-3 text-xs font-bold">
-            <button type="button" class="text-blue-600 hover:underline">Edit</button>
-            <span class="text-neutral-300">|</span>
-            <button type="button" class="text-neutral-400 hover:text-neutral-700">Delete</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-3xl p-6 border border-neutral-200 shadow-sm">
-          <div class="text-xs font-black uppercase text-neutral-400 mb-1">WORK / STUDIO</div>
-          <h4 class="text-sm font-black text-neutral-900">Design Studio Address</h4>
-          <p class="text-xs text-neutral-600 mt-2 leading-relaxed">
-            Plot 18, Streetwear Creative Hub, Okhla Phase III<br>
-            New Delhi — 110020
-          </p>
-          <p class="text-xs font-mono-tech text-neutral-500 mt-2">Phone: saved after first checkout</p>
-          <div class="mt-4 pt-4 border-t border-neutral-100 flex gap-3 text-xs font-bold">
-            <button type="button" class="text-blue-600 hover:underline">Set as Default</button>
-            <span class="text-neutral-300">|</span>
-            <button type="button" class="text-blue-600 hover:underline">Edit</button>
-          </div>
-        </div>
+      <div class="text-center py-14 bg-white rounded-3xl border border-neutral-200 p-8 space-y-3">
+        <span class="text-4xl">📍</span>
+        <h3 class="font-syne text-lg font-black uppercase">No Saved Addresses</h3>
+        <p class="text-xs text-neutral-500 max-w-sm mx-auto">For privacy, placeholder addresses are not shown. Address-book sync will appear only after customer sign-in is implemented.</p>
       </div>
     </section>
 
     <!-- TAB 4: VIP PERKS & REFERRAL -->
-    <section id="tab-vip-perks" class="account-tab-content hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-neutral-200 shadow-sm space-y-6">
-        <h3 class="font-syne text-xl font-black uppercase">YOUR STREET OG VIP PRIVILEGES</h3>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 space-y-1.5">
-            <div class="text-2xl">🚀</div>
-            <div class="text-xs font-black uppercase text-neutral-900">Free Express Air Courier</div>
-            <p class="text-[11px] text-neutral-500">Every single order dispatched via priority air freight without any minimum spend.</p>
-          </div>
-          <div class="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 space-y-1.5">
-            <div class="text-2xl">⏳</div>
-            <div class="text-xs font-black uppercase text-neutral-900">2-Hour Early Drop Access</div>
-            <p class="text-[11px] text-neutral-500">Unlock limited capsule streetwear drops 2 hours before the public drops go live.</p>
-          </div>
-          <div class="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 space-y-1.5">
-            <div class="text-2xl">✨</div>
-            <div class="text-xs font-black uppercase text-neutral-900">Free 3D Puff Upgrades</div>
-            <p class="text-[11px] text-neutral-500">Automatic free upgrade to 3D embossed puff printing on all DIY custom tees.</p>
-          </div>
-        </div>
-
-        <!-- Referral Link Box -->
-        <div class="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-200 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <div class="text-xs font-black uppercase text-[#2D8CE3]">GIVE ₹200, GET 200 REBEL COINS</div>
-            <h4 class="text-sm font-black text-neutral-900 mt-0.5">Invite a Streetwear Rebel</h4>
-            <p class="text-xs text-neutral-600 mt-1">Friends get ₹200 off their first drop, and you earn 200 Rebel Coins on their purchase.</p>
-          </div>
-          <div class="flex items-center gap-2 w-full md:w-auto">
-            <input type="text" readonly value="https://kodo.diy/vip?ref=KABIR99" id="ref-link-input" class="px-3 py-2 bg-white text-xs font-mono font-bold rounded-xl border border-blue-300 w-full md:w-64">
-            <button type="button" onclick="navigator.clipboard.writeText('https://kodo.diy/vip?ref=KABIR99'); alert('Referral link copied!');" class="px-4 py-2 bg-[#2D8CE3] text-white text-xs font-black rounded-xl uppercase flex-shrink-0">
-              Copy
-            </button>
-          </div>
-        </div>
+    <section id="tab-vip-perks" class="account-tab-content hidden">
+      <div class="text-center py-14 bg-white rounded-3xl border border-neutral-200 p-8 space-y-3">
+        <span class="text-4xl">👑</span>
+        <h3 class="font-syne text-lg font-black uppercase">Rewards Program Coming Soon</h3>
+        <p class="text-xs text-neutral-500 max-w-sm mx-auto">No coins, referral credits, or VIP benefits are issued until the live rewards program is enabled and published with final terms.</p>
       </div>
     </section>
 
@@ -251,13 +149,12 @@
 
   <!-- FOOTER -->
   <footer class="bg-white border-t border-neutral-200 py-6 text-center text-xs text-neutral-400 mt-12">
-    KODO.DIY • Rebel Club account hub
+    KODO.DIY • Local order history & tracking
   </footer>
 
   <script src="js/backend-config.js?v=8"></script>
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
-      const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
       // Tab switching
       const tabBtns = document.querySelectorAll(".account-tab-btn");
       const tabContents = document.querySelectorAll(".account-tab-content");
@@ -284,19 +181,9 @@
       const emptyState = document.getElementById("orders-empty-state");
       const countTab = document.getElementById("orders-tab-count");
 
+      // Privacy-safe customer view: show only orders created on this browser.
+      // Server-wide order lists are reserved for authenticated merchant admin access.
       let orders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/orders`);
-        if (res.ok) {
-          const liveOrders = await res.json();
-          if (Array.isArray(liveOrders) && liveOrders.length > 0) {
-            orders = liveOrders;
-            localStorage.setItem("KODO_ORDERS", JSON.stringify(orders));
-          }
-        }
-      } catch (e) {
-        console.warn("Live account orders unavailable", e);
-      }
 
       if (orders.length === 0) {
         countTab.textContent = "0";
@@ -321,7 +208,7 @@
                     ● ${ord.status || 'Processing'}
                   </span>
                 </div>
-                <div class="text-[11px] text-neutral-500 mt-0.5">Placed on ${ord.date || 'Recent'} • Paid via ${ord.paymentMethod || 'Prepaid'}</div>
+                <div class="text-[11px] text-neutral-500 mt-0.5">Placed on ${ord.date || 'Recent'} • Payment: ${ord.paymentStatus || ord.paymentMethod || 'Pending'}</div>
               </div>
 
               <div class="flex items-center gap-2">
@@ -332,9 +219,9 @@
                   Invoice 🖨️
                 </a>
                 ${ord.status !== 'Delivered' && ord.status !== 'Cancelled' ? `
-                  <button type="button" class="cancel-order-btn px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold rounded-xl transition-colors border border-red-200" data-id="${ord.orderId}">
-                    Cancel
-                  </button>
+                  <a href="https://wa.me/917046702094?text=${encodeURIComponent(`Please help me cancel KODO order ${ord.orderId}`)}" target="_blank" rel="noopener" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold rounded-xl transition-colors border border-red-200">
+                    Request Cancel
+                  </a>
                 ` : ''}
               </div>
             </div>
@@ -363,38 +250,7 @@
         `;
       }).join("");
 
-      document.querySelectorAll(".cancel-order-btn").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const orderId = btn.dataset.id;
-          const reason = prompt(`Cancel Order #${orderId}?\nPlease state reason (e.g. Placed by mistake, Want different size):`, "Placed by mistake");
-          if (reason !== null) {
-            const target = orders.find(o => o.orderId === orderId);
-            if (target) {
-              target.status = "Cancelled";
-              localStorage.setItem("KODO_ORDERS", JSON.stringify(orders));
-              try {
-                await fetch(`${API_BASE_URL}/api/orders/update`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ orderId, status: "Cancelled" })
-                });
-              } catch (e) {}
-              alert(`Order #${orderId} has been cancelled.\nRefund of ₹${target.total} has been reversed to your source account.`);
-              location.reload();
-            }
-          }
-        });
-      });
     });
-  </script>
-  <script src="js/auth.js"></script>
-  <script>
-    const accountSession = window.KODO_AUTH?.getSession?.();
-    if (accountSession) {
-      document.getElementById("account-display-name").textContent = accountSession.name || accountSession.email;
-      document.getElementById("account-display-email").textContent = accountSession.email;
-      document.getElementById("account-member-since").textContent = new Date(accountSession.signedInAt || Date.now()).toLocaleDateString("en-IN", { month: "short", year: "numeric" });
-    }
   </script>
   <script src="js/extras.js?v=hd-gallery-6"></script>
 </body>
