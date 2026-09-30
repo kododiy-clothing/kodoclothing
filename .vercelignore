@@ -1,0 +1,4 @@
+data/orders.json
+.env
+.env.*
+!.env.example
