@@ -653,10 +653,7 @@
 
     const discounts = [
       { code: "KODO15", type: "Percentage", val: "15% OFF", min: 0, status: "Active" },
-      { code: "STREET20", type: "Percentage", val: "20% OFF", min: 999, status: "Active" },
-      { code: "REBEL850", type: "Flat Coins", val: "₹850 OFF", min: 1499, status: "Active" },
-      { code: "DONTGO10", type: "Exit Intent", val: "10% OFF", min: 0, status: "Active" },
-      { code: "FREESHIP", type: "Shipping", val: "Free Air Freight", min: 799, status: "Active" }
+      { code: "FREESHIP", type: "Shipping", val: "Free Shipping", min: 0, status: "Active" }
     ];
 
     tbody.innerHTML = discounts.map(d => `
