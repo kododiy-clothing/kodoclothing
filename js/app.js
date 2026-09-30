@@ -1563,6 +1563,14 @@
         });
         window.KODO_GOOGLE_TAG?.beginCheckout?.(cart, total, selectedPayment);
         const checkout = await createDodoCheckout(newOrder);
+        if (checkout.pricing) {
+          newOrder.subtotal = Number(checkout.pricing.subtotal ?? newOrder.subtotal);
+          newOrder.discount = Number(checkout.pricing.discount ?? newOrder.discount);
+          newOrder.shipping = Number(checkout.pricing.shipping ?? newOrder.shipping);
+          newOrder.total = Number(checkout.pricing.total ?? newOrder.total);
+          newOrder.gatewayAmount = Number(checkout.pricing.gatewayAmount ?? newOrder.gatewayAmount);
+          if (isCod) newOrder.codBalance = Math.max(0, newOrder.total - newOrder.gatewayAmount);
+        }
         newOrder.dodoPaymentId = checkout.paymentId;
         newOrder.paymentLink = checkout.checkoutUrl || checkout.paymentLink;
         await saveOrder(newOrder);
@@ -1614,6 +1622,7 @@
           discount,
           shipping,
           total,
+          couponCode: appliedCoupon?.code || "",
           paymentMethod,
           paymentStatus,
           status
