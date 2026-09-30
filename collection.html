@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png?v=1">
   <link rel="apple-touch-icon" href="assets/favicon.png?v=1">
   <script src="js/meta-pixel.js?v=1"></script>
+  <script src="js/google-tag.js?v=1"></script>
 </head>
 <body class="min-h-full flex flex-col text-neutral-900 selection:bg-[#2D8CE3] selection:text-white">
 
@@ -253,6 +254,15 @@
         window.KODO_META_PIXEL?.trackCustom?.("ViewCategory", {
           gender: activeGender,
           category: activeCat,
+          gsm: activeGSM || "all",
+          fits: activeFits.join(",") || "all",
+          max_price: maxPrice,
+          sort: sortBy,
+          result_count: resultCount
+        });
+        window.KODO_GOOGLE_TAG?.event?.("view_item_list", {
+          item_list_name: activeCat === "all" ? "All Drops" : activeCat,
+          gender: activeGender,
           gsm: activeGSM || "all",
           fits: activeFits.join(",") || "all",
           max_price: maxPrice,

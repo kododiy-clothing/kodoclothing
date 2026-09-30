@@ -316,6 +316,11 @@
           value: matches.length,
           currency: "INR"
         });
+        window.KODO_GOOGLE_TAG?.event?.("search", {
+          search_term: query,
+          result_count: matches.length,
+          content_category: "streetwear"
+        });
       }
 
       if (matches.length === 0) {
@@ -683,6 +688,7 @@
             value: prod.price,
             currency: prod.currency || "INR"
           });
+          window.KODO_GOOGLE_TAG?.addToWishlist?.(prod);
         }
         saveWishlist();
       });
@@ -731,6 +737,7 @@
           value: prod.price,
           currency: prod.currency || "INR"
         });
+        window.KODO_GOOGLE_TAG?.addToCart?.(prod);
 
         openCartDrawer();
         showToast(`Added ${prod.title} (Size ${selectedSize}) to bag!`);
@@ -1319,6 +1326,7 @@
           value: subtotal,
           currency: "INR"
         });
+        window.KODO_GOOGLE_TAG?.beginCheckout?.(cart, subtotal, "cart_checkout");
         closeCartDrawer();
         openCheckoutModal();
       });
@@ -1535,6 +1543,7 @@
           value: total,
           currency: "INR"
         });
+        window.KODO_GOOGLE_TAG?.beginCheckout?.(cart, total, selectedPayment);
         const checkout = await createDodoCheckout(newOrder);
         newOrder.dodoPaymentId = checkout.paymentId;
         newOrder.paymentLink = checkout.checkoutUrl || checkout.paymentLink;
@@ -1548,6 +1557,12 @@
         window.KODO_META_PIXEL?.trackCustom?.("PaymentLinkCreated", {
           payment_mode: newOrder.paymentMode,
           order_id: newOrder.orderId,
+          value: total,
+          currency: "INR"
+        });
+        window.KODO_GOOGLE_TAG?.event?.("payment_link_created", {
+          payment_type: newOrder.paymentMode,
+          transaction_id: newOrder.orderId,
           value: total,
           currency: "INR"
         });

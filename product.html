@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png?v=1">
   <link rel="apple-touch-icon" href="assets/favicon.png?v=1">
   <script src="js/meta-pixel.js?v=1"></script>
+  <script src="js/google-tag.js?v=1"></script>
 </head>
 <body class="min-h-full flex flex-col text-neutral-900 selection:bg-[#2D8CE3] selection:text-white">
 
@@ -235,6 +236,7 @@
         value: product.price,
         currency: product.currency || "INR"
       });
+      window.KODO_GOOGLE_TAG?.viewItem?.(product);
 
       container.innerHTML = `
         <!-- Left: Image Gallery & Zoom (7 Cols) -->
@@ -602,6 +604,7 @@
           value: product.price,
           currency: product.currency || "INR"
         });
+        window.KODO_GOOGLE_TAG?.addToCart?.(product);
         openCart();
       });
 
@@ -615,6 +618,7 @@
           value: product.price,
           currency: product.currency || "INR"
         });
+        window.KODO_GOOGLE_TAG?.beginCheckout?.([{ ...product, quantity: 1 }], product.price, "buy_now");
         window.location.href = "index.html?checkout=1";
       });
     });
