@@ -32,12 +32,25 @@
 	  let appliedCoupon = null;
 	  const FREE_SHIPPING_THRESHOLD = 799;
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
-  const ASSET_VERSION = "hd-gallery-6";
-  const assetUrl = (src) => {
-    if (!src || /^(https?:|data:|blob:)/.test(src)) return src;
-    return src.includes("?") ? `${src}&v=${ASSET_VERSION}` : `${src}?v=${ASSET_VERSION}`;
-  };
-  const formatMoney = (value) => window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(value) : `₹${Number(value || 0).toLocaleString("en-IN")}`;
+	  const ASSET_VERSION = "hd-gallery-6";
+	  const assetUrl = (src) => {
+	    if (!src || /^(https?:|data:|blob:)/.test(src)) return src;
+	    return src.includes("?") ? `${src}&v=${ASSET_VERSION}` : `${src}?v=${ASSET_VERSION}`;
+	  };
+	  const formatMoney = (value) => window.KODO_FORMAT_MONEY ? window.KODO_FORMAT_MONEY(value) : `₹${Number(value || 0).toLocaleString("en-IN")}`;
+
+  function lockHorizontalScroll() {
+    document.documentElement.scrollLeft = 0;
+    document.body.scrollLeft = 0;
+    if (window.scrollX !== 0) {
+      window.scrollTo(0, window.scrollY);
+    }
+  }
+
+  lockHorizontalScroll();
+  window.addEventListener("load", lockHorizontalScroll);
+  window.addEventListener("resize", lockHorizontalScroll);
+  window.addEventListener("orientationchange", lockHorizontalScroll);
 
   const filterState = {
     maxPrice: 3000,

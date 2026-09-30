@@ -19,6 +19,25 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+main,
+section {
+  max-width: 100%;
+}
+
 .font-syne {
   font-family: 'Syne', sans-serif;
 }
