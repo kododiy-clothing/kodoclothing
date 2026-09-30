@@ -217,7 +217,7 @@
           DROP YOUR FIT PIC & REVIEW
         </h3>
         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1 mb-5">
-          Submit your fit picture to get featured on <b>#KODOGANG</b> and earn <b>100 Rebel Coins</b> instantly!
+          Submit your fit picture and review for manual KODO team review. Featuring is not guaranteed and no automatic rewards are issued.
         </p>
 
         <form id="ugc-review-form" class="space-y-4">
@@ -270,7 +270,7 @@
           </div>
 
           <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-pink-500 to-[#2D8CE3] hover:opacity-95 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md">
-            SUBMIT & CLAIM 100 REBEL COINS 🪙
+            CONTINUE SUBMISSION ON WHATSAPP
           </button>
         </form>
       </div>
@@ -309,7 +309,16 @@
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.getElementById("ugc-reviewer-name").value;
-      alert(`Thank you, ${name}! Your fit picture has been submitted for #KODOGANG verification. 100 Rebel Coins added to your account!`);
+      const review = document.getElementById("ugc-review-text")?.value || "";
+      const message = [
+        "Hi KODO, I want to submit a fit pic / product review for manual review.",
+        "",
+        "Name: " + name,
+        review ? "Review: " + review : "",
+        "",
+        "I will attach the fit photo in this WhatsApp chat."
+      ].filter(Boolean).join("\n");
+      window.open("https://wa.me/917046702094?text=" + encodeURIComponent(message), "_blank", "noopener");
       modal.classList.remove("active");
       document.body.style.overflow = "";
     });
