@@ -1049,9 +1049,9 @@ window.KODO_DATA.PRODUCTS = [
       "rating": 4.9,
       "reviewsCount": 85,
       "images": [
-          "assets/products/woman-drops/kd-woman-drive-35-dimensionjumpoversizedt-/model-front.webp",
-          "assets/products/woman-drops/kd-woman-drive-35-dimensionjumpoversizedt-/model-lifestyle.webp",
-          "assets/products/woman-drops/kd-woman-drive-35-dimensionjumpoversizedt-/model-detail.webp"
+          "assets/products/woman-drops/kd-woman-drive-35-dimensionjumpoversizedt-/model-front.jpeg",
+          "assets/products/woman-drops/kd-woman-drive-35-dimensionjumpoversizedt-/model-lifestyle.jpeg",
+          "assets/products/woman-drops/kd-woman-drive-35-dimensionjumpoversizedt-/model-detail.jpeg"
       ],
       "fabric": "Premium soft cotton jersey, breathable everyday streetwear weight",
       "gsm": 240,
@@ -1707,9 +1707,9 @@ window.KODO_DATA.PRODUCTS = [
       "rating": 4.8,
       "reviewsCount": 99,
       "images": [
-          "assets/products/woman-drops/kd-woman-drive-49-underdogoversizedt-shirt/model-front.webp",
-          "assets/products/woman-drops/kd-woman-drive-49-underdogoversizedt-shirt/model-lifestyle.webp",
-          "assets/products/woman-drops/kd-woman-drive-49-underdogoversizedt-shirt/model-detail.webp"
+          "assets/products/woman-drops/kd-woman-drive-49-underdogoversizedt-shirt/model-front.jpeg",
+          "assets/products/woman-drops/kd-woman-drive-49-underdogoversizedt-shirt/model-lifestyle.jpeg",
+          "assets/products/woman-drops/kd-woman-drive-49-underdogoversizedt-shirt/model-detail.jpeg"
       ],
       "fabric": "Premium soft cotton jersey, breathable everyday streetwear weight",
       "gsm": 240,
