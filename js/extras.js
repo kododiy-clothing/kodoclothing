@@ -345,23 +345,21 @@
           ✕
         </button>
         <div class="inline-flex items-center gap-2 bg-pink-500/20 text-pink-400 border border-pink-500/30 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider mb-3">
-          ⚡ EXCLUSIVE EXIT PASS
+          ⚡ CART SAVER
         </div>
         <h3 class="font-syne text-2xl sm:text-3xl font-black uppercase tracking-tight">
           WAIT REBEL! DON'T LEAVE YOUR FIT BEHIND
         </h3>
         <p class="text-xs text-neutral-400 mt-2 mb-5">
-          Take an instant <span class="text-amber-400 font-bold">EXTRA 10% OFF</span> on your entire cart before drops sell out!
+          Use <span class="text-amber-400 font-bold">KODO15</span> for 15% off your cart.
         </p>
         <div class="p-4 bg-white/5 rounded-2xl border border-white/15 space-y-2 mb-5">
           <div class="text-[10px] uppercase font-mono-tech tracking-widest text-neutral-400">YOUR VIP REBEL CODE:</div>
-          <div class="text-2xl font-black font-mono-tech text-amber-400 tracking-wider">DONTGO10</div>
-          <div class="text-[11px] text-pink-400 font-bold flex items-center justify-center gap-1">
-            <span>⏳</span> Offer expires in <span id="exit-timer">04:59</span>
-          </div>
+          <div class="text-2xl font-black font-mono-tech text-amber-400 tracking-wider">KODO15</div>
+          <div class="text-[11px] text-neutral-400 font-bold">Valid while the KODO15 promotion is active.</div>
         </div>
         <button type="button" id="exit-apply-btn" class="w-full py-4 bg-gradient-to-r from-pink-500 via-purple-600 to-[#2D8CE3] text-white font-black text-xs uppercase tracking-wider rounded-2xl transition-all hover:scale-102 shadow-lg shadow-pink-500/25">
-          CLAIM 10% OFF & CHECKOUT NOW 🛍️
+          APPLY 15% OFF & CHECKOUT 🛍️
         </button>
       </div>
     `;
@@ -369,19 +367,7 @@
 
     const closeBtn = document.getElementById("exit-modal-close");
     const applyBtn = document.getElementById("exit-apply-btn");
-    const timerEl = document.getElementById("exit-timer");
-
-    let seconds = 299;
-    setInterval(() => {
-      if (seconds > 0) {
-        seconds--;
-        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-        const s = String(seconds % 60).padStart(2, '0');
-        if (timerEl) timerEl.textContent = `${m}:${s}`;
-      }
-    }, 1000);
-
-    function triggerModal() {
+        function triggerModal() {
       const cart = JSON.parse(localStorage.getItem("KODO_CART") || "[]");
       if (cart.length > 0 && !hasShown) {
         hasShown = true;
@@ -406,7 +392,7 @@
       alert("Coupon DONTGO10 copied & applied! Directing to checkout...");
       if (window.location.pathname.includes("index.html") || window.location.pathname === "/") {
         const couponInput = document.getElementById("cart-coupon-input");
-        const couponBtn = document.getElementById("cart-coupon-apply");
+        const couponBtn = document.getElementById("apply-coupon-btn");
         if (couponInput && couponBtn) {
           couponInput.value = "DONTGO10";
           couponBtn.click();
