@@ -348,13 +348,13 @@
                 <div>
                   <h4 class="text-xs font-bold text-neutral-900 line-clamp-1">${p.title}</h4>
                   <div class="flex items-center gap-2 mt-0.5">
-                    <span class="text-xs font-extrabold text-[#2D8CE3]">${formatMoney(p.price, p)}</span>
+                    <span class="text-xs font-extrabold text-orange-600">${formatMoney(p.price, p)}</span>
                     <span class="text-[10px] text-neutral-400 line-through">${formatMoney(p.comparePrice, p)}</span>
                     <span class="text-[10px] font-bold text-emerald-600">${p.discount}</span>
                   </div>
                 </div>
               </div>
-              <a href="product.html?id=${p.id}" class="search-view-btn px-3 py-1.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-bold rounded-lg transition-colors">
+              <a href="product.html?id=${p.id}" class="search-view-btn px-3 py-1.5 bg-neutral-900 hover:bg-orange-600 text-white text-xs font-bold rounded-lg transition-colors">
                 View PDP ↗
               </a>
             </div>
@@ -404,7 +404,7 @@
               ${idx === 0 ? '🔥 HOT' : (idx === 4 ? '🎨 DIY' : 'DROP')}
             </span>
           </div>
-          <span class="text-[11px] md:text-xs font-bold text-neutral-800 text-center uppercase tracking-tight group-hover:text-[#2D8CE3] transition-colors mt-1">${item.name}</span>
+          <span class="text-[11px] md:text-xs font-bold text-neutral-800 text-center uppercase tracking-tight group-hover:text-orange-600 transition-colors mt-1">${item.name}</span>
         </div>
       `).join("");
 
@@ -503,7 +503,7 @@
     document.querySelectorAll(".gender-tab-btn").forEach(btn => {
       if (btn.dataset.gender === gender) {
         btn.classList.add("bg-neutral-950", "text-white", "border-neutral-950", "shadow-sm");
-        btn.classList.remove("bg-neutral-50", "text-neutral-700", "border-neutral-200", "text-pink-700", "text-blue-700");
+        btn.classList.remove("bg-neutral-50", "text-neutral-700", "border-neutral-200", "text-pink-700", "text-orange-700");
       } else {
         btn.classList.remove("bg-neutral-950", "text-white", "border-neutral-950", "shadow-sm");
         btn.classList.add("bg-neutral-50", "text-neutral-700", "border-neutral-200");
@@ -619,7 +619,7 @@
               </div>
 
               <!-- Product title links directly to dedicated PDP product.html -->
-              <a href="product.html?id=${product.id}" class="text-xs md:text-sm font-bold text-neutral-900 line-clamp-1 hover:text-[#2D8CE3] transition-colors block">
+              <a href="product.html?id=${product.id}" class="text-xs md:text-sm font-bold text-neutral-900 line-clamp-1 hover:text-orange-600 transition-colors block">
                 ${product.title}
               </a>
 
@@ -629,7 +629,7 @@
                 <span class="text-xs font-extrabold text-emerald-600">${product.discount}</span>
               </div>
 
-              <div class="mt-2 text-[10px] font-bold text-[#8F54F0] bg-[#F9F8FF] px-2 py-0.5 rounded border border-[#8F54F0]/20 inline-block">
+              <div class="mt-2 text-[10px] font-bold text-orange-700 bg-orange-50 px-2 py-0.5 rounded border border-orange-200 inline-block">
                 ⚡ ${product.offer}
               </div>
             </div>
@@ -637,7 +637,7 @@
             <div class="mt-3 pt-3 border-t border-neutral-100">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-[10px] font-bold text-neutral-500 uppercase">Select Size:</span>
-                <span class="text-[10px] font-bold text-[#2D8CE3] cursor-pointer size-guide-trigger" data-id="${product.id}">Size Guide</span>
+                <span class="text-[10px] font-bold text-orange-600 cursor-pointer size-guide-trigger" data-id="${product.id}">Size Guide</span>
               </div>
               <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 size-pills-row" data-id="${product.id}">
                 ${product.sizes.map((s, idx) => `
@@ -647,7 +647,7 @@
                 `).join("")}
               </div>
 
-              <button type="button" class="add-to-bag-card-btn w-full mt-2 py-2.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-extrabold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2" data-id="${product.id}">
+              <button type="button" class="add-to-bag-card-btn w-full mt-2 py-2.5 bg-neutral-900 hover:bg-orange-600 text-white text-xs font-extrabold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2" data-id="${product.id}">
                 <span>ADD TO BAG</span>
                 <span class="text-white/60">→</span>
               </button>
@@ -1096,7 +1096,7 @@
           </div>
           <div class="flex gap-2">
             ${product.images.map((img, idx) => `
-              <img src="${assetUrl(img)}" class="qv-thumb w-14 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all ${idx === 0 ? 'border-blue-600' : 'border-neutral-200 opacity-70'}" data-src="${assetUrl(img)}">
+              <img src="${assetUrl(img)}" class="qv-thumb w-14 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all ${idx === 0 ? 'border-orange-600' : 'border-neutral-200 opacity-70'}" data-src="${assetUrl(img)}">
             `).join("")}
           </div>
         </div>
@@ -1110,7 +1110,7 @@
               <span class="text-xs text-amber-500 font-bold">★ ${product.rating} (${product.reviewsCount} reviews)</span>
             </div>
 
-            <a href="product.html?id=${product.id}" class="text-lg md:text-xl font-extrabold text-neutral-900 hover:text-blue-600 block">
+            <a href="product.html?id=${product.id}" class="text-lg md:text-xl font-extrabold text-neutral-900 hover:text-orange-600 block">
               ${product.title} ↗
             </a>
             
@@ -1121,15 +1121,15 @@
             </div>
             <p class="text-xs text-neutral-500 mt-1">Inclusive of all taxes for India. International visitors see USD display pricing.</p>
 
-            <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
-              <span class="text-xs font-bold text-blue-900">⚡ Special Deal: ${product.offer}</span>
-              <span class="text-[10px] font-extrabold text-blue-600 bg-white px-2 py-0.5 rounded shadow-sm">AUTO-APPLIED</span>
+            <div class="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-xl flex items-center justify-between">
+              <span class="text-xs font-bold text-orange-950">⚡ Special Deal: ${product.offer}</span>
+              <span class="text-[10px] font-extrabold text-orange-600 bg-white px-2 py-0.5 rounded shadow-sm">AUTO-APPLIED</span>
             </div>
 
             <div class="mt-5">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-xs font-bold text-neutral-800 uppercase">Select Size:</span>
-                <button type="button" class="text-xs font-extrabold text-[#2D8CE3] size-chart-btn">Size Guide 📏</button>
+                <button type="button" class="text-xs font-extrabold text-orange-600 size-chart-btn">Size Guide 📏</button>
               </div>
               <div class="flex items-center gap-2" id="qv-size-options">
                 ${product.sizes.map((s, idx) => `
@@ -1143,7 +1143,7 @@
             <div class="mt-5 p-3.5 bg-neutral-50 rounded-xl border border-neutral-200">
               <span class="text-xs font-bold text-neutral-700 block mb-2">Check Estimated Delivery:</span>
               <div class="flex gap-2">
-                <input type="text" id="pincode-input" placeholder="Enter 6-digit Pincode" maxlength="6" class="w-full px-3 py-1.5 text-xs rounded-lg border border-neutral-300 focus:outline-none focus:border-blue-600">
+                <input type="text" id="pincode-input" placeholder="Enter 6-digit Pincode" maxlength="6" class="w-full px-3 py-1.5 text-xs rounded-lg border border-neutral-300 focus:outline-none focus:border-orange-600">
                 <button type="button" id="pincode-check-btn" class="px-4 py-1.5 bg-neutral-900 text-white text-xs font-bold rounded-lg hover:bg-neutral-800">Check</button>
               </div>
               <div id="pincode-status" class="mt-2 text-xs font-semibold text-neutral-600 hidden"></div>
@@ -1157,10 +1157,10 @@
           </div>
 
           <div class="mt-6 pt-4 border-t border-neutral-100 flex gap-3">
-            <button type="button" id="qv-add-to-bag-btn" class="flex-1 py-3.5 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-sm font-extrabold rounded-xl transition-colors shadow-md flex items-center justify-center gap-2">
+            <button type="button" id="qv-add-to-bag-btn" class="flex-1 py-3.5 bg-neutral-900 hover:bg-orange-600 text-white text-sm font-extrabold rounded-xl transition-colors shadow-md flex items-center justify-center gap-2">
               <span>ADD TO BAG</span>
             </button>
-            <button type="button" id="qv-buy-now-btn" class="flex-1 py-3.5 bg-[#2D8CE3] hover:bg-blue-600 text-white text-sm font-extrabold rounded-xl transition-colors shadow-md">
+            <button type="button" id="qv-buy-now-btn" class="flex-1 py-3.5 bg-orange-600 hover:bg-orange-700 text-white text-sm font-extrabold rounded-xl transition-colors shadow-md">
               BUY NOW (1-CLICK)
             </button>
           </div>
@@ -1181,8 +1181,8 @@
 
     body.querySelectorAll(".qv-thumb").forEach(thumb => {
       thumb.addEventListener("click", () => {
-        body.querySelectorAll(".qv-thumb").forEach(t => t.classList.remove("border-blue-600"));
-        thumb.classList.add("border-blue-600");
+        body.querySelectorAll(".qv-thumb").forEach(t => t.classList.remove("border-orange-600"));
+        thumb.classList.add("border-orange-600");
         const main = document.getElementById("qv-main-img");
         if (main) main.src = thumb.dataset.src;
       });
@@ -1291,7 +1291,7 @@
             </thead>
             <tbody class="divide-y divide-neutral-100">
               ${window.KODO_DATA.SIZE_CHART.map(row => `
-                <tr class="hover:bg-blue-50/50">
+                <tr class="hover:bg-orange-50/60">
                   <td class="p-2.5 font-bold text-neutral-900">${row.size}</td>
                   <td class="p-2.5 text-neutral-600">${row.chest}</td>
                   <td class="p-2.5 text-neutral-600">${row.length}</td>
@@ -1357,7 +1357,7 @@
 
     modal.innerHTML = `
       <div class="modal-box bg-white w-full min-h-screen overflow-hidden">
-        <div class="sticky top-0 z-10 bg-gradient-to-r from-[#2D8CE3] via-blue-600 to-[#8F54F0] px-4 sm:px-8 py-4 text-white flex items-center justify-between shadow-lg">
+        <div class="sticky top-0 z-10 bg-gradient-to-r from-neutral-950 via-orange-600 to-neutral-950 px-4 sm:px-8 py-4 text-white flex items-center justify-between shadow-lg">
           <div class="flex items-center gap-3">
             <img src="assets/kodo-logo.png?v=4" alt="KODO Logo" class="h-6 w-auto object-contain bg-white/10 px-2 py-0.5 rounded-lg">
             <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Secure Checkout</span>
@@ -1368,12 +1368,12 @@
         <div id="checkout-content-area" class="max-w-4xl mx-auto p-4 sm:p-8">
           <div class="mb-6">
             <h4 class="text-xs font-black uppercase tracking-wider text-neutral-800 mb-3 flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-[#2D8CE3] text-white flex items-center justify-center text-[10px]">1</span>
+              <span class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px]">1</span>
               Delivery Address
             </h4>
             <div class="space-y-2.5">
-              <input type="text" id="chk-name" placeholder="Full Name" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
-              <div class="flex rounded-xl border border-neutral-200 overflow-hidden focus-within:border-blue-500">
+              <input type="text" id="chk-name" placeholder="Full Name" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-orange-500">
+              <div class="flex rounded-xl border border-neutral-200 overflow-hidden focus-within:border-orange-500">
                 <select id="chk-country-code" class="px-3.5 py-2 bg-neutral-50 text-xs font-black border-r border-neutral-200 focus:outline-none">
                   <option value="+91">🇮🇳 +91</option>
                   <option value="+971">🇦🇪 +971</option>
@@ -1382,24 +1382,24 @@
                 </select>
                 <input type="tel" id="chk-phone" placeholder="Mobile Number" inputmode="numeric" class="w-full px-3.5 py-2 text-xs focus:outline-none">
               </div>
-              <input type="text" id="chk-addr" placeholder="Complete Street Address" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+              <input type="text" id="chk-addr" placeholder="Complete Street Address" class="w-full px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-orange-500">
               <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="chk-city" placeholder="City" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
-                <input type="text" id="chk-pin" placeholder="Pincode" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-blue-500">
+                <input type="text" id="chk-city" placeholder="City" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-orange-500">
+                <input type="text" id="chk-pin" placeholder="Pincode" class="px-3.5 py-2 text-xs rounded-xl border border-neutral-200 focus:outline-none focus:border-orange-500">
               </div>
             </div>
           </div>
 
           <div class="mb-6">
             <h4 class="text-xs font-black uppercase tracking-wider text-neutral-800 mb-3 flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-[#2D8CE3] text-white flex items-center justify-center text-[10px]">2</span>
+              <span class="w-5 h-5 rounded-full bg-orange-600 text-white flex items-center justify-center text-[10px]">2</span>
               Payment Method
             </h4>
             <div class="grid grid-cols-2 gap-2">
-              <label class="flex flex-col items-center justify-center p-3 rounded-xl border-2 border-blue-500 bg-blue-50/50 cursor-pointer payment-option">
+              <label class="flex flex-col items-center justify-center p-3 rounded-xl border-2 border-orange-500 bg-orange-50/60 cursor-pointer payment-option">
                 <input type="radio" name="payment-method" value="Dodo Secure Checkout" checked class="hidden">
                 <span class="text-lg mb-1">🔒</span>
-                <span class="text-[11px] font-extrabold text-blue-900">Secure Pay</span>
+                <span class="text-[11px] font-extrabold text-orange-950">Secure Pay</span>
                 <span class="text-[9px] text-emerald-600 font-bold">UPI / Card / Netbanking</span>
               </label>
               <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-neutral-200 bg-white hover:border-neutral-300 cursor-pointer payment-option">
@@ -1431,11 +1431,11 @@
             </div>
             <div class="border-t border-neutral-200 pt-2 flex justify-between text-sm font-black text-neutral-900">
               <span>Total Payable</span>
-              <span class="text-blue-600">₹${total}</span>
+              <span class="text-orange-600">₹${total}</span>
             </div>
           </div>
 
-          <button type="button" id="confirm-place-order-btn" class="w-full py-4 bg-[#2D8CE3] hover:bg-blue-600 text-white font-black text-sm rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
+          <button type="button" id="confirm-place-order-btn" class="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-black text-sm rounded-2xl shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2">
             <span>PAY SECURELY ₹${total}</span>
           </button>
         </div>
@@ -1446,10 +1446,10 @@
     modal.querySelectorAll(".payment-option").forEach(lbl => {
       lbl.addEventListener("click", () => {
         modal.querySelectorAll(".payment-option").forEach(l => {
-          l.classList.remove("border-2", "border-blue-500", "bg-blue-50/50");
+          l.classList.remove("border-2", "border-orange-500", "bg-orange-50/60");
           l.classList.add("border", "border-neutral-200", "bg-white");
         });
-        lbl.classList.add("border-2", "border-blue-500", "bg-blue-50/50");
+        lbl.classList.add("border-2", "border-orange-500", "bg-orange-50/60");
         lbl.classList.remove("border", "border-neutral-200", "bg-white");
         const radio = lbl.querySelector("input[type='radio']");
         if (radio) {
@@ -1613,11 +1613,11 @@
 
         content.innerHTML = `
           <div class="py-8 text-center">
-            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+            <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
               →
             </div>
             <h3 class="text-lg font-black text-neutral-900">ORDER REQUEST READY</h3>
-            <p class="text-xs font-bold text-[#2D8CE3] mt-1">Order #${orderId}</p>
+            <p class="text-xs font-bold text-orange-600 mt-1">Order #${orderId}</p>
             <p class="text-xs text-neutral-500 mt-2 max-w-xs mx-auto">
               Send this order on WhatsApp so the KODO team can verify payment, confirm stock, and dispatch only after real confirmation.
             </p>
@@ -1628,7 +1628,7 @@
             </div>
 
             <div class="mt-6 flex flex-col sm:flex-row gap-2">
-              <a href="track.html?id=${encodeURIComponent(orderId)}" class="flex-1 py-3.5 bg-blue-600 text-white text-center font-extrabold text-xs rounded-xl hover:bg-blue-700 transition-colors">
+              <a href="track.html?id=${encodeURIComponent(orderId)}" class="flex-1 py-3.5 bg-orange-600 text-white text-center font-extrabold text-xs rounded-xl hover:bg-orange-700 transition-colors">
                 TRACK ORDER
               </a>
               <a href="${whatsappUrl}" target="_blank" rel="noopener" class="flex-1 py-3.5 bg-emerald-600 text-white text-center font-extrabold text-xs rounded-xl hover:bg-emerald-700 transition-colors">
@@ -1671,7 +1671,7 @@
     if (!trigger || !modal || !canvas || !actionBtn) return;
 
     const segments = [
-      { label: "15% OFF", code: "KODO15", color: "#2D8CE3" },
+      { label: "15% OFF", code: "KODO15", color: "#ff6a00" },
       { label: "₹200 CASH", code: "REBEL200", color: "#18181b" },
       { label: "20% OFF", code: "STREET20", color: "#ec4899" },
       { label: "FREE SHIP", code: "FREESHIP", color: "#8b5cf6" },

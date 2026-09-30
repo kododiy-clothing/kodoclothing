@@ -1,13 +1,13 @@
-/* KODO.DIY - Veirdo Clone Premium Stylesheet */
+/* KODO.DIY - Premium Streetwear Stylesheet */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&family=Space+Grotesk:wght@500;700;800&family=Bebas+Neue&display=swap');
 
 :root {
-  --primary: #2D8CE3;       /* Veirdo Electric Cobalt */
-  --primary-hover: #1b73c4;
-  --accent-purple: #8F54F0; /* Veirdo Lilac Border / Purple Accent */
+  --primary: #ff6a00;       /* KODO Signal Orange */
+  --primary-hover: #ea580c;
+  --accent-purple: #171717; /* Carbon Accent */
   --dark: #0f1115;          /* Deep Carbon Onyx */
-  --light-blue: #EAF4FC;    /* Veirdo Soft Ice Blue */
-  --light-bg: #F9F8FF;      /* Veirdo Soft Filter Tint */
+  --light-blue: #fff3e8;    /* KODO Soft Orange Tint */
+  --light-bg: #fffaf5;      /* Warm Product Tint */
   --neon-green: #00E599;    /* Acid Cyber Green */
 }
 
@@ -98,8 +98,8 @@ body {
 }
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 35px -10px rgba(45, 140, 227, 0.18), 0 4px 12px rgba(0, 0, 0, 0.05);
-  border-color: #2D8CE3;
+  box-shadow: 0 20px 35px -10px rgba(255, 106, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #ff6a00;
 }
 
 .image-swap-wrapper .secondary-image {
@@ -122,7 +122,7 @@ body {
 
 /* Free Shipping Shimmer */
 .progress-shimmer {
-  background: linear-gradient(90deg, #2D8CE3 0%, #00E599 50%, #8F54F0 100%);
+  background: linear-gradient(90deg, #ff6a00 0%, #facc15 50%, #0f1115 100%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite linear;
 }
@@ -154,7 +154,7 @@ body {
   box-shadow: 3px 3px 0px #000000;
 }
 .neon-glow {
-  box-shadow: 0 0 25px rgba(45, 140, 227, 0.35);
+  box-shadow: 0 0 25px rgba(255, 106, 0, 0.35);
 }
 .neon-green-glow {
   box-shadow: 0 0 20px rgba(0, 229, 153, 0.4);
@@ -162,7 +162,7 @@ body {
 
 /* Story Bubble Gradient Ring */
 .story-ring {
-  background: linear-gradient(45deg, #2D8CE3, #8F54F0, #FF007A, #00E599);
+  background: linear-gradient(45deg, #ff6a00, #111111, #ff3d00, #facc15);
   background-size: 300% 300%;
   animation: gradient-rotate 4s ease infinite;
 }
