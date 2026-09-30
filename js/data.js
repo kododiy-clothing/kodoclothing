@@ -15,9 +15,9 @@ window.KODO_DATA.PRODUCTS = [
       "rating": 4.8,
       "reviewsCount": 63,
       "images": [
-          "assets/products/woman-drops/kd-woman-drive-13-women-graphic-tee/model-front.jpeg",
-          "assets/products/woman-drops/kd-woman-drive-13-women-graphic-tee/model-lifestyle.jpeg",
-          "assets/products/woman-drops/kd-woman-drive-13-women-graphic-tee/model-detail.jpeg"
+          "assets/products/woman-drops/kd-woman-drive-13-women-graphic-tee/model-front-hd.jpeg",
+          "assets/products/woman-drops/kd-woman-drive-13-women-graphic-tee/model-lifestyle-hd.jpeg",
+          "assets/products/woman-drops/kd-woman-drive-13-women-graphic-tee/model-detail-hd.jpeg"
       ],
       "fabric": "Premium soft cotton jersey, breathable everyday streetwear weight",
       "gsm": 240,
