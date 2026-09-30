@@ -32,7 +32,7 @@
 	  let appliedCoupon = null;
 	  const FREE_SHIPPING_THRESHOLD = 799;
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
-  const ASSET_VERSION = "hd-gallery-2";
+  const ASSET_VERSION = "hd-gallery-3";
   const assetUrl = (src) => {
     if (!src || /^(https?:|data:|blob:)/.test(src)) return src;
     return src.includes("?") ? `${src}&v=${ASSET_VERSION}` : `${src}?v=${ASSET_VERSION}`;
