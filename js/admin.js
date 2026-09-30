@@ -8,6 +8,13 @@
   let currentStatusFilter = "all";
   const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
   const apiUrl = (path) => `${API_BASE_URL}${path}`;
+  const adminHeaders = (extra = {}) => {
+    const token = window.KODO_AUTH?.getIdToken?.() || "";
+    return {
+      ...extra,
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    };
+  };
 
   document.addEventListener("DOMContentLoaded", async () => {
     await loadProducts();
@@ -52,10 +59,10 @@
      ------------------------------------------------------------- */
   async function loadOrders() {
     try {
-      const res = await fetch(apiUrl("/api/orders"));
+      const res = await fetch(apiUrl("/api/orders"), { headers: adminHeaders() });
       if (res.ok) {
         const liveOrders = await res.json();
-        if (Array.isArray(liveOrders) && liveOrders.length > 0) {
+        if (Array.isArray(liveOrders)) {
           orders = liveOrders;
           localStorage.setItem("KODO_ORDERS", JSON.stringify(orders));
           return;
@@ -83,7 +90,7 @@
 
   async function loadChatLogs() {
     try {
-      const res = await fetch(apiUrl("/api/chat/log"));
+      const res = await fetch(apiUrl("/api/chat/log"), { headers: adminHeaders() });
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data.conversations)) {
@@ -113,7 +120,7 @@
 
   async function loadAnalyticsSummary() {
     try {
-      const res = await fetch(apiUrl("/api/analytics/track"));
+      const res = await fetch(apiUrl("/api/analytics/track"), { headers: adminHeaders() });
       if (res.ok) {
         const data = await res.json();
         analyticsSummary = data.summary || null;
@@ -371,7 +378,7 @@
           try {
             await fetch(apiUrl("/api/orders/update"), {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: adminHeaders({ "Content-Type": "application/json" }),
               body: JSON.stringify({ orderId, status: newStatus })
             });
           } catch (err) {
@@ -399,7 +406,7 @@
         try {
           await fetch(apiUrl("/api/orders/delete"), {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: adminHeaders({ "Content-Type": "application/json" }),
             body: JSON.stringify({ orderId })
           });
         } catch (err) {
@@ -607,7 +614,7 @@
         try {
           await fetch(apiUrl("/api/products/update"), {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: adminHeaders({ "Content-Type": "application/json" }),
             body: JSON.stringify({ id, stock: newStock, price: newPrice })
           });
         } catch (err) {
@@ -944,7 +951,7 @@
       try {
         await fetch(apiUrl("/api/products/update"), {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: adminHeaders({ "Content-Type": "application/json" }),
           body: JSON.stringify(newProduct)
         });
       } catch (err) {}
