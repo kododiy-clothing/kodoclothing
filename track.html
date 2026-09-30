@@ -46,18 +46,19 @@
       <span class="text-xs font-black tracking-widest text-[#2D8CE3] uppercase">ORDER STATUS RADAR</span>
       <h1 class="font-syne text-2xl sm:text-3xl font-black uppercase text-neutral-900 mt-1">TRACK YOUR STREETWEAR SHIPMENT</h1>
       <p class="text-xs text-neutral-500 max-w-md mx-auto mt-1">
-        Enter your KODO Order ID or phone number to view the latest real order status.
+        Enter your KODO Order ID and the phone number used at checkout. Both are required to protect customer privacy.
       </p>
 
-      <form id="track-order-form" class="mt-6 flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-        <input type="text" id="track-input" placeholder="e.g. KD-123456 or Phone" required class="flex-1 px-4 py-3 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-blue-500 uppercase">
+      <form id="track-order-form" class="mt-6 grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-2 max-w-2xl mx-auto">
+        <input type="text" id="track-order-input" placeholder="Order ID (e.g. KD-123456)" required autocomplete="off" class="px-4 py-3 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-blue-500 uppercase">
+        <input type="tel" id="track-phone-input" placeholder="Checkout phone number" required autocomplete="tel" class="px-4 py-3 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-bold text-neutral-900 focus:outline-none focus:border-blue-500">
         <button type="submit" class="px-6 py-3 bg-[#2D8CE3] hover:bg-blue-600 text-white text-xs font-black rounded-xl uppercase tracking-wider transition-colors shadow-md">
           TRACK ORDER
         </button>
       </form>
 
       <div class="mt-3 text-[11px] text-neutral-400">
-        Only real orders saved from checkout or the live backend will appear here.
+        Tracking details are shown only after the order ID and checkout phone number match.
       </div>
     </div>
 
@@ -159,9 +160,9 @@
         <div class="space-y-4">
           <div class="p-4 bg-white rounded-2xl border border-neutral-200 text-xs space-y-1">
             <span class="text-[10px] font-black uppercase text-neutral-400 block tracking-wider">Delivery Address</span>
-            <div id="track-customer-name" class="font-bold text-neutral-900">Devendra Patel</div>
-            <div id="track-customer-addr" class="text-neutral-600">B-204, Royal Palms, Koregaon Park, Pune - 411001</div>
-            <div id="track-customer-phone" class="text-neutral-500">Phone: +91 98234 11092</div>
+            <div id="track-customer-name" class="font-bold text-neutral-900">Verified customer</div>
+            <div id="track-customer-addr" class="text-neutral-600">Address shown after verification</div>
+            <div id="track-customer-phone" class="text-neutral-500">Phone: verified at lookup</div>
           </div>
 
           <div class="p-4 bg-blue-50 rounded-2xl border border-blue-200 text-xs flex items-center justify-between gap-3">
@@ -191,11 +192,13 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("track-order-form");
-      const input = document.getElementById("track-input");
+      const orderInput = document.getElementById("track-order-input");
+      const phoneInput = document.getElementById("track-phone-input");
       const resultCard = document.getElementById("tracking-result-card");
       const API_BASE_URL = (window.KODO_API_BASE_URL || localStorage.getItem("KODO_API_BASE_URL") || "").replace(/\/$/, "");
 
-      // Auto load if order parameter passed
+      // Pre-fill the order ID after checkout return. If the same browser has the
+      // local order, we can also restore the checkout phone and load it immediately.
       const urlParams = new URLSearchParams(window.location.search);
       const urlOrderId = urlParams.get("id");
       if (urlOrderId) {
@@ -203,49 +206,63 @@
           order_id: urlOrderId,
           source: "dodo_return_or_order_tracking"
         });
-        input.value = urlOrderId;
-        lookupOrder(urlOrderId);
+        orderInput.value = urlOrderId;
+        try {
+          const localOrders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
+          const localOrder = localOrders.find(o => String(o.orderId || "").toLowerCase() === urlOrderId.toLowerCase());
+          if (localOrder?.customer?.phone) {
+            phoneInput.value = localOrder.customer.phone;
+            lookupOrder(urlOrderId, localOrder.customer.phone);
+          }
+        } catch (e) {}
       }
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        lookupOrder(input.value.trim());
+        lookupOrder(orderInput.value.trim(), phoneInput.value.trim());
       });
 
-      document.querySelectorAll(".demo-track-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const id = btn.dataset.id;
-          input.value = id;
-          lookupOrder(id);
-        });
-      });
+      function normalizePhone(value) {
+        return String(value || "").replace(/\D/g, "");
+      }
 
-      async function lookupOrder(query) {
-        let orders = [];
+      async function lookupOrder(orderId, phone) {
+        const cleanOrderId = String(orderId || "").trim().toLowerCase();
+        const cleanPhone = normalizePhone(phone);
+        if (!cleanOrderId || cleanPhone.length < 8) {
+          resultCard.classList.add("hidden");
+          alert("Please enter the order ID and the phone number used at checkout.");
+          return;
+        }
+
+        let found = null;
         try {
-          orders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
+          const orders = JSON.parse(localStorage.getItem("KODO_ORDERS") || "[]");
+          found = orders.find(o =>
+            String(o.orderId || "").toLowerCase() === cleanOrderId &&
+            normalizePhone(o.customer?.phone) === cleanPhone
+          ) || null;
         } catch(e) {}
-
-        const q = query.toLowerCase();
-        let found = orders.find(o => o.orderId.toLowerCase() === q || o.customer.phone.includes(q));
 
         if (!found) {
           try {
-            const res = await fetch(`${API_BASE_URL}/api/orders`);
+            const res = await fetch(`${API_BASE_URL}/api/orders/lookup`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ orderId: cleanOrderId, phone: cleanPhone })
+            });
             if (res.ok) {
-              const liveOrders = await res.json();
-              if (Array.isArray(liveOrders)) {
-                found = liveOrders.find(o => o.orderId.toLowerCase() === q || (o.customer?.phone || "").includes(q));
-              }
+              const data = await res.json();
+              found = data.order || null;
             }
           } catch (e) {
-            console.warn("Live order lookup failed", e);
+            console.warn("Secure order lookup unavailable", e);
           }
         }
 
         if (!found) {
           resultCard.classList.add("hidden");
-          alert("No real order found for this ID/phone yet. Please check the order ID or contact support.");
+          alert("We could not verify that order with the supplied phone number. Check the details or contact support.");
           return;
         }
 
