@@ -1,8 +1,12 @@
+const { requireAdmin } = require("../_admin-auth");
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ success: false, error: "Method not allowed" });
   }
+
+  if (!(await requireAdmin(req, res))) return;
 
   const orderId = String(req.body?.orderId || "").trim();
   if (!orderId) {
