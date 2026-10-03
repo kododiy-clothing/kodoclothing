@@ -6,17 +6,17 @@
   <title>All Streetwear Drops & Collections — KODO.DIY</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=shopify-kodo-1">
   <link rel="icon" type="image/png" href="assets/favicon.png?v=1">
   <link rel="apple-touch-icon" href="assets/favicon.png?v=1">
   <script src="js/meta-pixel.js?v=1"></script>
   <script src="js/google-tag.js?v=1"></script>
 </head>
-<body class="min-h-full flex flex-col text-neutral-900 selection:bg-[#2D8CE3] selection:text-white">
+<body class="shopify-catalog-page min-h-full flex flex-col text-neutral-900 selection:bg-[#ff6a00] selection:text-white">
 
   <!-- TOP BAR -->
-  <div class="bg-neutral-950 text-white text-[11px] py-2 px-4 text-center font-mono-tech tracking-wider border-b border-neutral-800">
-    ⚡ FREE EXPRESS AIR COURIER ON ALL PREPAID STREET DROPS • USE CODE <span class="text-amber-400 font-bold">KODO15</span> FOR 15% OFF
+  <div class="catalog-topbar bg-neutral-950 text-white text-[11px] py-2 px-4 text-center font-mono-tech tracking-wider border-b border-neutral-800">
+    KODO.DIY ORIGINALS • HD STREETWEAR DROPS • FREE EXPRESS AIR COURIER ON PREPAID ORDERS
   </div>
 
   <!-- HEADER -->
@@ -28,39 +28,37 @@
         </a>
       </div>
 
-      <nav class="hidden md:flex items-center gap-5 text-xs font-black uppercase tracking-wider">
-        <a href="collection.html?cat=all" class="text-[#2D8CE3]">All Drops</a>
-        <a href="mystery-box.html" class="text-amber-500 font-bold hover:underline">📦 Mystery Box</a>
-        <a href="drops.html" class="text-rose-500 font-bold hover:underline">⚡ Drops</a>
-        <a href="lookbook.html" class="hover:text-[#2D8CE3] font-bold">📸 Lookbook</a>
-        <a href="ambassador.html" class="text-emerald-600 font-bold hover:underline">🤝 Reps (12%)</a>
-        <a href="index.html#combo-builder-section" class="text-blue-600 hover:underline">Buy 2 @ ₹999</a>
-        <a href="account.html" class="hover:text-[#2D8CE3]">VIP Hub</a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-extrabold">
+        <a href="index.html">Home</a>
+        <a href="collection.html?cat=all" class="is-active">Collections</a>
+        <a href="collection.html?gender=men">Men</a>
+        <a href="collection.html?gender=women">Women</a>
+        <a href="lookbook.html">Lookbook</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <a href="wishlist.html" class="p-2 rounded-xl text-neutral-700 hover:bg-neutral-100">
-          🖤
+        <a href="wishlist.html" class="p-2 rounded-full text-neutral-700 hover:bg-neutral-100">
+          ♡
         </a>
-        <a href="index.html" class="px-3.5 py-2 rounded-xl bg-neutral-900 text-white font-black text-xs uppercase hover:bg-[#2D8CE3] transition-colors">
-          🛍️ Bag
+        <a href="index.html?checkout=1" class="catalog-bag-link px-4 py-2 rounded-full bg-neutral-900 text-white font-black text-xs uppercase hover:bg-orange-600 transition-colors">
+          Bag
         </a>
       </div>
     </div>
   </header>
 
   <!-- COLLECTION HERO BANNER -->
-  <section class="bg-[#0b0d11] text-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-grid-pattern border-b border-neutral-800">
+  <section class="catalog-hero bg-[#0b0d11] text-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-grid-pattern border-b border-neutral-800">
     <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div>
         <div class="inline-flex items-center gap-2 bg-blue-500/20 text-[#2D8CE3] border border-blue-500/30 px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider mb-2">
-          ⚡ 2026 CAPSULE ARCHIVE
+          KODO CATALOG
         </div>
         <h1 id="col-title" class="font-syne text-3xl sm:text-5xl font-black uppercase tracking-tight">
-          OVERSIZED STREETWEAR DROPS
+          KODO STREETWEAR DROPS
         </h1>
         <p id="col-desc" class="text-xs sm:text-sm text-neutral-400 max-w-xl mt-2">
-          Engineered with 240–380 GSM dense French Terry, raw drop-shoulder drape, and high-density 3D embossed puff prints.
+          Image-first edits, oversized tees, women capsules and daily drops curated into one clean storefront.
         </p>
       </div>
 
@@ -71,7 +69,7 @@
   </section>
 
   <!-- MAIN CATALOG CONTENT WITH PERSISTENT SIDEBAR -->
-  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+  <main class="catalog-main flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
       <!-- LEFT SIDEBAR FILTERS (3 Cols) -->
@@ -202,7 +200,7 @@
         </div>
 
         <!-- Products Grid -->
-        <div id="col-products-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+        <div id="col-products-grid" class="catalog-product-grid grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           <!-- Injected via JavaScript -->
         </div>
 
@@ -345,29 +343,29 @@
         }
 
         grid.innerHTML = list.map(p => `
-          <div class="group bg-white rounded-3xl p-3 border border-neutral-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden bg-neutral-100 mb-3">
+          <div class="catalog-product-card group bg-white transition-all flex flex-col justify-between">
+            <div class="catalog-product-media relative aspect-[3/4] overflow-hidden bg-neutral-100 mb-3">
               <a href="product.html?id=${p.id}">
-                <img src="${p.images[0]}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                <img src="${p.images[0]}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-700">
               </a>
-              <div class="absolute top-2 left-2 bg-black/70 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
+              <div class="catalog-card-badge absolute top-2 left-2 bg-black/70 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
                 ${p.badge}
               </div>
-              <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur text-neutral-900 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
+              <div class="catalog-card-fit absolute bottom-2 left-2 bg-white/90 backdrop-blur text-neutral-900 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">
                 ${p.fit} • ${p.gsm} GSM
               </div>
             </div>
 
-            <div class="space-y-1.5">
-              <a href="product.html?id=${p.id}" class="text-xs font-bold text-neutral-900 hover:text-[#2D8CE3] line-clamp-1">
+            <div class="catalog-product-info space-y-1.5">
+              <a href="product.html?id=${p.id}" class="catalog-product-title text-xs font-bold text-neutral-900 hover:text-orange-600 line-clamp-1">
                 ${p.title}
               </a>
               <div class="flex items-baseline gap-2">
                 <span class="text-sm font-black text-neutral-900">${formatMoney(p.price, p)}</span>
                 <span class="text-[11px] text-neutral-400 line-through">${formatMoney(p.comparePrice, p)}</span>
               </div>
-              <a href="product.html?id=${p.id}" class="block text-center w-full py-2 bg-neutral-900 hover:bg-[#2D8CE3] text-white text-xs font-black uppercase rounded-xl transition-colors mt-2">
-                VIEW DROP →
+              <a href="product.html?id=${p.id}" class="catalog-card-cta block text-center w-full py-2 bg-neutral-900 hover:bg-orange-600 text-white text-xs font-black uppercase transition-colors mt-2">
+                View Drop
               </a>
             </div>
           </div>

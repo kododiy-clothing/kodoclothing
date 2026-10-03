@@ -602,9 +602,9 @@
     grid.innerHTML = filtered.map(product => {
       const isWish = wishlist.some(w => w.id === product.id);
       return `
-        <div class="product-card group relative bg-white rounded-2xl border border-neutral-100 overflow-hidden flex flex-col justify-between" data-id="${product.id}">
-          <div class="image-swap-wrapper relative w-full aspect-[3/4] bg-neutral-100 overflow-hidden cursor-pointer quick-view-trigger" data-id="${product.id}">
-            <img src="${assetUrl(product.images[0])}" alt="${product.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        <div class="product-card shopify-grid-card group relative bg-white overflow-hidden flex flex-col justify-between" data-id="${product.id}">
+          <div class="image-swap-wrapper shopify-grid-media relative w-full aspect-[3/4] bg-neutral-100 overflow-hidden cursor-pointer quick-view-trigger" data-id="${product.id}">
+            <img src="${assetUrl(product.images[0])}" alt="${product.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-700">
             ${product.images[1] ? `<img src="${assetUrl(product.images[1])}" alt="${product.title} view 2" loading="lazy" class="secondary-image absolute inset-0 w-full h-full object-cover">` : ''}
             
             <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
@@ -619,20 +619,20 @@
             </button>
 
             <div class="absolute bottom-2.5 inset-x-2.5 hidden md:flex opacity-0 group-hover:opacity-100 transition-opacity z-10">
-              <button type="button" class="quick-view-btn w-full py-2 bg-white/95 backdrop-blur text-neutral-900 text-xs font-extrabold rounded-xl shadow-md hover:bg-neutral-900 hover:text-white transition-all flex items-center justify-center gap-1.5" data-id="${product.id}">
-                <span>👁️</span> Quick View
+              <button type="button" class="quick-view-btn w-full py-2 bg-white/95 backdrop-blur text-neutral-900 text-xs font-extrabold shadow-md hover:bg-neutral-900 hover:text-white transition-all flex items-center justify-center gap-1.5" data-id="${product.id}">
+                Quick View
               </button>
             </div>
           </div>
 
-          <div class="p-3.5 flex flex-col flex-1 justify-between">
+          <div class="shopify-grid-info p-3.5 flex flex-col flex-1 justify-between">
             <div>
               <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wide mb-1">
                 ${product.fit} • ${product.sizes.length} Sizes
               </div>
 
               <!-- Product title links directly to dedicated PDP product.html -->
-              <a href="product.html?id=${product.id}" class="text-xs md:text-sm font-bold text-neutral-900 line-clamp-1 hover:text-orange-600 transition-colors block">
+              <a href="product.html?id=${product.id}" class="shopify-grid-title text-xs md:text-sm font-bold text-neutral-900 line-clamp-1 hover:text-orange-600 transition-colors block">
                 ${product.title}
               </a>
 
@@ -660,7 +660,7 @@
                 `).join("")}
               </div>
 
-              <button type="button" class="add-to-bag-card-btn w-full mt-2 py-2.5 bg-neutral-900 hover:bg-orange-600 text-white text-xs font-extrabold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2" data-id="${product.id}">
+              <button type="button" class="add-to-bag-card-btn w-full mt-2 py-2.5 bg-neutral-900 hover:bg-orange-600 text-white text-xs font-extrabold transition-colors shadow-sm flex items-center justify-center gap-2" data-id="${product.id}">
                 <span>ADD TO BAG</span>
                 <span class="text-white/60">→</span>
               </button>

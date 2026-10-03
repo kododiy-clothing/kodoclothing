@@ -491,6 +491,47 @@ section {
   color: #fff !important;
 }
 
+.shopify-inspired-home #catalog-section {
+  background: #fff !important;
+  padding-left: clamp(14px, 3vw, 48px);
+  padding-right: clamp(14px, 3vw, 48px);
+}
+
+.shopify-inspired-home #catalog-section > div {
+  max-width: none;
+}
+
+.shopify-inspired-home #catalog-section .rounded-2xl,
+.shopify-inspired-home #catalog-section .rounded-3xl,
+.shopify-inspired-home #catalog-section .rounded-xl {
+  border-radius: 0 !important;
+}
+
+.shopify-inspired-home #products-grid {
+  gap: clamp(12px, 2vw, 30px) !important;
+}
+
+.shopify-inspired-home .shopify-grid-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.shopify-inspired-home .shopify-grid-media {
+  border: 1px solid #eee;
+}
+
+.shopify-inspired-home .shopify-grid-info {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+.shopify-inspired-home .shopify-grid-title {
+  font-size: clamp(12px, 1vw, 15px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
 @media (max-width: 767px) {
   .shopify-inspired-home #main-header > div {
     height: 74px;
@@ -511,7 +552,7 @@ section {
   }
 
   .shopify-inspired-home .shopify-product-strip {
-    margin-top: -120px;
+    margin-top: 0;
     padding-bottom: 34px;
   }
 
@@ -528,6 +569,228 @@ section {
   .shopify-inspired-home .shopify-editorial-tiles .grid > div:nth-child(3) {
     grid-column: auto;
     aspect-ratio: 1 / 1.08;
+  }
+}
+
+/* KODO premium catalog/product theme inspired by modern Shopify storefronts */
+.shopify-catalog-page,
+.shopify-product-page {
+  background: #fff;
+  color: #111;
+}
+
+.shopify-catalog-page header,
+.shopify-product-page .product-site-header {
+  min-height: 84px;
+  box-shadow: none;
+}
+
+.shopify-catalog-page header nav a,
+.shopify-product-page .product-site-header nav a {
+  color: #6b6b6b;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  transition: color .18s ease;
+}
+
+.shopify-catalog-page header nav a:hover,
+.shopify-catalog-page header nav a.is-active,
+.shopify-product-page .product-site-header nav a:hover {
+  color: #ff6a00;
+}
+
+.shopify-catalog-page .catalog-topbar {
+  background: #111;
+  letter-spacing: .18em;
+}
+
+.shopify-catalog-page .catalog-hero {
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.74), rgba(0,0,0,.35)),
+    url("../assets/banners/kodo-hero-collection-v2.jpg?v=theme-1") center/cover;
+  min-height: 360px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.shopify-catalog-page .catalog-hero .inline-flex {
+  background: rgba(255, 106, 0, .14) !important;
+  border-color: rgba(255, 106, 0, .32) !important;
+  color: #ff8a2a !important;
+  border-radius: 999px;
+}
+
+.shopify-catalog-page #col-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(42px, 7vw, 104px);
+  line-height: .82;
+  letter-spacing: -0.08em;
+  max-width: 980px;
+}
+
+.shopify-catalog-page #col-desc {
+  color: rgba(255,255,255,.78);
+  font-size: clamp(13px, 1.2vw, 18px);
+  max-width: 680px;
+}
+
+.shopify-catalog-page .catalog-main {
+  max-width: none;
+  padding-left: clamp(14px, 3vw, 48px);
+  padding-right: clamp(14px, 3vw, 48px);
+}
+
+.shopify-catalog-page aside > div,
+.shopify-catalog-page section.lg\:col-span-9 > div:first-child {
+  border-radius: 0;
+  border-color: #e8e8e8;
+  box-shadow: none;
+}
+
+.shopify-catalog-page .catalog-product-grid {
+  gap: clamp(14px, 2vw, 30px) !important;
+}
+
+.shopify-catalog-page .catalog-product-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  background: #fff;
+}
+
+.shopify-catalog-page .catalog-product-media {
+  border-radius: 0 !important;
+  margin-bottom: 12px;
+  border: 1px solid #eee;
+}
+
+.shopify-catalog-page .catalog-card-badge,
+.shopify-catalog-page .catalog-card-fit {
+  border-radius: 999px;
+  letter-spacing: .08em;
+}
+
+.shopify-catalog-page .catalog-product-info {
+  padding: 0 2px 10px;
+}
+
+.shopify-catalog-page .catalog-product-title {
+  font-size: clamp(12px, 1vw, 15px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.shopify-catalog-page .catalog-card-cta {
+  border-radius: 0 !important;
+  letter-spacing: .08em;
+}
+
+.shopify-product-page .product-main {
+  max-width: none;
+  padding-left: clamp(14px, 3vw, 48px);
+  padding-right: clamp(14px, 3vw, 48px);
+}
+
+.shopify-product-page #product-container {
+  max-width: 1480px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.shopify-product-page .pdp-main-frame {
+  border-radius: 0 !important;
+  min-height: min(78vh, 860px);
+}
+
+.shopify-product-page .product-thumb-strip .pdp-thumb {
+  border-radius: 0 !important;
+}
+
+.shopify-product-page .product-buy-panel {
+  position: sticky;
+  top: 108px;
+  padding: clamp(18px, 3vw, 34px);
+  border: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.shopify-product-page .pdp-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(32px, 4.8vw, 72px);
+  line-height: .86;
+  letter-spacing: -0.08em;
+}
+
+.shopify-product-page .pdp-size-btn,
+.shopify-product-page #pdp-add-bag-btn,
+.shopify-product-page #pdp-buy-now-btn {
+  border-radius: 0 !important;
+}
+
+.shopify-product-page section.mt-16 {
+  max-width: 1480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 1023px) {
+  .shopify-product-page .product-buy-panel {
+    position: static;
+    padding: 0;
+    border: 0;
+  }
+
+  .shopify-product-page .pdp-main-frame {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .shopify-catalog-page .catalog-topbar {
+    display: none;
+  }
+
+  .shopify-catalog-page header,
+  .shopify-product-page .product-site-header {
+    min-height: 70px;
+  }
+
+  .shopify-catalog-page .catalog-hero {
+    min-height: 300px;
+    align-items: flex-end;
+    padding-top: 42px;
+    padding-bottom: 30px;
+  }
+
+  .shopify-catalog-page #col-title {
+    font-size: clamp(42px, 15vw, 64px);
+  }
+
+  .shopify-catalog-page .catalog-main {
+    padding-top: 20px;
+  }
+
+  .shopify-catalog-page aside {
+    display: none;
+  }
+
+  .shopify-catalog-page .catalog-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 10px !important;
+  }
+
+  .shopify-catalog-page .catalog-card-fit {
+    display: none;
+  }
+
+  .shopify-product-page .product-main {
+    padding-top: 0;
+  }
+
+  .shopify-product-page .pdp-title {
+    font-size: clamp(34px, 13vw, 58px);
   }
 }
 
