@@ -207,6 +207,7 @@ section {
 }
 
 .shopify-inspired-home #main-header {
+  display: none !important;
   position: absolute !important;
   top: 0;
   left: 0;
@@ -326,7 +327,7 @@ section {
   inset: 0;
   z-index: 5;
   background:
-    linear-gradient(180deg, rgba(0,0,0,.16) 0%, rgba(0,0,0,.04) 40%, rgba(255,255,255,.94) 100%),
+    linear-gradient(180deg, rgba(0,0,0,.48) 0%, rgba(0,0,0,.34) 42%, rgba(0,0,0,.56) 100%),
     radial-gradient(circle at 50% 0%, rgba(255,255,255,.24), transparent 38%);
   pointer-events: none;
 }
@@ -336,13 +337,26 @@ section {
   width: 100%;
   height: 100%;
   background: #b7bab7 !important;
-  filter: grayscale(.28) saturate(.72) contrast(.94) brightness(.78);
-  object-position: center top;
+  filter: grayscale(.6) saturate(.45) contrast(.9) brightness(.58);
+  object-position: center center;
 }
 
 .shopify-inspired-home .shopify-hero-brand img {
   filter: brightness(0) invert(1);
   opacity: .98;
+}
+
+.shopify-inspired-home .shopify-splash-links a {
+  color: #fff;
+  text-decoration: none;
+  line-height: 1;
+  text-shadow: 0 10px 28px rgba(0,0,0,.65);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.shopify-inspired-home .shopify-splash-links a:hover {
+  opacity: .72;
+  transform: translateX(2px);
 }
 
 .shopify-inspired-home #hero-prev-btn,
@@ -355,12 +369,12 @@ section {
 }
 
 .shopify-inspired-home .shopify-product-strip {
-  margin-top: -170px;
+  margin-top: 0;
   position: relative;
   z-index: 15;
   padding: 0 0 56px;
   border: 0;
-  background: linear-gradient(180deg, transparent 0%, #fff 28%, #fff 100%);
+  background: #fff;
 }
 
 .shopify-inspired-home .shopify-product-strip > div {
