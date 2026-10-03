@@ -398,34 +398,38 @@
 
     const bubblesContainer = document.getElementById("category-bubbles-container");
     if (bubblesContainer) {
+      const pickProduct = (id) => window.KODO_DATA.PRODUCTS.find(product => product.id === id);
       const bubbleItems = [
-        { name: "Solar Eclipse", cat: "celestial-series", img: "assets/products/same-sky-tee/front.jpg" },
-        { name: "Alpine Summit", cat: "alpine-series", img: "assets/products/altitude-tee/front.jpg" },
-        { name: "Crescent Moon", cat: "celestial-series", img: "assets/products/crescent-moon-tee/front.jpg" },
-        { name: "Tokyo Drift GT-R", cat: "racing-tokyo", img: "assets/products/racing-division-tee/front.jpg" },
-        { name: "After Hours", cat: "celestial-series", img: "assets/products/after-hours-tee/front.jpg" },
-        { name: "Tokyo NO SIGNAL", cat: "racing-tokyo", img: "assets/products/no-signal-tee/front.jpg" }
-      ];
+        pickProduct("kd-man-drive-21-05754432dd"),
+        pickProduct("kd-man-drive-22-09cbea6550"),
+        pickProduct("kd-woman-drive-13-women-graphic-tee"),
+        pickProduct("kd-woman-drive-14-women-graphic-tee"),
+        pickProduct("kd-man-drive-26-368afd2022"),
+        pickProduct("kd-woman-drive-18-women-graphic-tee")
+      ].filter(Boolean).map(product => ({
+        name: product.title.split(":")[0].replace(/\"/g, ""),
+        cat: product.gender === "women" ? "women-streetwear" : "oversized-tees",
+        img: product.images[0],
+        href: `product.html?id=${product.id}`,
+        badge: product.gender === "women" ? "WOMEN" : "MEN"
+      }));
 
       bubblesContainer.innerHTML = bubbleItems.map((item, idx) => `
-        <div class="flex-shrink-0 flex flex-col items-center gap-2 cursor-pointer group category-bubble-item" data-cat="${item.cat}">
-          <div class="relative w-20 h-20 md:w-24 md:h-24 rounded-full p-[3px] story-ring group-hover:scale-105 transition-all shadow-md">
-            <div class="w-full h-full rounded-full p-[2px] bg-white overflow-hidden">
-              <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-300">
-            </div>
-            <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 px-2 py-0.2 bg-neutral-900 text-white text-[9px] font-black rounded-full uppercase border border-white tracking-wider whitespace-nowrap">
-              ${idx === 0 ? '🔥 HOT' : (idx === 4 ? '🎨 DIY' : 'DROP')}
+        <a href="${item.href}" class="flex-shrink-0 flex flex-col gap-2 cursor-pointer group category-bubble-item product-strip-tile" data-cat="${item.cat}">
+          <div class="relative overflow-hidden bg-neutral-100 story-ring transition-all">
+            <img src="${assetUrl(item.img)}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700">
+            <span class="absolute left-2 top-2 px-2 py-1 bg-white/90 text-neutral-950 text-[9px] font-black uppercase tracking-wider">
+              ${idx === 0 ? 'NEW' : item.badge}
             </span>
           </div>
-          <span class="text-[11px] md:text-xs font-bold text-neutral-800 text-center uppercase tracking-tight group-hover:text-orange-600 transition-colors mt-1">${item.name}</span>
-        </div>
+          <span class="product-strip-title text-[11px] md:text-xs font-black text-neutral-900 uppercase tracking-tight group-hover:text-orange-600 transition-colors">${item.name}</span>
+        </a>
       `).join("");
 
       bubblesContainer.querySelectorAll(".category-bubble-item").forEach(item => {
         item.addEventListener("click", () => {
+          if (item.getAttribute("href")) return;
           selectCategory(item.dataset.cat);
-          const target = document.getElementById("catalog-section");
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
         });
       });
     }

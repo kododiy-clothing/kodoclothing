@@ -407,15 +407,15 @@ section {
 
 .shopify-inspired-home #category-bubbles-container {
   justify-content: space-between;
-  gap: clamp(26px, 6vw, 80px);
-  padding-top: 34px;
+  gap: clamp(14px, 3vw, 34px);
+  padding-top: 26px;
   padding-bottom: 8px;
   scrollbar-width: none;
 }
 
 .shopify-inspired-home #category-bubbles-container .story-ring {
-  width: clamp(78px, 9vw, 126px);
-  height: clamp(104px, 12vw, 164px);
+  width: clamp(132px, 15vw, 210px);
+  height: clamp(170px, 20vw, 270px);
   border-radius: 0;
   padding: 0;
   background: transparent;
@@ -430,12 +430,22 @@ section {
 
 .shopify-inspired-home #category-bubbles-container img {
   border-radius: 0 !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
 }
 
-.shopify-inspired-home #category-bubbles-container .category-bubble-item > span,
 .shopify-inspired-home #category-bubbles-container .story-ring span {
-  display: none !important;
+  border-radius: 0 !important;
+}
+
+.shopify-inspired-home #category-bubbles-container .product-strip-tile {
+  width: clamp(132px, 15vw, 210px);
+}
+
+.shopify-inspired-home #category-bubbles-container .product-strip-title {
+  display: block !important;
+  max-width: 100%;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
 }
 
 .shopify-inspired-home .shopify-editorial-tiles {
@@ -558,7 +568,16 @@ section {
 
   .shopify-inspired-home #category-bubbles-container {
     justify-content: flex-start;
-    gap: 34px;
+    gap: 18px;
+  }
+
+  .shopify-inspired-home #category-bubbles-container .story-ring,
+  .shopify-inspired-home #category-bubbles-container .product-strip-tile {
+    width: 148px;
+  }
+
+  .shopify-inspired-home #category-bubbles-container .story-ring {
+    height: 196px;
   }
 
   .shopify-inspired-home .shopify-editorial-tiles .grid {
