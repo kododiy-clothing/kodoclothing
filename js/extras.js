@@ -1157,7 +1157,7 @@
     dock.innerHTML = links.map(l => `
       <a href="${l.href}" data-action="${l.action || ""}" class="kodo-dock-link flex flex-col items-center gap-0.5 px-2.5 py-1 rounded-xl transition-all text-[10px] uppercase ${
         l.active 
-          ? 'text-[#2D8CE3] font-black scale-105' 
+          ? 'text-orange-500 font-black scale-105' 
           : 'text-neutral-600 dark:text-neutral-400 font-medium hover:text-neutral-900 dark:hover:text-white'
       }">
         <span class="text-base leading-none">${l.icon}</span>
