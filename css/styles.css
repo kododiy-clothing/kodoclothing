@@ -341,6 +341,15 @@ section {
   object-position: center center;
 }
 
+.shopify-inspired-home .shopify-hero-video {
+  z-index: 1;
+  filter: grayscale(.62) saturate(.44) contrast(.92) brightness(.58);
+}
+
+.shopify-inspired-home .shopify-hero-video + img {
+  opacity: 0;
+}
+
 .shopify-inspired-home .shopify-hero-brand img {
   filter: brightness(0) invert(1);
   opacity: .98;
